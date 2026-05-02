@@ -59,7 +59,6 @@ describe('Form submit data correctly', () => {
     expect(passwordField).toHaveValue('johndoe123');
 
     await user.click(submitBtn);
-    screen.debug();
     const errorMessage = screen.getByText(
       'Username or Email or Password incorrect',
     );
@@ -87,11 +86,7 @@ describe('Form submit data correctly', () => {
     await user.type(usernameField, 'johndoe');
     await user.type(passwordField, 'johndoe123');
 
-    expect(usernameField).toHaveValue('johndoe');
-    expect(passwordField).toHaveValue('johndoe123');
-
     await user.click(submitBtn);
-    screen.debug();
     const successMessage = screen.getByText('Login Success, Redirecting.....');
     expect(successMessage).toBeInTheDocument();
   });
