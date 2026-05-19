@@ -28,7 +28,7 @@ export default defineConfig([
       ...reactPlugin.configs.recommended.rules,
       ...hooksPlugin.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'error',
+      'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': [
