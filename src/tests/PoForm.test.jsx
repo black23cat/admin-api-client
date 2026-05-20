@@ -3,31 +3,9 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import PurchaseOrderForm from '../components/PoForm/PoForm.jsx';
-
-//Setup multiple uploaded mockfiles
-const files = [
-  new File(['Test print_26-30_130x190_2x'], 'Test print_26-30_130x190_2x.tif', {
-    type: 'image/tif',
-  }),
-  new File(
-    ['Test print 2_26-30_130x190_3x'],
-    'Test print 2_26-30_130x190_3x.tif',
-    { type: 'image/tif' },
-  ),
-];
-
-// Setup valid/invalid file
-const validFile = new File(
-  ['Test print_26-30_130x190_2x'],
-  'Test print_26-30_130x190_2x.tif',
-  { type: 'image/tif' },
-);
-
-const invalidFiles = new File(
-  ['Test_print_26-30_130x190_2x'],
-  'Test_print_26-30_130x190_2x.tif',
-  { type: 'image/tif' },
-);
+//Setup mockfiles
+import { invalidFile, multipleFiles, validFile } from '../utils/mockData.js';
+import { removeExtension } from '../utils/regexPattern.js';
 
 describe('Render Purchase Order Form', () => {
   it('Render Purchase Order Form correctly', () => {
@@ -56,10 +34,10 @@ describe('Upload file', () => {
     );
 
     const uploadFiles = screen.getByLabelText('Upload Files :');
-    await user.upload(uploadFiles, files);
+    await user.upload(uploadFiles, multipleFiles);
     expect(uploadFiles.files.length).toEqual(2);
-    expect(uploadFiles.files[0]).toStrictEqual(files[0]);
-    expect(uploadFiles.files[1]).toStrictEqual(files[1]);
+    expect(uploadFiles.files[0]).toStrictEqual(multipleFiles[0]);
+    expect(uploadFiles.files[1]).toStrictEqual(multipleFiles[1]);
   });
 
   it('Show valid/invalid uploaded filename', async () => {
@@ -72,16 +50,15 @@ describe('Upload file', () => {
 
     const uploadFiles = screen.getByLabelText('Upload Files :');
     await user.upload(uploadFiles, validFile);
-    await user.upload(uploadFiles, invalidFiles);
+    await user.upload(uploadFiles, invalidFile);
 
-    const validFileDisplay = screen.getByText('Test print_26-30_130x190_2x', {
-      exact: false,
-    });
-    const invalidFIleDisplay = screen.getByText('Test_print_26-30_130x190_2x', {
-      exact: false,
-    });
+    const validFileDisplay = screen.getByText(removeExtension(validFile.name));
+    const invalidFileDisplay = screen.getByText(
+      removeExtension(invalidFile.name),
+    );
+
     expect(validFileDisplay).toBeInTheDocument();
-    expect(invalidFIleDisplay).toBeInTheDocument();
+    expect(invalidFileDisplay).toBeInTheDocument();
   });
 });
 
@@ -105,18 +82,19 @@ describe('Send valid uploaded files to server', () => {
         <PurchaseOrderForm />
       </MemoryRouter>,
     );
-
+    const filename = removeExtension(validFile.name);
     const uploadFiles = screen.getByLabelText('Upload Files :');
     const submitBtn = screen.getByText('Submit');
 
     await user.upload(uploadFiles, validFile);
-    await user.upload(uploadFiles, invalidFiles);
+    await user.upload(uploadFiles, invalidFile);
     await user.click(submitBtn);
 
+    //eslint-disable-next-line
     const [url, options] = mockFetch.mock.calls[0];
     const body = JSON.parse(options.body);
     expect(body.length).toEqual(1);
-    expect(body[0]).toEqual('Test print_26-30_130x190_2x');
+    expect(body[0]).toEqual(filename);
   });
   it("Should not send fetch request when there's no valid files ", async () => {
     const user = userEvent.setup();
@@ -141,6 +119,7 @@ describe('Send valid uploaded files to server', () => {
     const uploadFiles = screen.getByLabelText('Upload Files :');
     const submitBtn = screen.getByText('Submit');
 
+    await user.upload(uploadFiles, invalidFile);
     await user.click(submitBtn);
     expect(mockFetch).not.toBeCalled();
     const errorMsg = screen.getByText('Tidak ada file yang diupload');

@@ -11,8 +11,8 @@ export default function PoForm() {
 
   const handleFiles = (e) => {
     const files = e.target.files;
-    const acceptedFiles = [...validFiles];
-    const rejectedFiles = [...invalidFiles];
+    const acceptedFiles = [];
+    const rejectedFiles = [];
 
     for (const file of files) {
       const sliceIndex = file.name.indexOf('.');
@@ -20,11 +20,11 @@ export default function PoForm() {
       if (matchFilename(filename)) {
         acceptedFiles.push(filename);
       } else {
-        rejectedFiles.push(file.name);
+        rejectedFiles.push(filename);
       }
     }
-    setInvalidFiles(rejectedFiles);
-    setValidFiles(acceptedFiles);
+    setInvalidFiles([...rejectedFiles, ...invalidFiles]);
+    setValidFiles([...acceptedFiles, ...validFiles]);
   };
 
   const handleSubmit = async (e) => {
