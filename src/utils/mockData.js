@@ -1,10 +1,12 @@
+const currentDate = new Date();
+
 const mockPoData = [
   {
     id: 0,
     customerName: 'John Doe',
     printed: false,
     invoiceId: null,
-    createdAt: new Date(),
+    createdAt: currentDate,
     done: false,
     poType: 'Eco Solvent',
     fileList: [
@@ -30,7 +32,7 @@ const mockPoData = [
     customerName: 'John Doe',
     printed: false,
     invoiceId: null,
-    createdAt: new Date(),
+    createdAt: currentDate,
     done: false,
     printType: 'Eco Solvent',
     fileList: [
@@ -82,4 +84,28 @@ const invalidFile = new File(
   { type: 'image/tif' },
 );
 
-export { mockPoData, multipleFiles, validFile, invalidFile };
+// Mock Invoice Data
+const invoiceData = [
+  {
+    id: 0,
+    invoiceNumber: 1071,
+    customerName: 'John Doe',
+    customerPhone: '8888 8888 8888',
+    amount: 700000,
+    createdAt: currentDate,
+    status: 'pending',
+    orderList: mockPoData[0].fileList.map((list) => list),
+  },
+  {
+    id: 1,
+    invoiceNumber: 1072,
+    customerName: 'John Doe',
+    amount: 700000,
+    customerPhone: '0000 0000 0000',
+    createdAt: currentDate,
+    status: 'pending',
+    orderList: mockPoData[1].fileList.map((list) => list),
+  },
+];
+
+export { mockPoData, multipleFiles, validFile, invalidFile, invoiceData };
