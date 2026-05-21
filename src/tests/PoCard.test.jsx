@@ -10,7 +10,7 @@ const mockPurchaseOrder = mockPoData[0];
 
 describe('Render Card', () => {
   it('Render Card correctly', () => {
-    const currentDate = format(new Date(), 'MM-dd-yyyy');
+    const currentDate = format(new Date(), 'dd-MMM-yyyy');
     render(
       <MemoryRouter>
         <PoCard purchaseOrder={mockPurchaseOrder} />

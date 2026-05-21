@@ -10,7 +10,7 @@ export default function PoCard({ purchaseOrder, expandCard = false }) {
     <div className="card">
       <div className="poDetails" role="button" tabIndex={0}>
         <h3>{purchaseOrder.customerName}</h3>
-        <p>{format(purchaseOrder.createdAt, 'MM-dd-yyyy')}</p>
+        <p>{format(purchaseOrder.createdAt, 'dd-MMM-yyyy')}</p>
         <div className="card-button">
           <button onClick={toggleEditForm}>
             <img src="example.com" alt="edit purchase order" />
