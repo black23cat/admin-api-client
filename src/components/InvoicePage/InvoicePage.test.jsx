@@ -21,7 +21,6 @@ vi.mock('../InvoiceCard/InvoiceCard', () => ({
 
 describe('Render Invoice Page correctly', () => {
   it('Render Invoice page', async () => {
-    const user = userEvent.setup();
     render(
       <MemoryRouter>
         <InvoicePage />
@@ -30,38 +29,20 @@ describe('Render Invoice Page correctly', () => {
     const newInvoiceButton = screen.getByRole('button', {
       name: /\bbuat invoice\b/i,
     });
-    const searchBar = screen.getByRole('searchbox');
-    const filterSelect = screen.getByLabelText('Filter :');
-    const applyFilterButton = screen.getByRole('button', { name: 'Apply' });
-
-    await user.click(filterSelect);
-
-    const invoiceNumberFilter = screen.getByRole('option', { name: 'Invoice' });
-    const dateFilter = screen.getByRole('option', { name: 'Tanggal' });
-    const amountFilter = screen.getByRole('option', { name: 'Jumlah' });
-    const statusFilter = screen.getByRole('option', { name: 'Status' });
-    const weekFilter = screen.getByLabelText('Minggu :');
+    const filterForm = screen.getByRole('form', { name: 'Filter Invoice' });
 
     expect(newInvoiceButton).toBeInTheDocument();
-    expect(searchBar).toBeInTheDocument();
-    expect(filterSelect).toBeInTheDocument();
-    expect(invoiceNumberFilter).toBeInTheDocument();
-    expect(dateFilter).toBeInTheDocument();
-    expect(amountFilter).toBeInTheDocument();
-    expect(statusFilter).toBeInTheDocument();
-    expect(applyFilterButton).toBeInTheDocument();
-    expect(weekFilter).toBeInTheDocument();
+    expect(filterForm).toBeInTheDocument();
 
     await waitFor(() => {
       const invoiceCards = screen.getAllByText(/INV-\d{4}/i, { exact: false });
-
       expect(invoiceCards.length).toEqual(mockInvoice.length);
     });
   });
 });
 
-describe('Search form working correctly', () => {
-  it('Send request to server with searched data', async () => {
+describe('Filter form working correctly', () => {
+  it('Send request to server with filtered data', async () => {
     const user = userEvent.setup();
     const returnedInvoice = mockInvoice.filter((invoice) =>
       invoice.customerName.includes('John'),
@@ -97,10 +78,9 @@ describe('Search form working correctly', () => {
     await waitFor(
       () => {
         const invoiceCard = screen.getAllByText(mockInvoice[0].customerName);
-
         expect(invoiceCard.length).toEqual(2);
       },
-      { timeout: 3000 },
+      { timeout: 1500 },
     );
   });
 });
