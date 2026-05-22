@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
-import { mockPoData } from '../utils/mockData';
-import PoPage from '../components/PoPage/PoPage';
-import PoCard from '../components/PoCard/PoCard';
+import { mockPoData } from '../../utils/mockData';
+import PoPage from './PoPage';
+import PoCard from '../PoCard/PoCard';
 
 // Mock PoCard component
-vi.mock('../components/PoCard/PoCard', () => {
+vi.mock('../PoCard/PoCard', () => {
   return {
     default: () => <div>Purchase Order Card</div>,
   };

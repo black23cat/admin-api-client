@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { format } from 'date-fns';
-import { invoiceData as mockInvoice } from '../utils/mockData';
-import InvoiceCard from '../components/InvoiceCard/InvoiceCard';
+import { invoiceData as mockInvoice } from '../../utils/mockData';
+import InvoiceCard from './InvoiceCard';
 
 const currentDate = new Date();
 

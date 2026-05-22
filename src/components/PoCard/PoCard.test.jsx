@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { format } from 'date-fns';
-import PoCard from '../components/PoCard/PoCard';
+import PoCard from './PoCard';
 import userEvent from '@testing-library/user-event';
-import { mockPoData } from '../utils/mockData';
+import { mockPoData } from '../../utils/mockData';
 
 const mockPurchaseOrder = mockPoData[0];
 

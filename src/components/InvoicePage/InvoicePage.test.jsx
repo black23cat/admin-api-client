@@ -2,13 +2,13 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
-import { invoiceData as mockInvoice } from '../utils/mockData';
-import InvoicePage from '../components/InvoicePage/InvoicePage';
-import InvoiceCard from '../components/InvoiceCard/InvoiceCard';
+import { invoiceData as mockInvoice } from '../../utils/mockData';
+import InvoicePage from './InvoicePage';
+import InvoiceCard from '../InvoiceCard/InvoiceCard';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-vi.mock('../components/InvoiceCard/InvoiceCard', () => ({
+vi.mock('../InvoiceCard/InvoiceCard', () => ({
   default: ({ invoice }) => {
     return (
       <div>

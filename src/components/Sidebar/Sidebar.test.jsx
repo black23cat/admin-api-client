@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import Sidebar from '../components/Sidebar/Sidebar';
+import Sidebar from './Sidebar';
 
 describe('Render Sidebar', () => {
   it('Render Sidebar correctly', () => {
