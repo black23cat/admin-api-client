@@ -106,6 +106,26 @@ const invoiceData = [
     status: 'pending',
     orderList: mockPoData[1].fileList.map((list) => list),
   },
+  {
+    id: 2,
+    invoiceNumber: 1073,
+    customerName: 'Jane Doe',
+    customerPhone: '8888 8888 8888',
+    amount: 700000,
+    createdAt: currentDate,
+    status: 'pending',
+    orderList: mockPoData[0].fileList.map((list) => list),
+  },
+  {
+    id: 3,
+    invoiceNumber: 1074,
+    customerName: 'Jane Doe',
+    amount: 700000,
+    customerPhone: '0000 0000 0000',
+    createdAt: currentDate,
+    status: 'pending',
+    orderList: mockPoData[1].fileList.map((list) => list),
+  },
 ];
 
 export { mockPoData, multipleFiles, validFile, invalidFile, invoiceData };
