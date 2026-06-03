@@ -1,12 +1,15 @@
-import { Link, useNavigate } from 'react-router';
-import { useState } from 'react';
+import { Link } from 'react-router';
+import { useContext, useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { UserContext } from '../../App';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginForm() {
   const [fieldsError, setFieldsError] = useState('');
   const [formInput, setFormInput] = useState({});
   const [isLogin, setIsLogin] = useState(false);
-
-  const navigate = useNavigate();
+  const [setUser] = useContext(UserContext);
 
   const handleFormInput = (e) => {
     const fieldName = e.target.name;
@@ -17,28 +20,41 @@ export default function LoginForm() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // TODO: REPLACE API_URL TO DATABASE URL
-    const API_URL = import.meta.env.VITE_API_URL;
     try {
-      const response = await fetch(`${API_URL}/api/login`, {
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formInput),
       });
       const results = await response.json();
+
       if (response.status === 400) {
         setFieldsError(results.message);
+        return;
+      }
+      if (response.status === 404) {
+        setFieldsError(results);
         return;
       }
       localStorage.setItem('token', results);
       setFieldsError('');
       setIsLogin(true);
-      navigate('/');
     } catch {
-      // Navigate to error page
-      navigate('/error');
+      setFieldsError('Terjadi masalah dengan server');
     }
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      const timeout = setTimeout(() => {
+        const token = localStorage.getItem('token');
+        const decodedToken = jwtDecode(token);
+
+        setUser(decodedToken.user);
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  });
 
   return (
     <section className="login">

@@ -1,9 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
 import { MemoryRouter } from 'react-router';
+import { UserContext } from '../../App';
 
+let mockContextValue;
 const mockUser = {
   id: 1,
   firstName: 'John',
@@ -13,12 +15,18 @@ const mockUser = {
   password: 'johndoe123',
   role: 'Admin',
 };
+beforeEach(() => {
+  const setUser = vi.fn();
+  mockContextValue = [setUser];
+});
 
 describe('Render Login Form', () => {
   it('Render forms correctly', () => {
     render(
       <MemoryRouter>
-        <LoginForm />
+        <UserContext value={mockContextValue}>
+          <LoginForm />
+        </UserContext>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
@@ -45,7 +53,9 @@ describe('Form submit data correctly', () => {
     });
     render(
       <MemoryRouter>
-        <LoginForm />
+        <UserContext value={mockContextValue}>
+          <LoginForm />
+        </UserContext>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
@@ -76,7 +86,9 @@ describe('Form submit data correctly', () => {
     });
     render(
       <MemoryRouter>
-        <LoginForm />
+        <UserContext value={mockContextValue}>
+          <LoginForm />
+        </UserContext>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
