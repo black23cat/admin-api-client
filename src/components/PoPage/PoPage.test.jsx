@@ -6,6 +6,13 @@ import { mockPoData } from '../../utils/mockData';
 import PoPage from './PoPage';
 import PoCard from '../PoCard/PoCard';
 
+// Mock useNavigate
+let mockNavigate;
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
 // Mock PoCard component
 vi.mock('../PoCard/PoCard', () => {
   return {
@@ -14,6 +21,7 @@ vi.mock('../PoCard/PoCard', () => {
 });
 
 beforeEach(() => {
+  mockNavigate = vi.fn();
   const mockFetch = vi.fn(() => {
     return Promise.resolve({
       status: 200,
@@ -47,6 +55,19 @@ describe('Render Purchase Order Main Page', () => {
 });
 
 describe('Buttons working correctly', () => {
+  it('Redirect to po form', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <PoPage />
+      </MemoryRouter>,
+    );
+    const newPoButton = screen.getByText('New Purchase Order', {
+      exact: false,
+    });
+    await user.click(newPoButton);
+    expect(mockNavigate.mock.calls[0][0]).toEqual('/purchase-order/create');
+  });
   it('Invoice button is disabled when no po is selected', () => {
     render(
       <MemoryRouter>
