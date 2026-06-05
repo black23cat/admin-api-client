@@ -1,11 +1,13 @@
 import PoCard from '../PoCard/PoCard';
 import { useEffect, useState } from 'react';
 import { mockPoData } from '../../utils/mockData';
+import { useNavigate } from 'react-router';
 
 export default function PoPage() {
   const [selectedPo, setSelectedPo] = useState([]);
   const [poList, setPoList] = useState([]);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (poId) => {
     if (selectedPo.includes(poId)) {
@@ -63,10 +65,12 @@ export default function PoPage() {
   return (
     <div>
       <h2>Purchase Order</h2>
-      <button>+ New Purchase Order</button>
+      <button onClick={() => navigate('/purchase-order/create')}>
+        + New Purchase Order
+      </button>
       {poList.length > 0 ? (
         <div className="po-list-wrapper">
-          {mockPoData.map((po) => (
+          {poList.map((po) => (
             <div key={po.id}>
               <label htmlFor="selectedPo">
                 <input
@@ -82,7 +86,7 @@ export default function PoPage() {
                   disabled={po.invoiceId !== null ? true : false}
                 />
               </label>
-              <PoCard po={po} />
+              <PoCard purchaseOrder={po} />
             </div>
           ))}
         </div>
