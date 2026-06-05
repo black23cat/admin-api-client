@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -6,6 +6,17 @@ import PurchaseOrderForm from './PoForm.jsx';
 //Setup mockfiles
 import { invalidFile, multipleFiles, validFile } from '../../utils/mockData.js';
 import { removeExtension } from '../../utils/regexPattern.js';
+
+let mockNavigate;
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
+beforeEach(() => {
+  mockNavigate = vi.fn();
+});
 
 describe('Render Purchase Order Form', () => {
   it('Render Purchase Order Form correctly', () => {
@@ -17,13 +28,17 @@ describe('Render Purchase Order Form', () => {
     // Correctly render PO Form
     const customerNameField = screen.getByLabelText('Nama Customer :');
     const uploadFiles = screen.getByLabelText('Upload Files :');
+    const printType = screen.getByLabelText('Tipe po :');
+    const submitBtn = screen.getByRole('button', { name: 'Submit' });
     expect(customerNameField).toBeInTheDocument();
     expect(uploadFiles).toBeInTheDocument();
+    expect(printType).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
   });
 });
 
 describe('Upload file', () => {
-  it('Upload files', async () => {
+  it('Upload and delete uploaded files', async () => {
     // Setup user event
     const user = userEvent.setup();
 
@@ -38,6 +53,14 @@ describe('Upload file', () => {
     expect(uploadFiles.files.length).toEqual(2);
     expect(uploadFiles.files[0]).toStrictEqual(multipleFiles[0]);
     expect(uploadFiles.files[1]).toStrictEqual(multipleFiles[1]);
+
+    const deleteFileButtons = screen.getAllByRole('button', { name: 'x' });
+
+    await user.click(deleteFileButtons[0]);
+
+    const uploadedFiles = screen.getAllByText('Test', { exact: false });
+
+    expect(uploadedFiles.length).toEqual(1);
   });
 
   it('Show valid/invalid uploaded filename', async () => {
@@ -63,7 +86,7 @@ describe('Upload file', () => {
 });
 
 describe('Send valid uploaded files to server', () => {
-  it('Send only valid files to server', async () => {
+  it('Send only valid files to server and redirect to purchase order page', async () => {
     const user = userEvent.setup();
     const mockFetch = vi.fn(() =>
       Promise.resolve({
@@ -83,9 +106,11 @@ describe('Send valid uploaded files to server', () => {
       </MemoryRouter>,
     );
     const filename = removeExtension(validFile.name);
+    const customerName = screen.getByLabelText('Nama Customer :');
     const uploadFiles = screen.getByLabelText('Upload Files :');
     const submitBtn = screen.getByText('Submit');
 
+    await user.type(customerName, 'John Doe');
     await user.upload(uploadFiles, validFile);
     await user.upload(uploadFiles, invalidFile);
     await user.click(submitBtn);
@@ -93,18 +118,21 @@ describe('Send valid uploaded files to server', () => {
     //eslint-disable-next-line
     const [url, options] = mockFetch.mock.calls[0];
     const body = JSON.parse(options.body);
-    expect(body.length).toEqual(1);
-    expect(body[0]).toEqual(filename);
+    expect(body.fileList.length).toEqual(1);
+    expect(body.fileList[0].filename).toEqual(filename);
+
+    expect(mockNavigate.mock.calls[0][0]).toEqual('/purchase-order');
   });
+
   it("Should not send fetch request when there's no valid files ", async () => {
     const user = userEvent.setup();
     const mockFetch = vi.fn(() =>
-      Promise.resolve({
-        status: 201,
-        ok: true,
+      Promise.reject({
+        status: 400,
+        ok: false,
         json: () =>
-          Promise.resolve({
-            message: 'Order Created',
+          Promise.reject({
+            message: 'Bad Request',
           }),
       }),
     );
@@ -122,7 +150,48 @@ describe('Send valid uploaded files to server', () => {
     await user.upload(uploadFiles, invalidFile);
     await user.click(submitBtn);
     expect(mockFetch).not.toBeCalled();
-    const errorMsg = screen.getByText('Tidak ada file yang diupload');
-    expect(errorMsg).toBeInTheDocument();
+  });
+
+  it('Render error message', async () => {
+    const user = userEvent.setup();
+    const mockFetch = vi.fn(() =>
+      Promise.reject({
+        status: 400,
+        ok: false,
+        json: () =>
+          Promise.reject({
+            message: 'Bad Request',
+          }),
+      }),
+    );
+    globalThis.fetch = mockFetch;
+
+    render(
+      <MemoryRouter>
+        <PurchaseOrderForm />
+      </MemoryRouter>,
+    );
+
+    const customerName = screen.getByLabelText('Nama Customer :');
+    const uploadFiles = screen.getByLabelText('Upload Files :');
+    const submitBtn = screen.getByText('Submit');
+    await user.upload(uploadFiles, invalidFile);
+    await user.click(submitBtn);
+
+    expect(
+      screen.getByText('Tidak ada file yang diupload'),
+    ).toBeInTheDocument();
+
+    await user.upload(uploadFiles, validFile);
+    await user.click(submitBtn);
+
+    expect(
+      screen.getByText('Nama Customer tidak boleh kosong'),
+    ).toBeInTheDocument();
+
+    await user.type(customerName, 'John Doe');
+    await user.upload(uploadFiles, validFile);
+    await user.click(submitBtn);
+    expect(screen.getByText('Gagal membuat invoice')).toBeInTheDocument();
   });
 });
