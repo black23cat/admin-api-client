@@ -68,25 +68,36 @@ describe('Buttons working correctly', () => {
     await user.click(newPoButton);
     expect(mockNavigate.mock.calls[0][0]).toEqual('/purchase-order/create');
   });
-  it('Invoice button is disabled when no po is selected', () => {
+  it('Invoice button is disabled when no po is selected', async () => {
     render(
       <MemoryRouter>
         <PoPage />
       </MemoryRouter>,
     );
-    const invoiceButton = screen.getByText('Create Invoice');
-    expect(invoiceButton).toBeDisabled();
+    await waitFor(() => {
+      const invoiceButton = screen.getByText('Create Invoice');
+      expect(invoiceButton).toBeDisabled();
+    });
   });
 
   it('Send post request to create invoice when user has selected po', async () => {
     const user = userEvent.setup({ pointerEventsCheck: 0 });
-    const mockFetch = vi.fn().mockResolvedValueOnce(() => {
-      return Promise.resolve({
-        status: 201,
-        ok: true,
-        json: () => Promise.resolve('Created'),
+    const mockFetch = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        return Promise.resolve({
+          status: 200,
+          ok: true,
+          json: () => Promise.resolve(mockPoData),
+        });
+      })
+      .mockImplementationOnce(() => {
+        return Promise.resolve({
+          status: 201,
+          ok: true,
+          json: () => Promise.resolve('Created'),
+        });
       });
-    });
     globalThis.fetch = mockFetch;
     render(
       <MemoryRouter>
@@ -105,26 +116,35 @@ describe('Buttons working correctly', () => {
   });
   it('Render error message when failed to create invoice', async () => {
     const user = userEvent.setup({ pointerEventsCheck: 0 });
-    const mockFetch = vi.fn().mockRejectedValueOnce(() => {
-      return Promise.reject({
-        status: 500,
-        ok: true,
-        json: () => Promise.reject('Server Error'),
+    const mockFetch = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        return Promise.resolve({
+          status: 200,
+          ok: true,
+          json: () => Promise.resolve(mockPoData),
+        });
+      })
+      .mockImplementationOnce(() => {
+        return Promise.reject({
+          status: 500,
+          ok: false,
+          json: () => Promise.reject('Server Error'),
+        });
       });
-    });
     globalThis.fetch = mockFetch;
     render(
       <MemoryRouter>
         <PoPage />
       </MemoryRouter>,
     );
-    const createInvoiceBtn = screen.getByText('Create Invoice');
 
     await waitFor(async () => {
       const cardsCheckbox = screen.getAllByRole('checkbox');
       await user.click(cardsCheckbox[0]);
     });
 
+    const createInvoiceBtn = screen.getByText('Create Invoice');
     await user.click(createInvoiceBtn);
     expect(mockFetch).toHaveBeenCalled();
     await waitFor(() => {
