@@ -1,12 +1,14 @@
 import PoCard from '../PoCard/PoCard';
 import { useEffect, useState } from 'react';
-import { mockPoData } from '../../utils/mockData';
 import { useNavigate } from 'react-router';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PoPage() {
   const [selectedPo, setSelectedPo] = useState([]);
   const [poList, setPoList] = useState([]);
-  const [error, setError] = useState(false);
+  const [invoiceError, setInvoiceError] = useState(false);
+  const [fetchPoError, setFetchPoError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (poId) => {
@@ -26,8 +28,7 @@ export default function PoPage() {
       return;
     }
     try {
-      const API_URL = import.meta.env.VITE_API_URL;
-      const response = fetch(`${API_URL}/api/`, {
+      const response = fetch(`${API_URL}/purchase-order/create`, {
         method: 'POST',
       });
       const result = await response.json();
@@ -40,24 +41,37 @@ export default function PoPage() {
       setPoList(list);
       setSelectedPo([]);
     } catch {
-      setError(true);
+      setInvoiceError(true);
     }
   };
 
   useEffect(() => {
-    // TODO : Replace with fetch data from API
-    const timeout = setTimeout(() => {
-      setPoList(mockPoData);
-    }, 500);
-    return () => clearTimeout(timeout);
+    const token = localStorage.getItem('token');
+    const fetchErrorMessage = 'Gagal mengambil data po dari server';
+    const fetchPoData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/purchase-order`, {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.status !== 200) {
+          throw fetchErrorMessage;
+        }
+        const result = await response.json();
+        setPoList(result);
+      } catch {
+        setFetchPoError(fetchErrorMessage);
+      }
+    };
+    fetchPoData();
   }, []);
 
   useEffect(() => {
-    if (!error) {
+    if (!invoiceError) {
       return;
     }
     const errorTimeout = setTimeout(() => {
-      setError(false);
+      setInvoiceError(false);
     }, 1000);
     return () => clearTimeout(errorTimeout);
   });
@@ -90,8 +104,10 @@ export default function PoPage() {
             </div>
           ))}
         </div>
-      ) : (
+      ) : poList.length === 0 && fetchPoError === '' ? (
         <span>Loading</span>
+      ) : (
+        <span>{fetchPoError}</span>
       )}
       <button
         onClick={createInvoice}
@@ -99,7 +115,7 @@ export default function PoPage() {
       >
         Create Invoice
       </button>
-      {error ? <span>Gagal membuat invoice</span> : ''}
+      {invoiceError ? <span>Gagal membuat invoice</span> : ''}
     </div>
   );
 }
