@@ -153,3 +153,40 @@ describe('Buttons working correctly', () => {
     });
   });
 });
+
+describe('Select po working correctly', () => {
+  it('Select button is enabled when po is not invoiced', async () => {
+    render(
+      <MemoryRouter>
+        <PoPage />
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      const selectButton = screen.getAllByRole('checkbox');
+      expect(selectButton.length).toEqual(2);
+    });
+  });
+
+  it('Select button is disabled when po is invoiced', async () => {
+    const poData = mockPoData.map((po) => {
+      return { ...po, invoiceId: 1 };
+    });
+    globalThis.fetch = vi.fn(() => {
+      return Promise.resolve({
+        status: 200,
+        ok: true,
+        json: () => Promise.resolve(poData),
+      });
+    });
+    render(
+      <MemoryRouter>
+        <PoPage />
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      const selectButton = screen.getAllByRole('checkbox');
+      expect(selectButton[0]).toBeDisabled();
+      expect(selectButton[1]).toBeDisabled();
+    });
+  });
+});
