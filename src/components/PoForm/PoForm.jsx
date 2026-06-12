@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { matchFilename } from '../../utils/regexPattern';
 import { useNavigate } from 'react-router';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function PoForm() {
-  const [customerName, setCustomerName] = useState('');
-  const [poType, setPoType] = useState('eco');
-  const [validFiles, setValidFiles] = useState([]);
+export default function PoForm({ poData = null, closeCardForm, updatePo }) {
+  const [customerName, setCustomerName] = useState(
+    poData === null ? '' : poData.customerName,
+  );
+  const [poType, setPoType] = useState(poData === null ? 'eco' : poData.poType);
+  const [validFiles, setValidFiles] = useState(
+    poData === null ? [] : poData.fileList.map((file) => file.filename),
+  );
   const [invalidFiles, setInvalidFiles] = useState([]);
+  const [formError, setFormError] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [editPo, setEditPo] = useState(false);
 
   const navigate = useNavigate();
 
@@ -61,36 +67,115 @@ export default function PoForm() {
     const token = localStorage.getItem('token');
     if (token === null) {
       setErrorMsg(
-        'Token sudah expired, silahkan login ulang untuk membuat Invoice',
+        'Token sudah expired, silahkan login ulang untuk membuat atau mengedit Invoice',
       );
     }
     const fileList = validFiles.map((file) => {
       return { filename: file };
     });
-    try {
-      const response = await fetch(`${API_URL}/purchase-order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          customerName,
-          poType,
-          fileList: fileList,
-        }),
-      });
-      if (response.status === 201) {
-        return navigate('/purchase-order');
+    const invoiceErrorMsg = 'Gagal membuat invoice';
+    if (poData === null) {
+      try {
+        const response = await fetch(`${API_URL}/purchase-order/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            customerName,
+            poType,
+            fileList: fileList,
+          }),
+        });
+
+        if (response.status === 201) {
+          return navigate('/purchase-order');
+        }
+        if (response.status === 400) {
+          const result = await response.json();
+          return setFormError(result);
+        }
+        throw new Error(invoiceErrorMsg);
+      } catch {
+        setErrorMsg(invoiceErrorMsg);
       }
-      throw new Error('Gagal membuat invoice');
-    } catch {
-      setErrorMsg('Gagal membuat invoice');
+      return;
+    }
+    let edited;
+    for (let i = 0; i < validFiles.length; i++) {
+      if (validFiles.length !== poData.length) {
+        edited = true;
+        break;
+      }
+      if (
+        validFiles.length === poData.length &&
+        !validFiles.includes(poData.fileList[i].filename)
+      ) {
+        edited = true;
+        break;
+      }
+      edited = false;
+    }
+    if (
+      !edited &&
+      customerName === poData.customerName &&
+      poType === poData.poType
+    ) {
+      return setErrorMsg('Po tidak dirubah');
+    } else {
+      const editPoErrorMsg = 'Gagal mengedit po';
+      try {
+        const response = await fetch(`${API_URL}/purchase-order/${poData.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            customerName,
+            poType,
+            fileList: fileList,
+          }),
+        });
+        if (response.status === 200) {
+          const result = await response.json();
+          updatePo(result);
+          return setEditPo(true);
+        }
+        if (response.status === 400) {
+          const result = await response.json();
+          setFormError(result);
+        }
+        throw new Error(editPoErrorMsg);
+      } catch {
+        setErrorMsg(editPoErrorMsg);
+      }
     }
   };
+
+  useEffect(() => {
+    if (!editPo) {
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setEditPo(false);
+      closeCardForm();
+      navigate('/purchase-order');
+    }, 500);
+    return () => clearTimeout(timeout);
+  });
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      {formError.length > 0 && (
+        <ul>
+          {formError.map((error, index) => (
+            <li key={index}>{error.msg}</li>
+          ))}
+        </ul>
+      )}
+      <form onSubmit={handleSubmit} data-testid="purchase-order-form">
         <div>
           <label htmlFor="customer-name">Nama Customer :</label>
           <input
@@ -145,8 +230,11 @@ export default function PoForm() {
         <div>
           {errorMsg !== '' && <span>{errorMsg}</span>}
           <button type="submit">Submit</button>
-          <button>Cancel</button>
+          <button type="button" onClick={closeCardForm}>
+            Cancel
+          </button>
         </div>
+        {editPo && <span>Berhasil mengedit po</span>}
       </form>
     </>
   );

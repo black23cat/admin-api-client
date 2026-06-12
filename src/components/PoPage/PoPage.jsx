@@ -7,11 +7,12 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default function PoPage() {
   const [selectedPo, setSelectedPo] = useState([]);
   const [poList, setPoList] = useState([]);
+  const [editCardId, setEditCardId] = useState(null);
   const [invoiceError, setInvoiceError] = useState(false);
   const [fetchPoError, setFetchPoError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (poId) => {
+  const handleSelectPo = (poId) => {
     if (selectedPo.includes(poId)) {
       const index = selectedPo.indexOf(poId);
       const lists = [...selectedPo];
@@ -19,6 +20,25 @@ export default function PoPage() {
       setSelectedPo(lists);
     } else {
       setSelectedPo([...selectedPo, poId]);
+    }
+  };
+
+  const handleCardEdit = (poId) => {
+    if (poId === editCardId) {
+      return;
+    }
+    setEditCardId(poId);
+  };
+
+  const handleCloseCard = () => {
+    setEditCardId(null);
+  };
+
+  const updatePo = (poData, action = 'edit') => {
+    if (action === 'edit') {
+      const updatedPo = poList.map((po) => (po.id === poData.id ? poData : po));
+      setPoList(updatedPo);
+      return;
     }
   };
 
@@ -85,22 +105,29 @@ export default function PoPage() {
       {poList.length > 0 ? (
         <div className="po-list-wrapper">
           {poList.map((po) => (
-            <div key={po.id}>
-              <label htmlFor="selectedPo">
+            <div
+              className="card-wrapper"
+              key={po.id}
+              style={{ border: '1px solid green' }}
+            >
+              <label htmlFor="selectPo">
                 <input
                   type="checkbox"
                   name="selectPo"
                   id="selectPo"
-                  onChange={() => handleChange(po.id)}
-                  checked={
-                    selectedPo.includes(po.id) || po.invoiceId !== null
-                      ? true
-                      : false
-                  }
+                  aria-label="select po"
+                  onChange={() => handleSelectPo(po.id)}
+                  checked={selectedPo.includes(po.id)}
                   disabled={po.invoiceId !== null ? true : false}
                 />
               </label>
-              <PoCard purchaseOrder={po} />
+              <PoCard
+                purchaseOrder={po}
+                handleCardClick={handleCardEdit}
+                isOpen={po.id === editCardId}
+                closeCardForm={handleCloseCard}
+                updatePo={updatePo}
+              />
             </div>
           ))}
         </div>
