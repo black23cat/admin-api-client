@@ -1,5 +1,7 @@
 import { format } from 'date-fns';
 import PoForm from '../PoForm/PoForm';
+import Dialog from '../Dialog/Dialog';
+import { useState } from 'react';
 
 export default function PoCard({
   purchaseOrder,
@@ -8,6 +10,59 @@ export default function PoCard({
   closeCardForm,
   updatePo,
 }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  const deletePo = () => {
+    setOpenModal(true);
+  };
+
+  const handleModalBtnClick = (action) => {
+    if (action === 'cancel') {
+      closeModal();
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (token === null) {
+      setErrorMsg('Token expired silahkan login ulang.');
+      closeModal();
+      return;
+    }
+
+    if (purchaseOrder.invoiceId !== null) {
+      setErrorMsg('Po ini sudah dibuat invoice');
+      return;
+    }
+
+    if (action === 'confirm' && token !== null) {
+      const errorMsg = 'Gagal menghapus Purchase Order';
+      const fetchDelete = async () => {
+        try {
+          const API_URL = import.meta.env.VITE_API_URL;
+          const response = await fetch(
+            `${API_URL}/purchase-order/${purchaseOrder.id}`,
+            { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
+          );
+          if (response.status !== 200) {
+            throw errorMsg;
+          }
+          if (response.status === 200) {
+            const result = await response.json();
+            updatePo(result, 'delete');
+            return;
+          }
+        } catch {
+          setErrorMsg(errorMsg);
+        }
+      };
+      fetchDelete();
+    }
+  };
+
   return (
     <div
       style={{ border: '1px solid red', cursor: 'pointer' }}
@@ -16,6 +71,13 @@ export default function PoCard({
       tabIndex={0}
       onClick={() => handleCardClick(purchaseOrder.id)}
     >
+      <Dialog isOpen={openModal} closeModal={closeModal}>
+        <h3>Hapus Purchase Order</h3>
+        <div>
+          <button onClick={() => handleModalBtnClick('confirm')}>Hapus</button>
+          <button onClick={() => handleModalBtnClick('cancel')}>Batal</button>
+        </div>
+      </Dialog>
       <CardDetails purchaseOrder={purchaseOrder} />
       {isOpen && (
         <>
@@ -24,7 +86,12 @@ export default function PoCard({
             closeCardForm={closeCardForm}
             updatePo={updatePo}
           />
-          <CardButton />
+          <CardButton
+            poId={purchaseOrder.id}
+            deletePo={deletePo}
+            disabled={purchaseOrder.invoiceId !== null}
+          />
+          {errorMsg !== '' && <span>{errorMsg}</span>}
         </>
       )}
     </div>
@@ -40,13 +107,13 @@ function CardDetails({ purchaseOrder }) {
   );
 }
 
-function CardButton() {
+function CardButton({ deletePo, disabled }) {
   return (
     <div className="card-button">
       <button>
         <img src="example.com" alt="print purchase order" />
       </button>
-      <button>
+      <button onClick={() => deletePo()} disabled={disabled}>
         <img src="example.com" alt="delete purchase order" />
       </button>
     </div>

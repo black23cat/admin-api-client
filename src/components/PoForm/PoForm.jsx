@@ -76,7 +76,7 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
     const invoiceErrorMsg = 'Gagal membuat invoice';
     if (poData === null) {
       try {
-        const response = await fetch(`${API_URL}/purchase-order/create`, {
+        const response = await fetch(`${API_URL}/purchase-order/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

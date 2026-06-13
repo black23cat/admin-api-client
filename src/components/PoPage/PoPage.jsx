@@ -40,6 +40,12 @@ export default function PoPage() {
       setPoList(updatedPo);
       return;
     }
+    if (action === 'delete') {
+      const deletedPo = poList.filter((po) => po.id !== poData.id);
+      setPoList(deletedPo);
+      return;
+    }
+    throw 'No actions were defined';
   };
 
   const createInvoice = async () => {
