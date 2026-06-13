@@ -1,11 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { format } from 'date-fns';
 import PoCard from './PoCard';
+import Dialog from '../Dialog/Dialog';
 import { mockPoData } from '../../utils/mockData';
 
 const mockPurchaseOrder = mockPoData[0];
+vi.mock('../Dialog/Dialog', () => {
+  return {
+    default: () => <div>Modal mock</div>,
+  };
+});
 
 describe('Render Card', () => {
   it('Render Card correctly', () => {
