@@ -16,6 +16,7 @@ function init() {
   const decodedToken = jwtDecode(token);
   const tokenExpTime = new Date(decodedToken.exp * 1000); //jwt exp time must be times 1000 to get milisecond value
   if (currentTime > tokenExpTime) {
+    localStorage.removeItem('token');
     return null;
   }
   return decodedToken.user;

@@ -123,6 +123,10 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
       poType === poData.poType
     ) {
       return setErrorMsg('Po tidak dirubah');
+    } else if (poData.invoiceId !== null) {
+      return setErrorMsg(
+        'Gagal mengedit po. Invoice untuk po ini sudah dibuat.',
+      );
     } else {
       const editPoErrorMsg = 'Gagal mengedit po';
       try {

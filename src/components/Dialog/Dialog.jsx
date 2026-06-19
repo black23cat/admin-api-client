@@ -10,7 +10,7 @@ export default function Dialog({ isOpen, closeModal, children }) {
     }
   }, [isOpen]);
   return (
-    <dialog ref={modalRef} onCancel={() => closeModal()}>
+    <dialog ref={modalRef} onCancel={closeModal}>
       {children}
     </dialog>
   );
