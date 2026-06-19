@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { mockPoData } from '../../utils/mockData';
 import PoPage from './PoPage';
 import PoCard from '../PoCard/PoCard';
+import Dialog from '../Dialog/Dialog';
 
 // Mock useNavigate
 let mockNavigate;
@@ -17,6 +18,12 @@ vi.mock('react-router', async () => {
 vi.mock('../PoCard/PoCard', () => {
   return {
     default: () => <div>Purchase Order Card</div>,
+  };
+});
+
+vi.mock('../Dialog/Dialog', () => {
+  return {
+    default: () => <div>Dialog Mock</div>,
   };
 });
 
