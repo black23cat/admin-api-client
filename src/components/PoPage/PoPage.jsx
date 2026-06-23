@@ -99,10 +99,19 @@ export default function PoPage() {
         body: JSON.stringify({ ...bodyRequest }),
       });
 
-      if (response.status === 201) {
+      if (response.ok) {
+        const { invoice, updatedPoId } = await response.json();
         setSelectedPoId([]);
-        invoiceCancelButton(); // close modal and reset prevoius invoice data
-        return setInvoiceCreated(true);
+        setInvoiceErrorMsg('');
+        setInvoiceCreated(true);
+        const updatedPoList = poList.map((list) => {
+          return updatedPoId.includes(list.id)
+            ? { ...list, invoiceId: invoice.id }
+            : list;
+        });
+        setPoList(updatedPoList);
+
+        return;
       }
 
       if (response.status === 422) {
@@ -136,28 +145,28 @@ export default function PoPage() {
     fetchPoData();
   }, []);
 
-  useEffect(() => {
-    if (!invoiceErrorMsg || !invoiceCreated) {
-      return;
-    }
-    const errorTimeout = setTimeout(() => {
-      setInvoiceErrorMsg('');
-      setInvoiceCreated(false);
-    }, 1000);
-    return () => clearTimeout(errorTimeout);
-  });
-
   return (
     <>
       {' '}
       <Dialog isOpen={showModal} closeModal={closeModal}>
-        <h3>Konfirmasi pembuatan invoice</h3>
-        {newInvoiceResult !== null && (
-          <InvoiceConfirmForm
-            data={newInvoiceResult}
-            handleSubmit={invoiceConfirmSubmit}
-            handleCancel={invoiceCancelButton}
-          />
+        {invoiceCreated ? (
+          <>
+            <h3>Berhasil membuat invoice</h3>
+            <button type="button" onClick={invoiceCancelButton}>
+              Tutup
+            </button>
+          </>
+        ) : (
+          <>
+            <h3>Konfirmasi pembuatan invoice</h3>
+            {newInvoiceResult !== null && (
+              <InvoiceConfirmForm
+                data={newInvoiceResult}
+                handleSubmit={invoiceConfirmSubmit}
+                handleCancel={invoiceCancelButton}
+              />
+            )}
+          </>
         )}
       </Dialog>
       <div>
