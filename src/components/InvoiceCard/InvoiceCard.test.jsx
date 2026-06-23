@@ -1,11 +1,22 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { format } from 'date-fns';
 import { invoiceData as mockInvoice } from '../../utils/mockData';
 import InvoiceCard from './InvoiceCard';
+import Dialog from '../Dialog/Dialog';
 
 const currentDate = new Date();
+
+vi.mock('../Dialog/Dialog', () => {
+  return {
+    default: () => (
+      <>
+        <div>Dialog Mock</div>
+      </>
+    ),
+  };
+});
 
 describe('Render Card', () => {
   it('Render Invoice card component correctly', () => {
@@ -20,12 +31,12 @@ describe('Render Card', () => {
     const customerName = screen.getByText(mockInvoice[0].customerName);
     const customerPhone = screen.getByText(mockInvoice[0].customerPhone);
     const createdAt = screen.getByText(format(currentDate, 'dd-MMM-yyyy'));
-
     const ammount = screen.getByText('Rp', { exact: false });
     const status = screen.getByText(mockInvoice[0].status);
-    const payInvoice = screen.getByText('Bayar Invoice');
+    const payInvoice = screen.getByAltText('Pay Invoice');
     const printInvoice = screen.getByAltText('Print Invoice');
-    const deleteInvoice = screen.getByAltText('Delete Invoice');
+    const cancelInvoice = screen.getByAltText('Batalkan Invoice');
+
     expect(invoiceNumber).toBeInTheDocument();
     expect(customerName).toBeInTheDocument();
     expect(customerPhone).toBeInTheDocument();
@@ -34,6 +45,6 @@ describe('Render Card', () => {
     expect(status).toBeInTheDocument();
     expect(payInvoice).toBeInTheDocument();
     expect(printInvoice).toBeInTheDocument();
-    expect(deleteInvoice).toBeInTheDocument();
+    expect(cancelInvoice).toBeInTheDocument();
   });
 });
