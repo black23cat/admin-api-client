@@ -27,7 +27,12 @@ export default function LoginForm() {
         body: JSON.stringify(formInput),
       });
       const results = await response.json();
-
+      if (response.status === 200) {
+        localStorage.setItem('token', results);
+        setFieldsError('');
+        setIsLogin(true);
+        return;
+      }
       if (response.status === 400) {
         setFieldsError(results.message);
         return;
@@ -36,9 +41,6 @@ export default function LoginForm() {
         setFieldsError(results);
         return;
       }
-      localStorage.setItem('token', results);
-      setFieldsError('');
-      setIsLogin(true);
     } catch {
       setFieldsError('Terjadi masalah dengan server');
     }

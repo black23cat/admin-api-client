@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { invoiceData } from '../../utils/mockData';
 import InvoiceCard from '../InvoiceCard/InvoiceCard';
 import FilterForm from '../FilterForm/FilterForm';
 
@@ -7,48 +6,52 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function InvoicePage() {
   const [invoiceList, setInvoiceList] = useState([]);
-  const [error, setError] = useState(false);
+  const [fetchInvoiceError, setFetchInvoiceError] = useState(false);
+
+  const updateInvoice = (invoiceData) => {
+    const updatedList = invoiceList.map((invoice) => {
+      return invoice.id === invoiceData.id ? invoiceData : invoice;
+    });
+    return setInvoiceList(updatedList);
+  };
 
   useEffect(() => {
-    // FETCH DUMMY
-    // TODO: Replace timeout with fetch call
-    const timeout = setTimeout(() => {
-      setInvoiceList(invoiceData);
-    }, 300);
-    return () => clearTimeout(timeout);
-  });
-
-  const handleFilterSubmit = async (formData) => {
-    try {
-      const query = formData.query;
-      const sortBy = formData.sortBy;
-      const date = formData.date;
-
-      const response = await fetch(`${API_URL}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: query, sort: sortBy, date: date }),
-      });
-      if (response.status !== 200) {
-        throw new Error('Server Error');
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/invoice`, {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.status === 200) {
+          const result = await response.json();
+          setInvoiceList(result);
+        }
+      } catch {
+        setFetchInvoiceError(true);
       }
-      const result = response.json();
-      setInvoiceList(result);
-    } catch {
-      setError(true);
-    }
-  };
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
       <button>(+) Buat Invoice</button>
-      {error && <span>Gagal memfilter invoice</span>}
-      <FilterForm handleFilterSubmit={handleFilterSubmit} />
+      {fetchInvoiceError && <span>Gagal mengambil invoice</span>}
       <div className="invoice-card-wrapper">
-        {invoiceList.length > 0 &&
+        {invoiceList.length > 0 ? (
           invoiceList.map((invoice) => {
-            return <InvoiceCard key={invoice.id} invoice={invoice} />;
-          })}
+            return (
+              <InvoiceCard
+                key={invoice.id}
+                invoice={invoice}
+                updateInvoice={updateInvoice}
+              />
+            );
+          })
+        ) : (
+          <span>Belum ada data invoice</span>
+        )}
       </div>
     </>
   );
