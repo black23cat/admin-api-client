@@ -234,7 +234,14 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
         <div>
           {errorMsg !== '' && <span>{errorMsg}</span>}
           <button type="submit">Submit</button>
-          <button type="button" onClick={closeCardForm}>
+          <button
+            type="button"
+            onClick={
+              poData === null
+                ? () => navigate('/purchase-order')
+                : closeCardForm
+            }
+          >
             Cancel
           </button>
         </div>
