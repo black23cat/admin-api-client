@@ -6,6 +6,10 @@ import InvoicePage from './InvoicePage';
 import InvoiceCard from '../InvoiceCard/InvoiceCard';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const mockData = {
+  invoiceList: mockInvoice,
+  count: mockInvoice.length,
+};
 
 vi.mock('../InvoiceCard/InvoiceCard', () => ({
   default: ({ invoice }) => {
@@ -25,7 +29,7 @@ beforeEach(() => {
     return Promise.resolve({
       status: 200,
       ok: true,
-      json: () => Promise.resolve(mockInvoice),
+      json: () => Promise.resolve(mockData),
     });
   });
   globalThis.fetch = mockFetch;

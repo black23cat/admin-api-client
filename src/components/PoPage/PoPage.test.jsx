@@ -7,6 +7,10 @@ import PoPage from './PoPage';
 import PoCard from '../PoCard/PoCard';
 import Dialog from '../Dialog/Dialog';
 
+const mockResolvedData = {
+  purchaseOrder: mockPoData,
+  count: mockPoData.length,
+};
 // Mock useNavigate
 let mockNavigate;
 vi.mock('react-router', async () => {
@@ -33,7 +37,7 @@ beforeEach(() => {
     return Promise.resolve({
       status: 200,
       ok: true,
-      json: () => Promise.resolve(mockPoData),
+      json: () => Promise.resolve(mockResolvedData),
     });
   });
   globalThis.fetch = mockFetch;
@@ -95,7 +99,7 @@ describe('Buttons working correctly', () => {
         return Promise.resolve({
           status: 200,
           ok: true,
-          json: () => Promise.resolve(mockPoData),
+          json: () => Promise.resolve(mockResolvedData),
         });
       })
       .mockImplementationOnce(() => {
@@ -129,7 +133,7 @@ describe('Buttons working correctly', () => {
         return Promise.resolve({
           status: 200,
           ok: true,
-          json: () => Promise.resolve(mockPoData),
+          json: () => Promise.resolve(mockResolvedData),
         });
       })
       .mockImplementationOnce(() => {
@@ -182,7 +186,8 @@ describe('Select po working correctly', () => {
       return Promise.resolve({
         status: 200,
         ok: true,
-        json: () => Promise.resolve(poData),
+        json: () =>
+          Promise.resolve({ purchaseOrder: poData, count: poData.length }),
       });
     });
     render(
