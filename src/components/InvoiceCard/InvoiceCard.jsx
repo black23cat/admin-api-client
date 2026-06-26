@@ -70,7 +70,7 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
         <h4>{invoice.customerName}</h4>
         <p>{invoice.customerPhone}</p>
       </span>
-      <p>{format(new Date(), 'dd-MMM-yyyy')}</p>
+      <p>{format(new Date(invoice.createdAt), 'dd-MMM-yyyy')}</p>
       <p>{formatter.format(invoice.amount[0].total)}</p>
       <p>{invoice.status}</p>
       <div className="action-button-wrapper">

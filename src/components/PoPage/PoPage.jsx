@@ -1,20 +1,30 @@
 import PoCard from '../PoCard/PoCard';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import Dialog from '../Dialog/Dialog';
 import InvoiceConfirmForm from '../InvoiceConfirmForm/InvoiceConfirmForm';
+import FilterForm from '../FilterForm/FilterForm';
+import PageNavigation from '../PageNavigation/PageNavigation';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const initialFilterParams = 'page=1&filter=0';
 
 export default function PoPage() {
   const [selectedPoId, setSelectedPoId] = useState([]);
   const [poList, setPoList] = useState([]);
+  const [poCount, setPoCount] = useState(null);
   const [editCardId, setEditCardId] = useState(null);
   const [fetchPoError, setFetchPoError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [newInvoiceResult, setNewInvoiceResult] = useState(null);
   const [invoiceCreated, setInvoiceCreated] = useState(false);
   const [invoiceErrorMsg, setInvoiceErrorMsg] = useState('');
+  const [filterParams, setFilterParams] = useSearchParams(initialFilterParams);
+
+  // Define total items to displayed on page
+  // Calculte current user displayed page
+  const currentPage = Number(filterParams.get('page'));
+
   const navigate = useNavigate();
 
   const handleSelectPo = (poId) => {
@@ -124,26 +134,55 @@ export default function PoPage() {
     }
   };
 
+  const handleFilterButtonClick = (filterData, reset = false) => {
+    if (reset) {
+      setFilterParams(initialFilterParams);
+      return;
+    }
+
+    const newUrlParams = { page: '1', filter: '1', ...filterData };
+    setFilterParams(newUrlParams);
+  };
+
+  const handlePageNavigation = (navigate) => {
+    if (navigate === 'prev') {
+      return setFilterParams((prev) => {
+        prev.set('page', currentPage - 1);
+        return prev;
+      });
+    } else if (navigate === 'next') {
+      return setFilterParams((prev) => {
+        prev.set('page', currentPage + 1);
+        return prev;
+      });
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const fetchErrorMessage = 'Gagal mengambil data po dari server';
-    const fetchPoData = async () => {
+    const fetchPoData = async (filterParams) => {
       try {
-        const response = await fetch(`${API_URL}/purchase-order`, {
-          method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.status !== 200) {
+        const response = await fetch(
+          `${API_URL}/purchase-order?${filterParams === null ? initialFilterParams : filterParams}`,
+          {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        if (response.status !== 200 || !response.ok) {
           throw fetchErrorMessage;
         }
         const result = await response.json();
-        setPoList(result);
+
+        setPoCount(result.count);
+        setPoList(result.purchaseOrder);
       } catch {
         setFetchPoError(fetchErrorMessage);
       }
     };
-    fetchPoData();
-  }, []);
+    fetchPoData(filterParams);
+  }, [filterParams]);
 
   return (
     <>
@@ -174,6 +213,7 @@ export default function PoPage() {
         <button onClick={() => navigate('/purchase-order/create')}>
           + New Purchase Order
         </button>
+        <FilterForm handleFilterButtonClick={handleFilterButtonClick} />
         {poList.length > 0 ? (
           <div className="po-list-wrapper">
             {poList.map((po) => (
@@ -214,6 +254,11 @@ export default function PoPage() {
         </button>
         {invoiceErrorMsg !== '' ? <span>{invoiceErrorMsg}</span> : ''}
       </div>
+      <PageNavigation
+        totalItemCount={poCount}
+        currentPage={currentPage}
+        handlePageNavigation={handlePageNavigation}
+      />
     </>
   );
 }

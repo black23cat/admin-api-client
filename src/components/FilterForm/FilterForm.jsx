@@ -1,37 +1,67 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-const todayDate = new Date();
-export default function FilterForm({ handleFilterSubmit }) {
+export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
+  const todayDate = new Date();
+
   const [searchBox, setSearchBox] = useState('');
-  const [selectedValue, setSelectedValue] = useState('invoice');
-  const [datePicker, setDatePicker] = useState(format(todayDate, 'yyyy-MM-dd'));
+  const [selectedValue, setSelectedValue] = useState(
+    type === 'invoice' ? 'invoiceNumber' : null,
+  );
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSearchChange = (e) => {
     setSearchBox(e.target.value);
   };
+
   const handleSelectChange = (e) => {
     setSelectedValue(e.target.value);
   };
+
   const handleDateChange = (e) => {
-    setDatePicker(e.target.value);
+    const value = e.target.value;
+    const name = e.target.name;
+    return name === 'dateStart' ? setDateStart(value) : setDateEnd(value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchBox.length > 20) {
-      return setErrorMessage('Melebihi karakter maksimal');
+    if (selectedValue === '') {
+      const errorMsg =
+        type === 'po'
+          ? 'Filter tanggal tidak boleh kosong'
+          : 'Filter tanggal atau sort tidak boleh kosong';
+      return setErrorMessage(errorMsg);
     }
-    if (datePicker === '' || selectedValue === '') {
-      return setErrorMessage('Filter tanggal atau sort tidak boleh kosong');
+    if (dateStart > dateEnd && dateStart !== '' && dateEnd !== '') {
+      return setErrorMessage('Tanggal Awal lebih besar dari tanggal akhir.');
     }
-    handleFilterSubmit({
+
+    const formData = {
       query: searchBox,
-      sortBy: selectedValue,
-      date: datePicker,
-    });
+      dateStart,
+      dateEnd,
+    };
+
+    if (type === 'invoice') {
+      formData.sortBy = selectedValue;
+    }
+    setErrorMessage('');
+    handleFilterButtonClick(formData);
   };
+
+  const handleReset = () => {
+    setSearchBox('');
+    setSelectedValue(type === 'invoice' ? 'invoiceNumber' : null);
+    setDateStart('');
+    setDateEnd('');
+    setErrorMessage('');
+
+    handleFilterButtonClick({}, true);
+  };
+
   return (
     <form onSubmit={handleSubmit} aria-label="Filter Invoice">
       <div>
@@ -40,40 +70,56 @@ export default function FilterForm({ handleFilterSubmit }) {
           type="search"
           name="search-invoice"
           id="search-invoice"
-          placeholder="Cari Invoice...(Max 20karakter)"
+          placeholder={`Cari ${type === 'po' ? 'Purchase Order' : 'Invoice'}...(Max 20karakter)`}
           value={searchBox}
           maxLength={20}
           onChange={handleSearchChange}
         />
       </div>
+      {type === 'invoice' && (
+        <div>
+          <label htmlFor="sort-by">Urutkan :</label>
+          <select
+            name="sort-by"
+            id="sort-by"
+            onChange={handleSelectChange}
+            value={selectedValue}
+          >
+            <option value="invoiceNumber">Invoice</option>
+            <option value="amount">Nilai Invoice</option>
+            <option value="createdAt">Tanggal</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+      )}
       <div>
-        <label htmlFor="sort-by">Sort By :</label>
-        <select
-          name="sort-by"
-          id="sort-by"
-          onChange={handleSelectChange}
-          value={selectedValue}
-        >
-          <option value="invoice">Invoice</option>
-          <option value="date">Tanggal</option>
-          <option value="amount">Jumlah</option>
-          <option value="status">Status</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="date">Minggu :</label>
+        <label htmlFor="dateStart">Tanggal Awal :</label>
         <input
           type="date"
-          name="date"
-          id="date"
-          value={datePicker}
-          max={format(todayDate, 'yyyy-mm-dd')}
+          name="dateStart"
+          id="dateStart"
+          value={dateStart}
+          max={format(todayDate, 'yyyy-MM-dd')}
+          onChange={handleDateChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="dateEnd">Tanggal Akhir :</label>
+        <input
+          type="date"
+          name="dateEnd"
+          id="dateEnd"
+          value={dateEnd}
+          max={format(todayDate, 'yyyy-MM-dd')}
           onChange={handleDateChange}
         />
       </div>
       <div>
         {errorMessage !== '' && <span>{errorMessage}</span>}
         <button type="submit">Apply</button>
+        <button type="button" onClick={handleReset}>
+          Reset
+        </button>
       </div>
     </form>
   );
