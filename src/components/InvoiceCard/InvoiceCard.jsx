@@ -12,6 +12,9 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
   const [openModal, setOpenModal] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
+  const [cancelConfirmation, setCancelConfirmation] = useState(false);
+  const [cancelSuccess, setCancelSuccess] = useState(false);
+  const [cancelError, setCancelError] = useState(false);
 
   const openPaymentForm = () => {
     setOpenModal(true);
@@ -20,6 +23,7 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
   const closeModal = () => {
     setPaymentSuccess(false);
     setPaymentError(false);
+    setCancelConfirmation(false);
     return setOpenModal(false);
   };
 
@@ -50,6 +54,46 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
     }
   };
 
+  const handleCancelInvoice = async (action = 'openModal') => {
+    if (
+      invoice.status === 'Paid' ||
+      invoice.paymentDetails.length > 0 ||
+      invoice.status === 'Cancelled'
+    ) {
+      return;
+    }
+    if (action === 'openModal') {
+      setOpenModal(true);
+      setCancelConfirmation(true);
+      return;
+    }
+    if (action === 'confirm') {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+          `${API_URL}/invoice/cancel/${invoice.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        if (response.ok) {
+          const result = await response.json();
+          updateInvoice(result);
+          return setCancelSuccess(true);
+        } else {
+          return setCancelError(true);
+        }
+      } catch {
+        return setCancelError(true);
+      }
+    }
+
+    throw 'No actions.';
+  };
+
   return (
     <div className="invoice-card">
       <Dialog isOpen={openModal} closeModal={closeModal}>
@@ -57,6 +101,35 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
           <PaymentError invoice={invoice} closeModal={closeModal} />
         ) : paymentSuccess ? (
           <PaymentSuccess invoice={invoice} closeModal={closeModal} />
+        ) : cancelSuccess ? (
+          <>
+            <h3>Berhasil membatalkan invoice {invoice.invoiceNumber}</h3>
+            <button type="button" onClick={closeModal}>
+              Tutup
+            </button>
+          </>
+        ) : cancelError ? (
+          <>
+            <h3>Gagal membatalkan invoice {invoice.invoiceNumber}</h3>
+            <button type="button" onClick={closeModal}>
+              Tutup
+            </button>
+          </>
+        ) : cancelConfirmation ? (
+          <>
+            <h3>Ingin membatalkan invoice</h3>
+            <div>
+              <button
+                type="button"
+                onClick={() => handleCancelInvoice('confirm')}
+              >
+                Ya
+              </button>
+              <button type="button" onClick={closeModal}>
+                Batal
+              </button>
+            </div>
+          </>
         ) : (
           <PaymentForm
             invoiceData={invoice}
@@ -84,7 +157,15 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
         <button type="button">
           <img src="example.com" alt="Print Invoice" />
         </button>
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => handleCancelInvoice('openModal')}
+          disabled={
+            invoice.status === 'Paid' ||
+            invoice.paymentDetails.length > 0 ||
+            invoice.status === 'Cancelled'
+          }
+        >
           <img src="example.com" alt="Batalkan Invoice" />
         </button>
       </div>
