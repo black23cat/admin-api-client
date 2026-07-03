@@ -40,7 +40,6 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
     }
 
     const formData = {
-      query: searchBox,
       dateStart,
       dateEnd,
     };
@@ -48,6 +47,10 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
     if (type === 'invoice') {
       formData.sortBy = selectedValue;
     }
+    if (type === 'invoice' || type === 'po') {
+      formData.query = searchBox;
+    }
+
     setErrorMessage('');
     handleFilterButtonClick(formData);
   };
@@ -64,18 +67,20 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
 
   return (
     <form onSubmit={handleSubmit} aria-label="Filter Invoice">
-      <div>
-        <label htmlFor="search-invoice">Search :</label>
-        <input
-          type="search"
-          name="search-invoice"
-          id="search-invoice"
-          placeholder={`Cari ${type === 'po' ? 'Purchase Order' : 'Invoice'}...(Max 20karakter)`}
-          value={searchBox}
-          maxLength={20}
-          onChange={handleSearchChange}
-        />
-      </div>
+      {(type === 'invoice' || type === 'po') && (
+        <div>
+          <label htmlFor="search-invoice">Search :</label>
+          <input
+            type="search"
+            name="search-invoice"
+            id="search-invoice"
+            placeholder={`Cari ${type === 'po' ? 'Purchase Order' : 'Invoice'}...(Max 20karakter)`}
+            value={searchBox}
+            maxLength={20}
+            onChange={handleSearchChange}
+          />
+        </div>
+      )}
       {type === 'invoice' && (
         <div>
           <label htmlFor="sort-by">Urutkan :</label>

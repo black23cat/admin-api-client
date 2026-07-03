@@ -47,12 +47,14 @@ export default function InvoicePage() {
   };
 
   useEffect(() => {
+    const abortController = new AbortController();
     const fetchData = async (filterParams = null) => {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(
           `${API_URL}/invoice?${filterParams === null ? initialFilterParams : filterParams}`,
           {
+            signal: abortController.signal,
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -62,12 +64,27 @@ export default function InvoicePage() {
           setInvoiceCount(result.count);
           setInvoiceList(result.invoiceList);
         }
-      } catch {
+      } catch (err) {
+        if (err.name === 'AbortError' || abortController.signal.aborted) {
+          return;
+        }
         setFetchInvoiceError(true);
       }
     };
     fetchData(filterParams);
+    return () => abortController.abort();
   }, [filterParams]);
+
+  useEffect(() => {
+    if (!fetchInvoiceError) {
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setFetchInvoiceError(false);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  });
 
   return (
     <>

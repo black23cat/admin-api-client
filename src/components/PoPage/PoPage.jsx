@@ -161,11 +161,13 @@ export default function PoPage() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const fetchErrorMessage = 'Gagal mengambil data po dari server';
+    const abortController = new AbortController();
     const fetchPoData = async (filterParams) => {
       try {
         const response = await fetch(
           `${API_URL}/purchase-order?${filterParams === null ? initialFilterParams : filterParams}`,
           {
+            signal: abortController.signal,
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -177,11 +179,16 @@ export default function PoPage() {
 
         setPoCount(result.count);
         setPoList(result.purchaseOrder);
-      } catch {
-        setFetchPoError(fetchErrorMessage);
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          return;
+        } else {
+          setFetchPoError(fetchErrorMessage);
+        }
       }
     };
     fetchPoData(filterParams);
+    return () => abortController.abort();
   }, [filterParams]);
 
   return (

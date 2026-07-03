@@ -24,7 +24,12 @@ export default function Sidebar() {
         >
           Invoice
         </button>
-        <button data-test-id="sidebar-button">Data Kerja</button>
+        <button
+          data-test-id="sidebar-button"
+          onClick={() => navigate('/job-data')}
+        >
+          Data Kerja
+        </button>
         <button data-test-id="sidebar-button">Kas Mingguan</button>
       </div>
       <div className="toggle-sidebar-wrapper">
