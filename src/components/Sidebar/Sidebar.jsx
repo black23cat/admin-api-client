@@ -30,7 +30,12 @@ export default function Sidebar() {
         >
           Data Kerja
         </button>
-        <button data-test-id="sidebar-button">Kas Mingguan</button>
+        <button
+          data-test-id="sidebar-button"
+          onClick={() => navigate('/payment')}
+        >
+          Kas Mingguan
+        </button>
       </div>
       <div className="toggle-sidebar-wrapper">
         <button onClick={toggleSidebar}>

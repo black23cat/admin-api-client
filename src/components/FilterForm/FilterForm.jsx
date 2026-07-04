@@ -47,7 +47,7 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
     if (type === 'invoice') {
       formData.sortBy = selectedValue;
     }
-    if (type === 'invoice' || type === 'po') {
+    if (type !== 'job-data') {
       formData.query = searchBox;
     }
 
@@ -67,7 +67,7 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
 
   return (
     <form onSubmit={handleSubmit} aria-label="Filter Invoice">
-      {(type === 'invoice' || type === 'po') && (
+      {type !== 'job-data' && (
         <div>
           <label htmlFor="search-invoice">Search :</label>
           <input
