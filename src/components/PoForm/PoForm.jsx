@@ -199,7 +199,9 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
             onChange={(e) => handlePoType(e.target.value)}
           >
             <option value="eco">Eco Solvent</option>
-            <option value="sublim">Sublim</option>
+            <option value="ecoBahan">Eco Solvent + Bahan</option>
+            <option value="sublimPress">Sublim</option>
+            <option value="sublim">Sublim + Bahan</option>
           </select>
         </div>
         <div>

@@ -21,6 +21,18 @@ export default function InvoiceConfirmForm({
     } else if (name === 'ecoPrice') {
       formInput.eco.price = value;
       return setConfirmFormInput(formInput);
+    } else if (name === 'ecoBahanLength') {
+      formInput.ecoBahan.printLength = value;
+      return setConfirmFormInput(formInput);
+    } else if (name === 'ecoBahanPrice') {
+      formInput.ecoBahan.price = value;
+      return setConfirmFormInput(formInput);
+    } else if (name === 'sublimPressLength') {
+      formInput.sublimPress.printLength = value;
+      return setConfirmFormInput(formInput);
+    } else if (name === 'sublimPressPrice') {
+      formInput.sublimPress.price = value;
+      return setConfirmFormInput(formInput);
     } else if (name === 'sublimLength') {
       formInput.sublim.printLength = value;
       return setConfirmFormInput(formInput);
@@ -57,7 +69,8 @@ export default function InvoiceConfirmForm({
             onChange={(e) => handleCustomerNameChange(e)}
           />
         </div>
-        <h4>Eco Solvent :</h4>
+        <h3>Eco Solvent</h3>
+        <h4>Print :</h4>
         <div>
           <label htmlFor="ecoLength">Total(m) :</label>
           <input
@@ -82,7 +95,33 @@ export default function InvoiceConfirmForm({
             onChange={(e) => onChange(e, 'ecoPrice')}
           />
         </div>
-        <h4>Sublim :</h4>
+        <h4>Print + Bahan :</h4>
+        <div>
+          <label htmlFor="ecoBahanLength">Total(m) :</label>
+          <input
+            id="ecoBahanLength"
+            name="ecoBahanLength"
+            type="number"
+            value={
+              confirmFormInput.ecoBahan.printLength === null
+                ? 0
+                : confirmFormInput.ecoBahan.printLength
+            }
+            onChange={(e) => onChange(e, 'ecoBahanLength')}
+          />
+        </div>
+        <div>
+          <label htmlFor="ecoBahanPrice"> Harga (/m) :</label>
+          <input
+            id="ecoBahanPrice"
+            name="ecoBahanPrice"
+            type="number"
+            value={confirmFormInput.ecoBahan.price}
+            onChange={(e) => onChange(e, 'ecoBahanPrice')}
+          />
+        </div>
+        <h3>Sublim</h3>
+        <h4>Print + Press + Bahan :</h4>
         <div>
           <label htmlFor="sublimLength">Total(m) :</label>
           <input
@@ -105,6 +144,31 @@ export default function InvoiceConfirmForm({
             type="number"
             value={confirmFormInput.sublim.price}
             onChange={(e) => onChange(e, 'sublimPrice')}
+          />
+        </div>
+        <h4>Print + Press :</h4>
+        <div>
+          <label htmlFor="sublimPressLength">Total(m) :</label>
+          <input
+            id="sublimPressLength"
+            name="sublimPressLength"
+            type="number"
+            value={
+              confirmFormInput.sublimPress.printLength === null
+                ? 0
+                : confirmFormInput.sublimPress.printLength
+            }
+            onChange={(e) => onChange(e, 'sublimPressLength')}
+          />
+        </div>
+        <div>
+          <label htmlFor="sublimPressPrice">Harga (/m) :</label>
+          <input
+            id="sublimPressPrice"
+            name="sublimPressPrice"
+            type="number"
+            value={confirmFormInput.sublimPress.price}
+            onChange={(e) => onChange(e, 'sublimPressPrice')}
           />
         </div>
         <p>Lanjutkan ?</p>

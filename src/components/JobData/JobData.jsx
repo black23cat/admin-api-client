@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import PageNavigation from '../PageNavigation/PageNavigation';
 import { id } from 'date-fns/locale';
+import getFileDetails from '../../utils/getFileDetails';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -99,19 +100,20 @@ export default function JobData() {
       ? printLength
       : jobData.reduce((acc, curr) => {
           curr.fileList.forEach((file) => {
-            const splittedFilename = file.filename.split('_');
-            const printSize = splittedFilename[2].split('x');
-            const printHeight = Number(printSize[1] / 100);
-            const printCount =
-              Number(splittedFilename[4].replace('x', '')) || 1;
+            const { printHeight, printCount } = getFileDetails(file.filename);
             if (curr.poType === 'eco') {
               acc.eco += printHeight * printCount;
+            } else if (curr.poType === 'ecoBahan') {
+              acc['eco-bahan'] += printHeight * printCount;
+            } else if (curr.poType === 'sublimPress') {
+              acc['sublim-press'] += printHeight * printCount;
             } else if (curr.poType === 'sublim') {
               acc['sublim-bahan'] += printHeight * printCount;
             }
           });
           return acc;
         }, printLength);
+
   useEffect(() => {
     if (fetchErrorMsg === '') {
       return;
@@ -121,6 +123,7 @@ export default function JobData() {
     }, 300);
     return () => clearTimeout(timeout);
   });
+
   return (
     <>
       <FilterForm
@@ -203,12 +206,8 @@ function JobDataRow({ jobData }) {
         <td style={{ display: 'none' }}></td>
       </tr>
       {jobData.fileList.map((file) => {
-        const splittedFilename = file.filename.split('_');
-        const filename = `${splittedFilename[0]}_${splittedFilename[1]}_${splittedFilename[3]}`;
-        const printSize = splittedFilename[2].split('x');
-        const printWidth = Number(printSize[0] / 100);
-        const printHeight = Number(printSize[1] / 100);
-        const printCount = Number(splittedFilename[4].replace('x', '')) || 1;
+        const { filename, printWidth, printHeight, printCount } =
+          getFileDetails(file.filename);
         return (
           <tr key={file.id}>
             <td style={{ display: 'none' }}></td>
@@ -221,6 +220,20 @@ function JobDataRow({ jobData }) {
                 <td>{printHeight * printCount}</td>
                 <td></td>
                 <td></td>
+                <td></td>
+              </>
+            ) : jobData.poType === 'ecoBahan' ? (
+              <>
+                <td></td>
+                <td>{printHeight * printCount}</td>
+                <td></td>
+                <td></td>
+              </>
+            ) : jobData.poType === 'sublimPress' ? (
+              <>
+                <td></td>
+                <td></td>
+                <td>{printHeight * printCount}</td>
                 <td></td>
               </>
             ) : jobData.poType === 'sublim' ? (
