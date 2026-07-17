@@ -7,6 +7,15 @@ export default function InvoiceConfirmForm({
 }) {
   const [confirmFormInput, setConfirmFormInput] = useState(data.printDetails);
   const [customerName, setCustomerName] = useState(data.customerName);
+  const [nonPrintValue, setNonPrintValue] = useState({
+    itemName: '',
+    itemCount: '',
+    itemPrice: '',
+    cashbackNotes: '',
+    cashbackAmount: '',
+  });
+  const [nonPrintItems, setNonPrintItems] = useState([]);
+  const [addNonPrintItemError, setAddNonPrintItemError] = useState(false);
   const handleCustomerNameChange = (e) => {
     setCustomerName(e.target.value);
   };
@@ -41,11 +50,61 @@ export default function InvoiceConfirmForm({
       return setConfirmFormInput(formInput);
     }
   };
+
+  const nonPrintOnchange = (e) => {
+    setAddNonPrintItemError(false);
+    const name = e.target.name;
+    const value = e.target.value;
+    const nonPrintItem = { ...nonPrintValue };
+    nonPrintItem[name] = value;
+
+    setNonPrintValue(nonPrintItem);
+  };
+
+  const handleAddNonPrintItem = () => {
+    if (
+      nonPrintValue.itemName === '' ||
+      nonPrintValue.itemPrice === '' ||
+      nonPrintValue.itemCount === ''
+    ) {
+      return setAddNonPrintItemError(true);
+    }
+    const resetValue = {
+      ...nonPrintValue,
+      itemName: '',
+      itemCount: '',
+      itemPrice: '',
+    };
+    setNonPrintValue(resetValue);
+    setNonPrintItems([
+      ...nonPrintItems,
+      {
+        itemName: nonPrintValue.itemName,
+        itemPrice: nonPrintValue.itemPrice,
+        itemCount: nonPrintValue.itemCount,
+      },
+    ]);
+  };
+
+  const handleFormSubmit = (e) => {
+    const formData = {
+      ...confirmFormInput,
+      customerName,
+      nonPrintItems: nonPrintItems.length > 0 ? nonPrintItems : null,
+      cashback:
+        nonPrintValue.cashbackAmount === ''
+          ? null
+          : {
+              note: nonPrintValue.cashbackNotes,
+              amount: nonPrintValue.cashbackAmount,
+            },
+    };
+
+    handleSubmit(e, formData);
+  };
   return (
     <>
-      <form
-        onSubmit={(e) => handleSubmit(e, { ...confirmFormInput, customerName })}
-      >
+      <form onSubmit={handleFormSubmit}>
         {data.needMissmatchConfirmation && (
           <>
             <span
@@ -169,6 +228,80 @@ export default function InvoiceConfirmForm({
             type="number"
             value={confirmFormInput.sublimPress.price}
             onChange={(e) => onChange(e, 'sublimPressPrice')}
+          />
+        </div>
+        <h4>Non Print Item :</h4>
+        <div>
+          <label htmlFor="itemName">Nama Item :</label>
+          <input
+            type="text"
+            name="itemName"
+            id="itemName"
+            onChange={nonPrintOnchange}
+            value={nonPrintValue.itemName}
+          />
+        </div>
+        <div>
+          <label htmlFor="itemCount">Jumlah Item : </label>
+          <input
+            type="number"
+            name="itemCount"
+            id="itemCount"
+            onChange={nonPrintOnchange}
+            value={nonPrintValue.itemCount}
+          />
+        </div>
+        <div>
+          <label htmlFor="itemPrice">Harga Per-item :</label>
+          <input
+            type="number"
+            name="itemPrice"
+            id="itemPrice"
+            onChange={nonPrintOnchange}
+            value={nonPrintValue.itemPrice}
+          />
+        </div>
+        <div>
+          {addNonPrintItemError && <span>Harap isi field terlebih dahulu</span>}
+          <button type="button" onClick={handleAddNonPrintItem}>
+            Tambahkan Item
+          </button>
+        </div>
+        <div>
+          {nonPrintItems.length > 0 && (
+            <>
+              {nonPrintItems.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <p>{item.itemName}</p>
+                    <p>{item.itemCount}</p>
+                    <p>{item.itemPrice}</p>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+        <h4>Casback</h4>
+        <div>
+          <label htmlFor="cashbackNotes">Keterangan :</label>
+          <input
+            type="text"
+            name="cashbackNotes"
+            id="cashbackNotes"
+            onChange={nonPrintOnchange}
+            value={nonPrintValue.cashbackNotes}
+          />
+        </div>
+        <div>
+          <label htmlFor="cashbackAmount">Jumlah (Rp) :</label>
+          <input
+            type="number"
+            name="cashbackAmount"
+            id="cashbackAmount"
+            min={0}
+            onChange={nonPrintOnchange}
+            value={nonPrintValue.cashbackAmount}
           />
         </div>
         <p>Lanjutkan ?</p>
