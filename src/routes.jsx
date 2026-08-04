@@ -14,12 +14,12 @@ const routes = [
         path: '/purchase-order',
         element: <PoPage />,
       },
+      { path: '/purchase-order/create', element: <PoForm /> },
       { path: '/invoice', element: <InvoicePage /> },
       { path: '/job-data', element: <JobData /> },
       { path: '/payment', element: <PaymentData /> },
     ],
   },
-  { path: '/purchase-order/create', element: <PoForm /> },
 ];
 
 export default routes;
