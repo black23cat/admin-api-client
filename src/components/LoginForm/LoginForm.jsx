@@ -2,16 +2,25 @@ import { Link } from 'react-router';
 import { useContext, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { UserContext } from '../../App';
+import LogoPgSmall from '../../assets/svg/LogoPgSmall';
+import styles from './LoginForm.module.css';
+import warnIcon from '../../assets/images/warning.svg';
+import checklistIcon from '../../assets/images/checklist.svg';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginForm() {
-  const [fieldsError, setFieldsError] = useState('');
+  const [fieldsError, setFieldsError] = useState(false);
+  const [serverError, setServerError] = useState(false);
   const [formInput, setFormInput] = useState({});
   const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [setUser] = useContext(UserContext);
 
   const handleFormInput = (e) => {
+    setFieldsError(false);
+    setServerError(false);
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
     const userInput = { ...formInput, [fieldName]: fieldValue };
@@ -19,6 +28,7 @@ export default function LoginForm() {
   };
 
   const handleFormSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const response = await fetch(`${API_URL}/login`, {
@@ -27,22 +37,21 @@ export default function LoginForm() {
         body: JSON.stringify(formInput),
       });
       const results = await response.json();
-      if (response.status === 200) {
+
+      if (response.status === 200 || response.ok) {
         localStorage.setItem('token', results);
-        setFieldsError('');
+        setFieldsError(false);
         setIsLogin(true);
         return;
       }
-      if (response.status === 400) {
-        setFieldsError(results.message);
-        return;
+      if (response.status.toString().startsWith('5')) {
+        setServerError(true);
       }
-      if (response.status === 404) {
-        setFieldsError(results);
-        return;
-      }
+      setFieldsError(true);
     } catch {
-      setFieldsError('Terjadi masalah dengan server');
+      setServerError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,44 +68,84 @@ export default function LoginForm() {
   });
 
   return (
-    <section className="login">
-      <form onSubmit={handleFormSubmit}>
-        <h3>Login</h3>
-        {isLogin && (
-          <p className="login-succes">Login Success, Redirecting.....</p>
-        )}
-        {fieldsError !== '' && (
-          <ul className="form-error">
-            <li>{fieldsError}</li>
-          </ul>
-        )}
-        <div className="input-wrapper">
-          <p>
-            <label htmlFor="username">Email or Username :</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              onChange={handleFormInput}
-              required
-            />
-          </p>
-          <p>
-            <label htmlFor="password">Password :</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              min="6"
-              onChange={handleFormInput}
-              required
-            />
-          </p>
+    <main className="login">
+      <section className={styles['first-panel']}>
+        {' '}
+        <div className={styles['theme-toggle-wrapper']}>
+          <ThemeToggle />
         </div>
-        <p>
-          <button type="submit">LOGIN</button>
-        </p>
-      </form>
-    </section>
+        <div className={styles.logo}>
+          <LogoPgSmall />
+        </div>
+        <h3>Selamat Datang di website admin Polygraphic</h3>
+      </section>
+      <section className={styles['second-panel']}>
+        <form onSubmit={handleFormSubmit}>
+          <div className={styles['login-success']}>
+            {isLogin && (
+              <p>
+                Berhasil login, mengalihkan ke halaman utama...{' '}
+                <img src={checklistIcon} alt="" width={'24px'} />
+              </p>
+            )}
+          </div>
+          <div className={styles['input-wrapper']}>
+            <div
+              className={
+                fieldsError || serverError ? styles['form-invalid'] : ''
+              }
+            >
+              <label htmlFor="username">Email or Username :</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                onChange={handleFormInput}
+                required
+                autoComplete="username"
+              />
+            </div>
+            <div
+              className={
+                fieldsError || serverError ? styles['form-invalid'] : ''
+              }
+            >
+              <label htmlFor="password">Password :</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                min="6"
+                onChange={handleFormInput}
+                required
+              />
+            </div>
+          </div>
+          <div className={styles['login-error']}>
+            {(fieldsError || serverError) && (
+              <p>
+                <img src={warnIcon} alt="input error" width="18px" />{' '}
+                {serverError
+                  ? 'Terjadi masalah dengan server'
+                  : 'Username atau email atau pasword salah'}
+              </p>
+            )}
+          </div>
+          <div>
+            <button
+              className={styles['login-btn']}
+              type="submit"
+              disabled={loading}
+            >
+              {loading && <div className="spinner"></div>}
+              LOGIN
+            </button>
+          </div>{' '}
+          <p className={styles['contact-admin']}>
+            Belum punya akun? <a>Hubungi administrator</a>
+          </p>
+        </form>
+      </section>
+    </main>
   );
 }

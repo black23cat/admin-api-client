@@ -70,7 +70,7 @@ describe('Form submit data correctly', () => {
 
     await user.click(submitBtn);
     const errorMessage = screen.getByText(
-      'Username or Email or Password incorrect',
+      'Username atau email atau pasword salah',
     );
     expect(errorMessage).toBeInTheDocument();
   });
@@ -99,7 +99,10 @@ describe('Form submit data correctly', () => {
     await user.type(passwordField, 'johndoe123');
 
     await user.click(submitBtn);
-    const successMessage = screen.getByText('Login Success, Redirecting.....');
+    const successMessage = screen.getByText(
+      'Berhasil login, mengalihkan ke halaman utama',
+      { exact: false },
+    );
     expect(successMessage).toBeInTheDocument();
   });
 });

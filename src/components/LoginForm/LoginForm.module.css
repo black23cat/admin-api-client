@@ -1,0 +1,173 @@
+.first-panel {
+  background-color: var(--bg-login);
+  background-image: var(--bg-login-image);
+  background-repeat: no-repeat;
+  background-position: left top;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: right;
+  margin-bottom: var(--space-m);
+  transition: background-color 0.5s;
+}
+
+.first-panel h3 {
+  font-size: var(--font-size-xl);
+  padding: var(--space-m) var(--space-m) var(--space-s) var(--space-m);
+}
+
+.first-panel p {
+  align-self: end;
+  margin-right: var(--space-m);
+  margin-bottom: var(--space-m);
+  font-size: var(--font-size-lg);
+}
+
+.logo svg {
+  margin-bottom: var(--space-l);
+  filter: var(--logo-shadow) var(--logo-contrast);
+  transform: scale(120%);
+}
+
+.theme-toggle-wrapper {
+  align-self: end;
+  margin-top: var(--space-m);
+  margin-right: var(--space-m);
+}
+
+.second-panel {
+  margin: var(--space-m);
+}
+
+.input-wrapper div {
+  margin-bottom: var(--space-sm);
+}
+
+.input-wrapper div label {
+  display: block;
+  margin-left: var(--space-l);
+  transform: translateY(25px);
+  color: var(--label-text-clr);
+  font-size: var(--font-size-sm);
+}
+
+.input-wrapper div input {
+  outline: var(--input-outline);
+  -webkit-text-fill-color: var(--clr-text-primary);
+  background-color: var(--bg-primary-a0);
+  width: 100%;
+  padding: var(--space-m) var(--space-s) var(--space-s) var(--space-l);
+  font-size: var(--font-size-lg);
+  border-radius: 10px;
+  border: none;
+  transition: background-color 0.5s;
+}
+
+.input-wrapper div input:focus {
+  outline-color: #0068be;
+  outline-width: 2px;
+  transition: outline-color 0.4s;
+  caret-color: var(--clr-text-primary);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--bg-primary-a0) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-primary-a0) inset !important;
+  -webkit-text-fill-color: var(--clr-text-primary) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: none !important;
+  color: fieldtext !important;
+}
+
+.input-wrapper div.form-invalid input {
+  outline: 1px solid red;
+  background-color: var(--danger-a20);
+  color: red;
+}
+
+.input-wrapper div.form-invalid label {
+  color: red;
+}
+
+.login-success {
+  min-height: 45px;
+}
+
+.login-success p {
+  display: flex;
+  justify-content: space-between;
+  color: rgb(0, 137, 32);
+  padding: var(--space-xs) var(--space-s);
+  background-color: var(--success-a20);
+  height: 100%;
+  border: 3px solid var(--success-a0);
+  border-radius: 10px;
+}
+
+.login-success p img {
+  justify-self: center;
+}
+
+.login-error {
+  min-height: 30px;
+  margin: var(--space-xs) var(--space-m);
+}
+
+.login-error p {
+  color: #ff0000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.login-btn {
+  /* margin-top: var(--space-xl); */
+  padding: var(--space-xs);
+  background-color: var(--elements-a0);
+  color: var(--clr-text-primary);
+  width: 100%;
+  border: none;
+  transition: background-color 0.5s;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.login-btn:hover {
+  background-color: var(--elements-a10);
+  transition: background-color 0.1s;
+}
+
+.login-btn:active {
+  background-color: var(--elements-a30);
+  transition: background-color 0.1s;
+}
+
+.contact-admin {
+  margin-top: var(--space-m);
+  text-align: center;
+}
+
+.contact-admin a {
+  cursor: pointer;
+  color: var(--elements-a0);
+}
+
+.contact-admin a:hover {
+  text-decoration: underline;
+}
+
+.contact-admin a:active {
+  color: var(--elements-a30);
+}
