@@ -1,0 +1,8 @@
+.app {
+  position: relative;
+  height: 100vh;
+  background-color: var(--bg-primary-a0);
+  color: var(--clr-text-primary);
+  transition: background-color 0.5s;
+  font-family: var(--font-base);
+}

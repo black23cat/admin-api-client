@@ -6,8 +6,39 @@ import LoginForm from './components/LoginForm/LoginForm';
 import { jwtDecode } from 'jwt-decode';
 
 const currentTime = new Date();
+export const UserContext = createContext({});
+export const ThemeContext = createContext('light');
 
-function init() {
+export default function App() {
+  const [user, setUser] = useState(userInit);
+  const [theme, setTheme] = useState(themeInit);
+
+  if (user === null) {
+    return (
+      <UserContext value={[setUser]}>
+        <ThemeContext value={[theme, setTheme]}>
+          <AppWrapper theme={theme}>
+            <LoginForm />
+          </AppWrapper>
+        </ThemeContext>
+      </UserContext>
+    );
+  }
+
+  return (
+    <UserContext value={[user]}>
+      <ThemeContext value={[theme, setTheme]}>
+        <AppWrapper theme={theme}>
+          <Header />
+          <Sidebar />
+          <Outlet />
+        </AppWrapper>
+      </ThemeContext>
+    </UserContext>
+  );
+}
+
+function userInit() {
   // Check if user still have valid jwt on local storage
   const token = localStorage.getItem('token');
   if (token === null) {
@@ -22,24 +53,35 @@ function init() {
   return decodedToken.user;
 }
 
-export const UserContext = createContext({});
-
-export default function App() {
-  const [user, setUser] = useState(init);
-
-  if (user === null) {
-    return (
-      <UserContext value={[setUser]}>
-        <LoginForm />
-      </UserContext>
-    );
+function themeInit() {
+  const localTheme = localStorage.getItem('theme');
+  const osPreferedTheme = window.matchMedia(
+    '(preferes-color-scheme : dark)',
+  ).matches;
+  if (localTheme === null && !osPreferedTheme) {
+    localStorage.setItem('theme', 'light');
+    return 'light';
+  } else if (
+    localTheme !== null &&
+    (localTheme === 'dark' || localTheme === 'light')
+  ) {
+    return localTheme;
+  } else if (localTheme === null && osPreferedTheme) {
+    localStorage.setItem('theme', osPreferedTheme);
+    return osPreferedTheme;
+  } else if (
+    localTheme !== null &&
+    (localTheme !== 'dark' || localTheme !== 'light')
+  ) {
+    localStorage.setItem('theme', 'light');
+    return 'light';
   }
+}
 
+function AppWrapper({ theme, children }) {
   return (
-    <>
-      <Header />
-      <Sidebar />
-      <Outlet />
-    </>
+    <div className="app" data-theme={theme}>
+      {children}
+    </div>
   );
 }
