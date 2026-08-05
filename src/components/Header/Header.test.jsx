@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import Header from './Header';
 import { MemoryRouter } from 'react-router';
 
@@ -11,22 +10,9 @@ describe('Render Header correctly', () => {
         <Header />
       </MemoryRouter>,
     );
-    const themeToggle = screen.getByAltText('toggle theme');
-    expect(themeToggle).toBeInTheDocument();
-    const dropdown = screen.getByAltText('dropdown');
+    const companyLogo = screen.getByTestId('company-logo');
+    expect(companyLogo).toBeInTheDocument();
+    const dropdown = screen.getByTestId('dropdown');
     expect(dropdown).toBeInTheDocument();
-  });
-});
-
-describe('Header buttons working correctly', () => {
-  it('Toggle dark/light mode', async () => {
-    const user = userEvent.setup({ pointerEventsCheck: 0 });
-    const handleToggleTheme = vi.fn();
-    render(<Header handleToggleTheme={handleToggleTheme} />);
-
-    const themeToggle = screen.getByAltText('toggle theme');
-    await user.click(themeToggle);
-    expect(themeToggle).toBeInTheDocument();
-    expect(handleToggleTheme).toHaveBeenCalled();
   });
 });

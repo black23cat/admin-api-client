@@ -1,28 +1,33 @@
-import darkModeIcon from '../../images/dark-mode.png';
-import lightModeIcon from '../../images/light-mode.png';
-import threeDotsIcon from '../../images/three-dots.png';
+import { useState } from 'react';
+import Dots from '../../assets/svg/Dots';
+import LogoPgBig from '../../assets/svg/LogoPgBig';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import styles from './Header.module.css';
 
-export default function Header({ handleToggleTheme }) {
-  const themeContext = 'dark';
+export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <header>
-      <div className="theme-toggle-wrapper">
-        <button onClick={handleToggleTheme}>
-          <img
-            src={themeContext === 'dark' ? lightModeIcon : darkModeIcon}
-            alt="toggle theme"
-          />
+      <div className={styles['company-logo-wrapper']}>
+        <LogoPgBig data-testid="company-logo" />
+      </div>
+      <div className={styles['dropdown-button-wrapper']}>
+        <button onClick={toggleMenu} className={isOpen ? styles.active : ''}>
+          <Dots data-testid="dropdown" />
         </button>
       </div>
-      <div className="navigation-wrapper">
-        <nav>
-          <div className="dropdown-wrapper">
-            <button>
-              <img src={threeDotsIcon} alt="dropdown" />
-            </button>
+      <nav
+        className={`${styles['dropdown-wrapper']} ${isOpen ? styles.open : ''}`}
+      >
+        {isOpen && (
+          <div className="dropdown-items">
+            <ThemeToggle />
           </div>
-        </nav>
-      </div>
+        )}
+      </nav>
     </header>
   );
 }

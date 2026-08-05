@@ -54,7 +54,7 @@
 .input-wrapper div input {
   outline: var(--input-outline);
   -webkit-text-fill-color: var(--clr-text-primary);
-  background-color: var(--bg-primary-a0);
+  background-color: var(--bg-secondary-a0);
   width: 100%;
   padding: var(--space-m) var(--space-s) var(--space-s) var(--space-l);
   font-size: var(--font-size-lg);
@@ -79,8 +79,8 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  box-shadow: 0 0 0 1000px var(--bg-primary-a0) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--bg-primary-a0) inset !important;
+  box-shadow: 0 0 0 1000px var(--bg-secondary-a0) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary-a0) inset !important;
   -webkit-text-fill-color: var(--clr-text-primary) !important;
   transition: background-color 9999s ease-in-out 0s;
 }
@@ -95,7 +95,7 @@ input:-internal-autofill-selected {
 .input-wrapper div.form-invalid input {
   outline: 1px solid red;
   background-color: var(--danger-a20);
-  color: red;
+  -webkit-text-fill-color: red;
 }
 
 .input-wrapper div.form-invalid label {

@@ -1,18 +1,14 @@
 :root {
-  --bg-primary-a0: #ffffff;
-  --bg-primary-a10: #e4e4e4;
-  --bg-primary-a20: #d7d7d7;
-  --bg-primary-a30: #bdbdbd;
-  --bg-secondary-a0: #e4eaf2;
-  --bg-secondary-a10: #d9dee4;
-  --bg-secondary-a20: #cdd2d7;
-  --bg-secondary-a30: #b6babe;
+  --bg-primary-a0: #e4eaf2;
+  --bg-secondary-a0: #ffffff;
+  --border-clr-a0: #d9dee4;
   --bg-login-image: url('../assets/images/login-bg-light.svg');
   --bg-login: #cde7ff;
   --elements-a0: #539aff;
   --elements-a10: #5587cc;
   --elements-a20: #41689e;
   --elements-a30: #264063;
+  --backdrop-clr: #18181889;
   --success-a0: #118623;
   --success-a10: #95ffa6;
   --success-a20: #c1ffca;
@@ -55,13 +51,8 @@
 
 [data-theme='dark'] {
   --bg-primary-a0: #030015;
-  --bg-primary-a10: #393939;
-  --bg-primary-a20: #4f4f4f;
-  --bg-primary-a30: #7d7d7d;
   --bg-secondary-a0: #1b1f25;
-  --bg-secondary-a10: #42454b;
-  --bg-secondary-a20: #575a5f;
-  --bg-secondary-a30: #83868a;
+  --border-clr-a0: #42454b;
   --bg-login: #00062a;
   --bg-login-image: url('../assets/images/login-bg-dark.svg');
   --elements-a0: #0060e6;
@@ -78,4 +69,5 @@
   --input-outline: 2px solid var(--outline-clr);
   --label-text-clr: #c7c7c7;
   --theme-toggle-bg: #121b4f;
+  --backdrop-clr: #181818c2;
 }
