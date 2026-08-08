@@ -1,0 +1,25 @@
+div.backdrop {
+  top: 0;
+  right: 0;
+  z-index: 99;
+  position: absolute;
+  display: none;
+  opacity: 0;
+  background-color: var(--backdrop-clr, red);
+  min-width: 100vw;
+  min-height: 100vh;
+  transition:
+    display 0.3s allow-discrete,
+    opacity 0.3s;
+}
+
+div.backdrop.show {
+  display: block;
+  opacity: 1;
+}
+
+@starting-style {
+  .backdrop.show {
+    opacity: 0;
+  }
+}

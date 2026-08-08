@@ -1,10 +1,11 @@
 .button-wrapper {
+  width: 100%;
   display: flex;
   align-items: center;
 }
 
 .button-wrapper button {
-  width: 55px;
+  min-width: 55px;
   cursor: pointer;
   border-radius: 20px;
   border: 1px solid #686868;
@@ -24,4 +25,33 @@
 
 .button-wrapper button div.switch.dark {
   transform: translateX(20px) rotate(270deg);
+}
+
+.button-wrapper.sidebar button {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  background-color: none;
+  border-top: 1px solid var(--border-clr-a0);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--clr-text-primary);
+  background-color: var(--bg-secondary-a0);
+  padding: var(--space-xs);
+  font-size: var(--font-size-sm);
+  transition: var(--bg-clr-transition);
+}
+
+.button-wrapper.sidebar button div.switch {
+  transform: translateX(0px) rotate(180deg);
+  position: static;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  transition: transform ease-in-out 0.2s;
+}
+
+.button-wrapper.sidebar button div.switch.dark {
+  transform: rotate(0deg);
 }

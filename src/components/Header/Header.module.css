@@ -6,7 +6,7 @@ header {
   grid-template-columns: 1fr 4fr 1fr;
   align-items: center;
   background-color: var(--bg-secondary-a0);
-  transition: background-color 0.5s;
+  transition: var(--bg-clr-transition);
 }
 
 header div.company-logo-wrapper {
@@ -39,7 +39,7 @@ header div.dropdown-button-wrapper button {
 
 header div.dropdown-button-wrapper button.active {
   background-color: var(--elements-a0);
-  transition: background-color 0.5s;
+  transition: var(--bg-clr-transition);
 }
 
 header div.dropdown-button-wrapper svg {
@@ -61,7 +61,7 @@ header nav.dropdown-wrapper {
   transform-origin: top;
   transition:
     transform ease-in-out 0.3s,
-    background-color 0.5s;
+    var(--bg-clr-transition);
   box-shadow: 0px 2px 2px 0px rgba(193, 193, 193, 0.75);
 }
 nav.dropdown-wrapper.open {

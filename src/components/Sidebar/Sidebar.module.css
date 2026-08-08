@@ -1,0 +1,124 @@
+aside {
+  position: absolute;
+  top: 0;
+  z-index: 101;
+  width: 200px;
+  height: 100vh;
+  transform: translateX(-200px);
+  background-color: var(--bg-secondary-a0, blue);
+  transition:
+    transform ease-in-out 0.3s,
+    var(--bg-clr-transition);
+  border-right: 1px solid var(--border-clr-a0);
+}
+
+aside.show {
+  transform: translateX(0px);
+}
+
+button.sidebar-toggle {
+  cursor: pointer;
+  border: 1px solid var(--border-clr-a0);
+  border-left: none;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 30px;
+  position: absolute;
+  top: 25px;
+  right: -25px;
+  z-index: 9999999;
+  background-color: var(--bg-secondary-a0, blue);
+  transition: var(--bg-clr-transition);
+}
+
+button.sidebar-toggle.open svg {
+  transform: rotate(0deg);
+  transition: transform ease 0.3s;
+}
+
+button.sidebar-toggle.open svg {
+  transform: rotate(180deg);
+}
+
+button.sidebar-toggle path {
+  fill: var(--clr-text-primary);
+}
+
+.sidebar-header {
+  margin-bottom: var(--space-xs);
+  padding: var(--space-s);
+  border-bottom: 1px solid var(--border-clr-a0);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+
+.sidebar-header img {
+  border-radius: 5px;
+  background-color: var(--elements-a0);
+  padding: var(--space-xxs);
+}
+
+.sidebar-header div {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 0.95;
+}
+
+.sidebar-header div p {
+  font-size: var(--font-size-xs);
+  color: var(--clr-text-secondary-a0, red);
+}
+
+.sidebar-button {
+  margin: var(--space-s) var(--space-xxs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.sidebar-button button {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  background: none;
+  padding: var(--space-xs) var(--space-s);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  border-radius: 7px;
+  border: none;
+  color: var(--clr-text-primary);
+}
+
+.sidebar-button button svg {
+  width: 18px;
+  height: 15px;
+}
+
+.sidebar-button button svg path {
+  fill: var(--clr-text-secondary-a0);
+}
+
+.sidebar-button button:hover {
+  background-color: var(--btn-clr-a10);
+}
+
+.sidebar-button button.active {
+  background-color: var(--btn-clr-a0);
+  color: var(--btn-clr-a40);
+}
+
+.sidebar-button button.active svg path {
+  fill: var(--btn-clr-a40);
+}
+aside > div:last-child {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}

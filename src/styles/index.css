@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
   --bg-primary-a0: #e4eaf2;
   --bg-secondary-a0: #ffffff;
@@ -8,6 +10,9 @@
   --elements-a10: #5587cc;
   --elements-a20: #41689e;
   --elements-a30: #264063;
+  --btn-clr-a0: #bcd8ff;
+  --btn-clr-a10: #e2eeff;
+  --btn-clr-a40: #00337a;
   --backdrop-clr: #18181889;
   --success-a0: #118623;
   --success-a10: #95ffa6;
@@ -18,14 +23,13 @@
   --danger-a0: #cd0300;
   --danger-a10: #ffb0ae;
   --danger-a20: #ffc7c5;
-  --info-a0: #87d1ff;
-  --info-a10: #9ad8ff;
-  --info-a20: #addfff;
   --logo-shadow: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.4));
   --logo-contrast: contrast(100%);
   --clr-text-primary: #3a3a3a;
+  --clr-text-secondary-a0: #8d8d8d;
+  --clr-text-secondary-a10: #636363;
   --theme-toggle-bg: #ffffff;
-  --font-base: 'Roboto', 'sans-serif';
+  --font-base: 'JetBrains Mono', 'Inter', 'Roboto', 'sans-serif';
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -47,6 +51,7 @@
   --outline-clr: #0e0e0e;
   --input-outline: 1px solid var(--outline-clr);
   --label-text-clr: #777777;
+  --bg-clr-transition: background-color 0.5s;
 }
 
 [data-theme='dark'] {
@@ -59,12 +64,16 @@
   --elements-a10: #8bbcff;
   --elements-a20: #9ac5ff;
   --elements-a30: #b7d6ff;
+  --btn-clr-a0: #002b56;
+  --btn-clr-a10: #002a65;
+  --btn-clr-a40: #c9e0ff;
   --danger-a0: #cd0300;
   --danger-a10: #ff7774;
   --danger-a20: #ffc7c5;
   --logo-shadow: drop-shadow(0px 0px 3px #668ae4);
   --logo-contrast: contrast(100%);
   --clr-text-primary: #f5f5f5;
+  --clr-text-secondary: #bcbcbc;
   --outline-clr: #737373;
   --input-outline: 2px solid var(--outline-clr);
   --label-text-clr: #c7c7c7;

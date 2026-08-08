@@ -4,7 +4,7 @@ import darkModeIcon from '../../assets/images/dark-mode.svg';
 import lightModeIcon from '../../assets/images/light-mode.png';
 import styles from './ThemeToggle.module.css';
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ sidebar = false }) {
   const [theme, setTheme] = useContext(ThemeContext);
   const switchTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -13,7 +13,9 @@ export default function ThemeToggle() {
   };
 
   return (
-    <div className={styles['button-wrapper']}>
+    <div
+      className={`${styles['button-wrapper']} ${sidebar ? styles.sidebar : ''}`}
+    >
       <button onClick={switchTheme}>
         <div
           className={`${styles['switch']} ${
@@ -25,6 +27,7 @@ export default function ThemeToggle() {
             alt="theme toggle"
           />
         </div>
+        {sidebar && <p>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</p>}
       </button>
     </div>
   );
