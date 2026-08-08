@@ -52,6 +52,7 @@
   --input-outline: 1px solid var(--outline-clr);
   --label-text-clr: #777777;
   --bg-clr-transition: background-color 0.5s;
+  --header-height: 70px;
 }
 
 [data-theme='dark'] {

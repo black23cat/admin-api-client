@@ -7,6 +7,7 @@ header {
   align-items: center;
   background-color: var(--bg-secondary-a0);
   transition: var(--bg-clr-transition);
+  height: var(--header-height);
 }
 
 header div.company-logo-wrapper {
@@ -16,8 +17,8 @@ header div.company-logo-wrapper {
 
 header div.company-logo-wrapper svg {
   filter: var(--logo-shadow);
-  width: 170px;
-  height: 80px;
+  width: 150px;
+  height: 65px;
 }
 
 header div.dropdown-button-wrapper {
@@ -52,10 +53,10 @@ header div.dropdown-button-wrapper button.active svg {
 
 header nav.dropdown-wrapper {
   width: 100vw;
-  height: 45px;
+  height: 35px;
   position: absolute;
-  bottom: -44px;
-  padding: var(--space-xs) var(--space-s);
+  bottom: -34px;
+  padding: var(--space-xxs) var(--space-s);
   background-color: var(--bg-secondary-a0);
   transform: scaleY(0);
   transform-origin: top;
