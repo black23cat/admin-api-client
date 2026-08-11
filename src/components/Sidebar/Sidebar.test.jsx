@@ -22,12 +22,16 @@ describe('Render Sidebar', () => {
         <Sidebar />
       </MemoryRouter>,
     );
-    const menu = screen.getByText('Menu');
-    const purchaseOrderBtn = screen.getByText('Puchase Order (PO)');
+    const sidebarToggle = screen.getByTestId('toggle-sidebar');
+    const headerText = screen.getByText('PrintAdmin');
+    const headerSubText = screen.getByText('Polygraphic');
+    const purchaseOrderBtn = screen.getByText('Data PO');
     const invoice = screen.getByText('Invoice');
     const jobData = screen.getByText('Data Kerja');
     const weeklyCash = screen.getByText('Kas Mingguan');
-    expect(menu).toBeInTheDocument();
+    expect(sidebarToggle).toBeInTheDocument();
+    expect(headerText).toBeInTheDocument();
+    expect(headerSubText).toBeInTheDocument();
     expect(purchaseOrderBtn).toBeInTheDocument();
     expect(invoice).toBeInTheDocument();
     expect(jobData).toBeInTheDocument();
@@ -46,13 +50,20 @@ describe('Sidebar button redirect to correct route', () => {
     );
 
     const purchaseOrderBtn = screen.getByRole('button', {
-      name: 'Puchase Order (PO)',
+      name: 'Data PO',
     });
     const invoice = screen.getByRole('button', { name: 'Invoice' });
+    const jobData = screen.getByRole('button', { name: 'Data Kerja' });
+    const weeklyCash = screen.getByRole('button', { name: 'Kas Mingguan' });
     await user.click(purchaseOrderBtn);
     await user.click(invoice);
     expect(mockNavigate).toHaveBeenCalledTimes(2);
+    await user.click(jobData);
+    await user.click(weeklyCash);
+    expect(mockNavigate).toHaveBeenCalledTimes(4);
     expect(mockNavigate.mock.calls[0][0]).toEqual('/purchase-order');
     expect(mockNavigate.mock.calls[1][0]).toEqual('/invoice');
+    expect(mockNavigate.mock.calls[2][0]).toEqual('/job-data');
+    expect(mockNavigate.mock.calls[3][0]).toEqual('/payment');
   });
 });

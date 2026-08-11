@@ -56,6 +56,7 @@ export default function Sidebar() {
     <>
       <aside className={`${showSidebar ? styles.show : ''}`}>
         <button
+          data-testid="toggle-sidebar"
           className={`${styles['sidebar-toggle']} ${showSidebar ? styles.open : ''}`}
           onClick={toggleSidebar}
         >
@@ -71,7 +72,7 @@ export default function Sidebar() {
         <div className={styles['sidebar-button']}>
           <button
             className={activeSidebarButton === 'po' ? styles.active : ''}
-            data-test-id="sidebar-button"
+            data-testid="sidebar-button"
             onClick={() => handleSidebarButtonClick('po')}
           >
             <ShoppingCart />
@@ -79,7 +80,7 @@ export default function Sidebar() {
           </button>
           <button
             className={activeSidebarButton === 'invoice' ? styles.active : ''}
-            data-test-id="sidebar-button"
+            data-testid="sidebar-button"
             onClick={() => handleSidebarButtonClick('invoice')}
           >
             <Receipt />
@@ -87,7 +88,7 @@ export default function Sidebar() {
           </button>
           <button
             className={activeSidebarButton === 'jobData' ? styles.active : ''}
-            data-test-id="sidebar-button"
+            data-testid="sidebar-button"
             onClick={() => handleSidebarButtonClick('jobData')}
           >
             <JobData />
@@ -95,7 +96,7 @@ export default function Sidebar() {
           </button>
           <button
             className={activeSidebarButton === 'payment' ? styles.active : ''}
-            data-test-id="sidebar-button"
+            data-testid="sidebar-button"
             onClick={() => handleSidebarButtonClick('payment')}
           >
             <Payment />
