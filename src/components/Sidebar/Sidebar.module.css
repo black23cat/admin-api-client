@@ -1,5 +1,5 @@
 aside {
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 101;
   width: 200px;
