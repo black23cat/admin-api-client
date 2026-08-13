@@ -1,9 +1,12 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
+import styles from './FilterForm.module.css';
+import Filter from '../../assets/svg/Filter';
+import Reset from '../../assets/svg/Reset';
 
 export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
   const todayDate = new Date();
-
+  const [isOpen, setIsOpen] = useState(false);
   const [searchBox, setSearchBox] = useState('');
   const [selectedValue, setSelectedValue] = useState(
     type === 'invoice' ? 'invoiceNumber' : null,
@@ -11,6 +14,10 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const toggleFilterForm = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleSearchChange = (e) => {
     setSearchBox(e.target.value);
@@ -66,66 +73,86 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} aria-label="Filter Invoice">
-      {type !== 'job-data' && (
-        <div>
-          <label htmlFor="search-invoice">Search :</label>
-          <input
-            type="search"
-            name="search-invoice"
-            id="search-invoice"
-            placeholder={`Cari ${type === 'po' ? 'Purchase Order' : 'Invoice'}...(Max 20karakter)`}
-            value={searchBox}
-            maxLength={20}
-            onChange={handleSearchChange}
-          />
-        </div>
-      )}
-      {type === 'invoice' && (
-        <div>
-          <label htmlFor="sort-by">Urutkan :</label>
-          <select
-            name="sort-by"
-            id="sort-by"
-            onChange={handleSelectChange}
-            value={selectedValue}
-          >
-            <option value="invoiceNumber">Invoice</option>
-            <option value="amount">Nilai Invoice</option>
-            <option value="createdAt">Tanggal</option>
-            <option value="status">Status</option>
-          </select>
-        </div>
-      )}
-      <div>
-        <label htmlFor="dateStart">Tanggal Awal :</label>
-        <input
-          type="date"
-          name="dateStart"
-          id="dateStart"
-          value={dateStart}
-          max={format(todayDate, 'yyyy-MM-dd')}
-          onChange={handleDateChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="dateEnd">Tanggal Akhir :</label>
-        <input
-          type="date"
-          name="dateEnd"
-          id="dateEnd"
-          value={dateEnd}
-          max={format(todayDate, 'yyyy-MM-dd')}
-          onChange={handleDateChange}
-        />
-      </div>
-      <div>
-        {errorMessage !== '' && <span>{errorMessage}</span>}
-        <button type="submit">Apply</button>
-        <button type="button" onClick={handleReset}>
-          Reset
+    <div className={styles['filter-form-wrapper']}>
+      <div className={styles['button-wrapper']}>
+        <button onClick={toggleFilterForm}>
+          <Filter />
+          Filter Data
         </button>
       </div>
-    </form>
+      {isOpen && (
+        <form onSubmit={handleSubmit} aria-label="Filter Invoice">
+          {type !== 'job-data' && (
+            <div>
+              <label htmlFor="search-invoice">
+                Kata Kunci (Max 20karakter)
+              </label>
+              <input
+                type="search"
+                name="search-invoice"
+                id="search-invoice"
+                placeholder={`Cari ${type === 'po' ? 'PO' : 'Invoice'} / Nama`}
+                value={searchBox}
+                maxLength={20}
+                onChange={handleSearchChange}
+              />
+            </div>
+          )}
+
+          <div className={styles['date-wrapper']}>
+            <div>
+              <label htmlFor="dateStart">Tanggal Awal</label>
+              <input
+                type="date"
+                name="dateStart"
+                id="dateStart"
+                value={dateStart}
+                max={format(todayDate, 'yyyy-MM-dd')}
+                onChange={handleDateChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="dateEnd">Tanggal Akhir</label>
+              <input
+                type="date"
+                name="dateEnd"
+                id="dateEnd"
+                value={dateEnd}
+                max={format(todayDate, 'yyyy-MM-dd')}
+                onChange={handleDateChange}
+              />
+            </div>
+          </div>
+          {type === 'invoice' && (
+            <div>
+              <label htmlFor="sort-by">Urutkan :</label>
+              <select
+                name="sort-by"
+                id="sort-by"
+                onChange={handleSelectChange}
+                value={selectedValue}
+              >
+                <option value="invoiceNumber">🧾 Invoice</option>
+                <option value="amount">Rp Nilai Invoice</option>
+                <option value="createdAt">📅 Tanggal</option>
+                <option value="status">⌛ Status</option>
+              </select>
+            </div>
+          )}
+          <div className={styles.splitter}></div>
+          <div className={styles['form-button-wrapper']}>
+            {errorMessage !== '' && <span>{errorMessage}</span>}
+            <button type="button" onClick={handleReset}>
+              <Reset />
+              Reset
+            </button>
+            <button type="submit">
+              <Filter />
+              Apply
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }

@@ -9,22 +9,29 @@ beforeEach(() => {
   onSubmit = vi.fn();
 });
 
-describe('Filter Form correctly', () => {
+describe('Filter Form render correctly', () => {
   it('Render Form', async () => {
     const user = userEvent.setup();
     render(<FilterForm handleFilterButtonClick={onSubmit} type="invoice" />);
 
-    const searchBar = screen.getByRole('searchbox');
-    const filterSelect = screen.getByLabelText('Urutkan :');
-    const applyFilterButton = screen.getByRole('button', { name: 'Apply' });
+    const toggleFilterFormButton = screen.getByRole('button', {
+      name: 'Filter Data',
+    });
 
+    await user.click(toggleFilterFormButton);
+
+    const searchBar = screen.queryByRole('searchbox');
+    const filterSelect = screen.queryByLabelText('Urutkan :');
+    const applyFilterButton = screen.queryByRole('button', { name: 'Apply' });
     await user.click(filterSelect);
 
-    const invoiceNumberFilter = screen.getByRole('option', { name: 'Invoice' });
-    const dateFilter = screen.getByRole('option', { name: 'Tanggal' });
-    const statusFilter = screen.getByRole('option', { name: 'Status' });
-    const dateStartInput = screen.getByLabelText('Tanggal Awal :');
-    const dateEndInput = screen.getByLabelText('Tanggal Akhir :');
+    const invoiceNumberFilter = screen.getByRole('option', {
+      name: '🧾 Invoice',
+    });
+    const dateFilter = screen.getByRole('option', { name: '📅 Tanggal' });
+    const statusFilter = screen.getByRole('option', { name: '⌛ Status' });
+    const dateStartInput = screen.getByLabelText('Tanggal Awal');
+    const dateEndInput = screen.getByLabelText('Tanggal Akhir');
 
     expect(searchBar).toBeInTheDocument();
     expect(filterSelect).toBeInTheDocument();
@@ -42,6 +49,12 @@ describe('Filter form working correctly', () => {
     const user = userEvent.setup();
 
     render(<FilterForm handleFilterButtonClick={onSubmit} type="invoice" />);
+    const toggleFilterFormButton = screen.getByRole('button', {
+      name: 'Filter Data',
+    });
+
+    await user.click(toggleFilterFormButton);
+
     const searchBar = screen.getByRole('searchbox');
     const filterSubmit = screen.getByRole('button', { name: 'Apply' });
     await user.type(searchBar, mockInvoice[0].customerName);

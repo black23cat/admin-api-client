@@ -6,3 +6,13 @@
   transition: var(--bg-clr-transition);
   font-family: var(--font-base);
 }
+
+.app main.login {
+  padding: 0;
+}
+
+.app main:not(.login) {
+  background-color: var(--bg-primary-a0);
+  transition: var(--bg-clr-transition);
+  min-height: calc(100vh - var(--header-height));
+}
