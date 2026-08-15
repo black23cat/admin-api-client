@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import PoForm from '../PoForm/PoForm';
 import Dialog from '../Dialog/Dialog';
 import { useState } from 'react';
+import styles from './PoCard.module.css';
 
 export default function PoCard({
   purchaseOrder,
@@ -9,6 +10,7 @@ export default function PoCard({
   isOpen,
   closeCardForm,
   updatePo,
+  // selected,
 }) {
   const [openModal, setOpenModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -65,8 +67,7 @@ export default function PoCard({
 
   return (
     <div
-      style={{ border: '1px solid red', cursor: 'pointer' }}
-      className="card"
+      className={styles.card}
       role="button"
       tabIndex={0}
       onClick={() => handleCardClick(purchaseOrder.id)}
@@ -100,7 +101,8 @@ export default function PoCard({
 
 function CardDetails({ purchaseOrder }) {
   return (
-    <div className="poDetails">
+    <div className={styles['po-details']}>
+      <p>{generatePoId(purchaseOrder)}</p>
       <h3>{purchaseOrder.customerName}</h3>
       <p>{format(purchaseOrder.createdAt, 'dd-MMM-yyyy')}</p>
     </div>
@@ -118,4 +120,12 @@ function CardButton({ deletePo, disabled }) {
       </button>
     </div>
   );
+}
+
+function generatePoId(po) {
+  const createdAt = new Date(po.createdAt);
+  const poId = po.id;
+  const idLength = poId.toString().length;
+  const idPrefix = '000000'.slice(0, 6 - idLength);
+  return `PO-${createdAt.getFullYear()}${createdAt.getMonth() + 1 < 10 ? '0' : ''}${createdAt.getMonth() + 1}-${idPrefix}${poId}`;
 }
