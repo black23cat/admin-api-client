@@ -39,11 +39,11 @@
   margin: var(--space-m);
 }
 
-.input-wrapper div {
+form.login-form .input-wrapper div {
   margin-bottom: var(--space-sm);
 }
 
-.input-wrapper div label {
+form.login-form .input-wrapper div label {
   display: block;
   margin-left: var(--space-l);
   transform: translateY(25px);
@@ -51,7 +51,7 @@
   font-size: var(--font-size-sm);
 }
 
-.input-wrapper div input {
+form.login-form .input-wrapper div input {
   outline: var(--input-outline);
   -webkit-text-fill-color: var(--clr-text-primary);
   background-color: var(--bg-secondary-a0);
@@ -63,42 +63,42 @@
   transition: var(--bg-clr-transition);
 }
 
-.input-wrapper div input:focus {
+form.login-form .input-wrapper div input:focus {
   outline-color: #0068be;
   outline-width: 2px;
   transition: outline-color 0.4s;
   caret-color: var(--clr-text-primary);
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
+form.login-form input:-webkit-autofill,
+form.login-form input:-webkit-autofill:hover,
+form.login-form input:-webkit-autofill:focus,
+form.login-form textarea:-webkit-autofill,
+form.login-form textarea:-webkit-autofill:hover,
+form.login-form textarea:-webkit-autofill:focus,
+form.login-form select:-webkit-autofill,
+form.login-form select:-webkit-autofill:hover,
+form.login-form select:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px var(--bg-secondary-a0) inset !important;
   -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary-a0) inset !important;
   -webkit-text-fill-color: var(--clr-text-primary) !important;
   transition: background-color 9999s ease-in-out 0s;
 }
 
-input:-internal-autofill-selected {
+form.login-form input:-internal-autofill-selected {
   appearance: menulist-button;
   background-image: none !important;
   background-color: none !important;
   color: fieldtext !important;
 }
 
-.input-wrapper div.form-invalid input {
+form.login-form .input-wrapper div.form-invalid input {
   outline: 1px solid red;
   background-color: var(--danger-a20);
   -webkit-text-fill-color: red;
 }
 
-.input-wrapper div.form-invalid label {
+form.login-form .input-wrapper div.form-invalid label {
   color: red;
 }
 
@@ -142,7 +142,6 @@ input:-internal-autofill-selected {
   border: none;
   transition: var(--bg-clr-transition);
   border-radius: 10px;
-  cursor: pointer;
 }
 .login-btn:hover {
   background-color: var(--elements-a10);
@@ -160,7 +159,6 @@ input:-internal-autofill-selected {
 }
 
 .contact-admin a {
-  cursor: pointer;
   color: var(--elements-a0);
 }
 

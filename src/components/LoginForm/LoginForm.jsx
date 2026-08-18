@@ -80,7 +80,7 @@ export default function LoginForm() {
         <h3>Selamat Datang di website admin Polygraphic</h3>
       </section>
       <section className={styles['second-panel']}>
-        <form onSubmit={handleFormSubmit}>
+        <form className={styles['login-form']} onSubmit={handleFormSubmit}>
           <div className={styles['login-success']}>
             {isLogin && (
               <p>
