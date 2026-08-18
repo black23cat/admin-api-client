@@ -9,7 +9,7 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchBox, setSearchBox] = useState('');
   const [selectedValue, setSelectedValue] = useState(
-    type === 'invoice' ? 'invoiceNumber' : null,
+    type === 'invoice' ? 'invoiceNumber' : null
   );
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
@@ -81,7 +81,11 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
         </button>
       </div>
       {isOpen && (
-        <form onSubmit={handleSubmit} aria-label="Filter Invoice">
+        <form
+          className={styles['filter-form']}
+          onSubmit={handleSubmit}
+          aria-label="Filter Invoice"
+        >
           {type !== 'job-data' && (
             <div>
               <label htmlFor="search-invoice">

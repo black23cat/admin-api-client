@@ -2,12 +2,12 @@
   --date-wrapper-width: 100%;
   --date-gap: 10px;
   --input-bdr-rad: 10px;
-  --elements-a0: #0060e6;
   border: 1px solid var(--border-clr-a0);
   border-radius: var(--border-radius);
   min-width: var(--main-content-min-width);
   background-color: var(--bg-secondary-a0);
   transition: var(--bg-clr-transition);
+  margin: var(--space-s) 0;
 }
 
 div.button-wrapper button {
@@ -26,23 +26,23 @@ div.button-wrapper button svg {
   fill: var(--clr-text-primary);
 }
 
-.filter-form-wrapper form {
+.filter-form-wrapper form.filter-form {
   border-top: 1px solid var(--border-clr-a0);
   padding: var(--space-s);
   color: var(--clr-text-secondary-a10, red);
 }
 
-.filter-form-wrapper form > div {
+.filter-form-wrapper form.filter-form > div {
   margin-bottom: var(--space-s);
 }
 
-.filter-form-wrapper form div label {
+.filter-form-wrapper form.filter-form div label {
   display: block;
   font-weight: 500;
   margin-bottom: var(--space-xxs);
 }
 
-.filter-form-wrapper form div input {
+.filter-form-wrapper form.filter-form div input {
   width: 100%;
   display: flex;
   padding: var(--space-xs) var(--space-s);
@@ -54,7 +54,7 @@ div.button-wrapper button svg {
   transition: var(--bg-clr-transition);
 }
 
-.filter-form-wrapper form div.date-wrapper {
+.filter-form-wrapper form.filter-form div.date-wrapper {
   display: flex;
   width: var(--date-wrapper-width);
   justify-content: space-between;
@@ -63,7 +63,7 @@ div.button-wrapper button svg {
   flex-wrap: wrap;
 }
 
-.filter-form-wrapper form div.date-wrapper > div {
+.filter-form-wrapper form.filter-form div.date-wrapper > div {
   width: clamp(
     130px,
     calc(var(--date-wrapper-width) - var(--date-gap)) / 2,
@@ -71,7 +71,11 @@ div.button-wrapper button svg {
   );
 }
 
-.filter-form-wrapper form div.date-wrapper > div input[type='date'] {
+.filter-form-wrapper
+  form.filter-form
+  div.date-wrapper
+  > div
+  input[type='date'] {
   padding: var(--space-xxs) var(--space-xs);
   width: 100%;
   display: block;
@@ -79,7 +83,7 @@ div.button-wrapper button svg {
   width: 100%;
 }
 
-input[type='date']::-webkit-calendar-picker-indicator {
+form.filter-form input[type='date']::-webkit-calendar-picker-indicator {
   filter: var(--date-picker-filter);
   cursor: pointer;
 }
@@ -124,7 +128,7 @@ div.form-button-wrapper button[type='submit'] svg path {
   fill: #ffff;
 }
 
-form select {
+select {
   cursor: pointer;
   border: none;
   border-radius: var(--border-radius);
@@ -133,6 +137,7 @@ form select {
   background-color: var(--bg-secondary-a10);
   text-align: left;
   transition: var(--bg-clr-transition);
+  color: var(--clr-text-secondary-a10);
   min-width: 225px;
 }
 
@@ -149,10 +154,11 @@ select::picker-icon {
   transition: transform 0.2s ease;
 }
 
-form select:open::picker-icon {
+select:open::picker-icon {
   transform: scale(1.5) rotate(180deg);
 }
 
-form select option {
+select option {
   padding: var(--space-xxs) var(--space-xs);
+  color: var(--clr-text-primary);
 }
