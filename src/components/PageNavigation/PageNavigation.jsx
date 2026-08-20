@@ -45,7 +45,7 @@ export default function PageNavigation({
           className={styles.next}
           type="button"
           onClick={() => handlePageButtonNavigate('next')}
-          // disabled={isLastPage}
+          disabled={isLastPage}
         >
           Next
           <span>
