@@ -231,7 +231,7 @@ export default function PoPage() {
         )}
       </Dialog>
       <div>
-        <h2>Purchase Order</h2>
+        <h3>Purchase Order</h3>
         <button
           className={styles['new-po']}
           onClick={() => navigate('/purchase-order/create')}

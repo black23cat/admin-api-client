@@ -85,7 +85,7 @@ button.sidebar-toggle path {
 
 .sidebar-button button {
   cursor: pointer;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   background: none;
   padding: var(--space-xs) var(--space-s);
   display: flex;

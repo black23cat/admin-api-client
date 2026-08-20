@@ -122,7 +122,7 @@ function CardDetails({ handleCardClick, purchaseOrder }) {
       role="button"
     >
       <p>{generatePoId(purchaseOrder)}</p>
-      <h3>{purchaseOrder.customerName}</h3>
+      <p className={styles['customer-name']}>{purchaseOrder.customerName}</p>
       <p>{format(purchaseOrder.createdAt, 'dd-MMM-yyyy')}</p>
     </div>
   );
