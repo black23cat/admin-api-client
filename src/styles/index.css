@@ -7,7 +7,7 @@
   --border-clr-a0: #d9dee4;
   --bg-login-image: url('../assets/images/login-bg-light.svg');
   --bg-login: #cde7ff;
-  --elements-a0: #539aff;
+  --elements-a0: #0060e6;
   --elements-a10: #5587cc;
   --elements-a20: #41689e;
   --elements-a30: #264063;
@@ -19,9 +19,10 @@
   --success-a10: #95ffa6;
   --success-a20: #c1ffca;
   --success-a40: #eefff1;
-  --warn-a0: #ffbc5e;
+  --warn-a0: #ffac38;
   --warn-a10: #ffc77a;
   --warn-a20: #ffd194;
+  --warn-a30: #ffe2bb;
   --danger-a0: #cd0300;
   --danger-a10: #ffb0ae;
   --danger-a20: #ffc7c5;
@@ -58,6 +59,7 @@
   --date-picker-filter: invert(0);
   --main-content-min-width: 300px;
   --border-radius: 12px;
+  --btn-disabled: #a3b7ff;
 }
 
 [data-theme='dark'] {

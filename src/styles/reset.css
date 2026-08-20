@@ -71,3 +71,8 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+button,
+::file-selector-button {
+  cursor: pointer;
+}

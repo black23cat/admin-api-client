@@ -23,8 +23,10 @@ describe('Render Card', () => {
     );
     const customerName = screen.getByText('John Doe');
     const dateCreated = screen.getByText(`${currentDate}`);
+    const selectPo = screen.getByRole('checkbox');
     expect(customerName).toBeInTheDocument();
     expect(dateCreated).toBeInTheDocument();
+    expect(selectPo).toBeInTheDocument();
   });
 
   it("Shouldn't Render form, file list and action button when card isOpen=false", async () => {
@@ -46,11 +48,33 @@ describe('Render Card', () => {
       </MemoryRouter>,
     );
     const poForm = screen.getByTestId('purchase-order-form');
-    const deleteButton = screen.getByAltText('delete purchase order');
-    const printButton = screen.getByAltText('print purchase order');
+    const deleteButton = screen.getByTestId('delete-po');
+    const printButton = screen.getByTestId('print-po');
 
     expect(poForm).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
     expect(printButton).toBeInTheDocument();
+  });
+
+  it('Select button is disabled when po is invoiced', async () => {
+    const poData = mockPoData.map((po) => {
+      return { ...po, invoiceId: 1 };
+    });
+    globalThis.fetch = vi.fn(() => {
+      return Promise.resolve({
+        status: 200,
+        ok: true,
+        json: () =>
+          Promise.resolve({ purchaseOrder: poData, count: poData.length }),
+      });
+    });
+    render(
+      <MemoryRouter>
+        <PoCard purchaseOrder={poData[0]} />
+      </MemoryRouter>,
+    );
+
+    const selectButton = screen.getByRole('checkbox');
+    expect(selectButton).toBeDisabled();
   });
 });

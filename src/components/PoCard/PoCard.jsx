@@ -3,6 +3,8 @@ import PoForm from '../PoForm/PoForm';
 import Dialog from '../Dialog/Dialog';
 import { useState } from 'react';
 import styles from './PoCard.module.css';
+import Trasn from '../../assets/svg/Trash';
+import Printer from '../../assets/svg/Printer';
 
 export default function PoCard({
   purchaseOrder,
@@ -10,7 +12,8 @@ export default function PoCard({
   isOpen,
   closeCardForm,
   updatePo,
-  // selected,
+  handleSelectPo,
+  selected,
 }) {
   const [openModal, setOpenModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -67,10 +70,9 @@ export default function PoCard({
 
   return (
     <div
-      className={styles.card}
-      role="button"
-      tabIndex={0}
-      onClick={() => handleCardClick(purchaseOrder.id)}
+      className={
+        selected && !isOpen ? `${styles.card} ${styles.selected}` : styles.card
+      }
     >
       <Dialog isOpen={openModal} closeModal={closeModal}>
         <h3>Hapus Purchase Order</h3>
@@ -79,7 +81,24 @@ export default function PoCard({
           <button onClick={() => handleModalBtnClick('cancel')}>Batal</button>
         </div>
       </Dialog>
-      <CardDetails purchaseOrder={purchaseOrder} />
+      <input
+        type="checkbox"
+        name="selectPo"
+        id="select-po"
+        aria-label="select po"
+        onChange={() => handleSelectPo(purchaseOrder.id)}
+        checked={selected}
+        disabled={purchaseOrder.invoiceId !== null ? true : false}
+      />{' '}
+      <CardDetails
+        handleCardClick={handleCardClick}
+        purchaseOrder={purchaseOrder}
+      />
+      <CardButton
+        poId={purchaseOrder.id}
+        deletePo={deletePo}
+        disabled={purchaseOrder.invoiceId !== null}
+      />
       {isOpen && (
         <>
           <PoForm
@@ -87,11 +106,7 @@ export default function PoCard({
             closeCardForm={closeCardForm}
             updatePo={updatePo}
           />
-          <CardButton
-            poId={purchaseOrder.id}
-            deletePo={deletePo}
-            disabled={purchaseOrder.invoiceId !== null}
-          />
+
           {errorMsg !== '' && <span>{errorMsg}</span>}
         </>
       )}
@@ -99,9 +114,13 @@ export default function PoCard({
   );
 }
 
-function CardDetails({ purchaseOrder }) {
+function CardDetails({ handleCardClick, purchaseOrder }) {
   return (
-    <div className={styles['po-details']}>
+    <div
+      className={styles['card-details']}
+      onClick={() => handleCardClick(purchaseOrder.id)}
+      role="button"
+    >
       <p>{generatePoId(purchaseOrder)}</p>
       <h3>{purchaseOrder.customerName}</h3>
       <p>{format(purchaseOrder.createdAt, 'dd-MMM-yyyy')}</p>
@@ -111,12 +130,17 @@ function CardDetails({ purchaseOrder }) {
 
 function CardButton({ deletePo, disabled }) {
   return (
-    <div className="card-button">
-      <button>
-        <img src="example.com" alt="print purchase order" />
+    <div className={styles['card-button']}>
+      <button data-testid="print-po">
+        <Printer />
       </button>
-      <button onClick={() => deletePo()} disabled={disabled}>
-        <img src="example.com" alt="delete purchase order" />
+      <button
+        data-testid="delete-po"
+        className={styles.delete}
+        onClick={() => deletePo()}
+        disabled={disabled}
+      >
+        <Trasn />
       </button>
     </div>
   );
@@ -125,7 +149,9 @@ function CardButton({ deletePo, disabled }) {
 function generatePoId(po) {
   const createdAt = new Date(po.createdAt);
   const poId = po.id;
-  const idLength = poId.toString().length;
-  const idPrefix = '000000'.slice(0, 6 - idLength);
-  return `PO-${createdAt.getFullYear()}${createdAt.getMonth() + 1 < 10 ? '0' : ''}${createdAt.getMonth() + 1}-${idPrefix}${poId}`;
+  // const idLength = poId.toString().length;
+  // const idPrefix = '000000'.slice(0, 6 - idLength);
+  return `PO-${createdAt.getMonth() + 1 < 10 ? '0' : ''}${
+    createdAt.getMonth() + 1
+  }${createdAt.getFullYear().toString().slice(2)}-00${poId}`;
 }

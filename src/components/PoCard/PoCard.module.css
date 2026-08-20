@@ -1,12 +1,62 @@
 div.card {
+  padding: var(--space-xxs) var(--space-s);
+  display: grid;
+  grid-template-columns: var(--header-grid-col);
+  gap: var(--space-xs);
+  border-top: 1px solid var(--border-clr-a0);
+  font-size: var(--font-size-sm);
+  transition: var(--bg-clr-transition);
+}
+
+div.card-details {
+  grid-area: 1/2/2/5;
+  display: grid;
+  grid-template-columns: var(--grid-col2) var(--grid-col3) var(--grid-col4);
+  gap: var(--space-xs);
+  position: relative;
+  align-items: center;
   cursor: pointer;
 }
 
-div.po-details {
-  font-size: var(--font-size-xs);
-  display: grid;
-  grid-template-columns: var(--content-grid-col);
+div.card.selected {
+  background-color: var(--success-a40);
+  color: var(--card-clr-selected);
+}
+
+div.card input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  margin: auto;
+}
+
+div.card:last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+div.card-button {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xxs);
   justify-content: center;
   align-items: center;
-  gap: var(--space-s);
+}
+
+div.card-button button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+div.card button svg path {
+  fill: var(--clr-text-primary);
+}
+div.card.selected button svg path {
+  fill: var(--card-clr-selected);
+}
+
+div.card-button button.delete svg path {
+  fill: red;
 }
