@@ -1,0 +1,75 @@
+:root {
+  --btn-outline: #acacac;
+  --btn-clr: #7e7e7e;
+  --btn-outline-disabled: #dedede;
+}
+
+[data-theme='dark'] {
+  --btn-outline: #878787;
+  --btn-clr: #aaaaaa;
+  --btn-outline-disabled: #393939;
+}
+
+nav.page-navigation {
+  margin: var(--space-s) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+nav.page-navigation > p {
+  font-size: var(--font-size-xs);
+  color: var(--clr-text-secondary-a0, red);
+}
+
+nav.page-navigation > p span,
+.button-wrapper > p {
+  color: var(--clr-text-primary, red);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+}
+
+nav.page-navigation div.button-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+
+nav.page-navigation div.button-wrapper button {
+  min-width: 75px;
+  border: 1px solid var(--btn-outline);
+  background-color: var(--bg-primary-a0);
+  padding: var(--space-xxs) var(--space-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--btn-clr);
+  border-radius: 8px;
+}
+
+nav.page-navigation div.button-wrapper button:first-child {
+  padding-left: var(--space-s);
+}
+nav.page-navigation div.button-wrapper button:first-child svg {
+  transform: rotate(180deg);
+}
+
+nav.page-navigation div.button-wrapper button:last-child {
+  padding-right: var(--space-s);
+}
+
+nav.page-navigation div.button-wrapper button svg path {
+  fill: var(--btn-clr);
+}
+
+nav.page-navigation div.button-wrapper button:disabled {
+  border-color: var(--btn-outline-disabled);
+  cursor: not-allowed;
+  color: var(--btn-outline-disabled);
+}
+
+nav.page-navigation div.button-wrapper button:disabled svg path {
+  fill: var(--btn-outline-disabled);
+}
