@@ -5,6 +5,7 @@ import Dialog from '../Dialog/Dialog';
 import InvoiceConfirmForm from '../InvoiceConfirmForm/InvoiceConfirmForm';
 import FilterForm from '../FilterForm/FilterForm';
 import PageNavigation from '../PageNavigation/PageNavigation';
+import styles from './PoPage.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const initialFilterParams = 'page=1&filter=0';
@@ -124,11 +125,13 @@ export default function PoPage() {
         return;
       }
 
-      if (response.status === 422) {
-        const result = await response.json();
-        setNewInvoiceResult(result);
-        return setShowModal(true);
+      if (response.status !== 422) {
+        return setInvoiceErrorMsg('Gagal membuat invoice');
       }
+
+      const result = await response.json();
+      setNewInvoiceResult(result);
+      setShowModal(true);
     } catch {
       setInvoiceErrorMsg('Gagal membuat invoice');
     }
@@ -165,7 +168,9 @@ export default function PoPage() {
     const fetchPoData = async (filterParams) => {
       try {
         const response = await fetch(
-          `${API_URL}/purchase-order?${filterParams === null ? initialFilterParams : filterParams}`,
+          `${API_URL}/purchase-order?${
+            filterParams === null ? initialFilterParams : filterParams
+          }`,
           {
             signal: abortController.signal,
             method: 'GET',
@@ -191,8 +196,18 @@ export default function PoPage() {
     return () => abortController.abort();
   }, [filterParams]);
 
+  useEffect(() => {
+    if (invoiceErrorMsg === '') {
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setInvoiceErrorMsg('');
+    }, 2000);
+    return () => clearTimeout(timeout);
+  });
+
   return (
-    <>
+    <main>
       {' '}
       <Dialog isOpen={showModal} closeModal={closeModal}>
         {invoiceCreated ? (
@@ -217,55 +232,56 @@ export default function PoPage() {
       </Dialog>
       <div>
         <h2>Purchase Order</h2>
-        <button onClick={() => navigate('/purchase-order/create')}>
+        <button
+          className={styles['new-po']}
+          onClick={() => navigate('/purchase-order/create')}
+        >
           + New Purchase Order
         </button>
         <FilterForm handleFilterButtonClick={handleFilterButtonClick} />
-        {poList.length > 0 ? (
-          <div className="po-list-wrapper">
-            {poList.map((po) => (
-              <div
-                className="card-wrapper"
-                key={po.id}
-                style={{ border: '1px solid green' }}
-              >
-                <input
-                  type="checkbox"
-                  name="selectPo"
-                  id="selectPo"
-                  aria-label="select po"
-                  onChange={() => handleSelectPo(po.id)}
-                  checked={selectedPoId.includes(po.id)}
-                  disabled={po.invoiceId !== null ? true : false}
-                />
-                <PoCard
-                  purchaseOrder={po}
-                  handleCardClick={handleCardEdit}
-                  isOpen={po.id === editCardId}
-                  closeCardForm={handleCloseCard}
-                  updatePo={updatePo}
-                />
-              </div>
-            ))}
+        <div className={styles['po-list-wrapper']}>
+          <div className={styles['card-header']}>
+            <h3>Id Po</h3>
+            <h3>Nama Customer</h3>
+            <h3>Tanggal</h3>
           </div>
-        ) : poList.length === 0 && fetchPoError === '' ? (
-          <span>Loading</span>
-        ) : (
-          <span>{fetchPoError}</span>
-        )}
+          {poList.length > 0 ? (
+            <>
+              {poList.map((po) => {
+                return (
+                  <PoCard
+                    key={po.id}
+                    purchaseOrder={po}
+                    handleCardClick={handleCardEdit}
+                    isOpen={po.id === editCardId}
+                    closeCardForm={handleCloseCard}
+                    updatePo={updatePo}
+                    handleSelectPo={handleSelectPo}
+                    selected={selectedPoId.includes(po.id)}
+                  />
+                );
+              })}
+            </>
+          ) : poList.length === 0 && fetchPoError === '' ? (
+            <span>Loading</span>
+          ) : (
+            <span>{fetchPoError}</span>
+          )}
+        </div>
         <button
+          className={styles['new-invoice']}
           onClick={() => createInvoice(false)}
           disabled={selectedPoId.length === 0 ? true : false}
         >
           Create Invoice
         </button>
-        {invoiceErrorMsg !== '' ? <span>{invoiceErrorMsg}</span> : ''}
+        {invoiceErrorMsg !== '' && <p>{invoiceErrorMsg}</p>}
       </div>
       <PageNavigation
         totalItemCount={poCount}
         currentPage={currentPage}
         handlePageNavigation={handlePageNavigation}
       />
-    </>
+    </main>
   );
 }

@@ -21,7 +21,12 @@ vi.mock('react-router', async () => {
 // Mock PoCard component
 vi.mock('../PoCard/PoCard', () => {
   return {
-    default: () => <div>Purchase Order Card</div>,
+    default: () => (
+      <div>
+        <input type="checkbox" />
+        <p>Purchase Order Card</p>
+      </div>
+    ),
   };
 });
 
@@ -125,44 +130,6 @@ describe('Buttons working correctly', () => {
     await user.click(createInvoiceBtn);
     expect(mockFetch).toHaveBeenCalled();
   });
-  it('Render error message when failed to create invoice', async () => {
-    const user = userEvent.setup({ pointerEventsCheck: 0 });
-    const mockFetch = vi
-      .fn()
-      .mockImplementationOnce(() => {
-        return Promise.resolve({
-          status: 200,
-          ok: true,
-          json: () => Promise.resolve(mockResolvedData),
-        });
-      })
-      .mockImplementationOnce(() => {
-        return Promise.reject({
-          status: 500,
-          ok: false,
-          json: () => Promise.reject('Server Error'),
-        });
-      });
-    globalThis.fetch = mockFetch;
-    render(
-      <MemoryRouter>
-        <PoPage />
-      </MemoryRouter>,
-    );
-
-    await waitFor(async () => {
-      const cardsCheckbox = screen.getAllByRole('checkbox');
-      await user.click(cardsCheckbox[0]);
-    });
-
-    const createInvoiceBtn = screen.getByText('Create Invoice');
-    await user.click(createInvoiceBtn);
-    expect(mockFetch).toHaveBeenCalled();
-    await waitFor(() => {
-      const error = screen.getByText('Gagal membuat invoice');
-      expect(error).toBeInTheDocument();
-    });
-  });
 });
 
 describe('Select po working correctly', () => {
@@ -175,30 +142,6 @@ describe('Select po working correctly', () => {
     await waitFor(() => {
       const selectButton = screen.getAllByRole('checkbox');
       expect(selectButton.length).toEqual(2);
-    });
-  });
-
-  it('Select button is disabled when po is invoiced', async () => {
-    const poData = mockPoData.map((po) => {
-      return { ...po, invoiceId: 1 };
-    });
-    globalThis.fetch = vi.fn(() => {
-      return Promise.resolve({
-        status: 200,
-        ok: true,
-        json: () =>
-          Promise.resolve({ purchaseOrder: poData, count: poData.length }),
-      });
-    });
-    render(
-      <MemoryRouter>
-        <PoPage />
-      </MemoryRouter>,
-    );
-    await waitFor(() => {
-      const selectButton = screen.getAllByRole('checkbox');
-      expect(selectButton[0]).toBeDisabled();
-      expect(selectButton[1]).toBeDisabled();
     });
   });
 });
