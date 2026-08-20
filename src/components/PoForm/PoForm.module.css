@@ -1,0 +1,167 @@
+:root {
+  --btn-border-radius: 8px;
+}
+
+.po-form-wrapper {
+  position: relative;
+  border-radius: 12px;
+  grid-area: 2/1/3/6;
+  background-color: var(--bg-primary-a0);
+  padding: var(--space-l) var(--space-xs) var(--space-m);
+  margin-bottom: var(--space-s);
+}
+
+main > .po-form-wrapper {
+  padding: 0;
+}
+
+main > form.po-form {
+  border-radius: var(--border-radius);
+  margin-top: var(--space-s);
+  padding: var(--space-xs);
+  background-color: var(--bg-secondary-a0);
+}
+
+.po-form-wrapper > button {
+  color: #727272;
+  background: none;
+  border: none;
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+}
+
+form.po-form div {
+  margin-bottom: var(--space-s);
+}
+
+form.po-form label {
+  display: block;
+  width: 50%;
+  margin: var(--space-xs) 0;
+}
+form.po-form input {
+  width: 100%;
+}
+
+form.po-form input:not([type='file']) {
+  border: 1px solid var(--outline-clr);
+  border-radius: var(--border-radius);
+  padding: var(--space-xs) var(--space-s);
+  background-color: var(--bg-secondary-a0);
+  color: var(--clr-text-primary);
+}
+
+form.po-form select {
+  background-color: var(--bg-secondary-a0);
+  border: 1px solid var(--outline-clr);
+}
+
+form.po-form div.select-wrapper,
+form.po-form div.file-uploader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+form.po-form div.select-wrapper select,
+form.po-form div.select-wrapper label {
+  width: 50%;
+}
+
+form.po-form input:focus {
+  outline-color: #0068be;
+  outline-width: 2px;
+  transition: outline-color 0.4s;
+  caret-color: var(--clr-text-primary);
+}
+
+form.po-form div.file-uploader label {
+  width: 50%;
+}
+
+form.po-form div.file-uploader input[type='file'] {
+  width: 50%;
+}
+
+form.po-form div.file-uploader input[type='file']::file-selector-button {
+  background-color: var(--elements-a0);
+  color: #ffff;
+  border: none;
+  margin-left: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  border-radius: 10px;
+}
+
+form.po-form div.uploaded-files button.delete-file {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  margin: 0 var(--space-xs);
+}
+
+form.po-form div.uploaded-files ul {
+  padding: 0;
+  margin-bottom: var(--space-s);
+}
+
+form.po-form div.uploaded-files ul li {
+  list-style: none;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  margin: var(--space-s) 0;
+}
+
+form.po-form div.uploaded-files ul li p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: disc;
+  padding: var(--space-xxs) var(--space-s);
+  border: 1px solid var(--outline-clr);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-secondary-a0);
+}
+
+form.po-form div.uploaded-files button.delete-file svg {
+  width: 20px;
+}
+
+form.po-form div.uploaded-files button.delete-file svg path {
+  fill: red;
+}
+
+form.po-form div.warn {
+  border: 2px solid var(--warn-a0);
+  padding: var(--space-xs);
+  border-radius: var(--border-radius);
+  background-color: var(--warn-a30);
+  font-size: var(--font-size-xs);
+  color: #3d3d3d;
+  margin-top: var(--space-s);
+}
+
+form.po-form div.button-wrapper {
+  display: flex;
+  justify-content: end;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
+}
+
+form.po-form div.button-wrapper button {
+  border: none;
+  background: none;
+  background-color: var(--elements-a0);
+  color: #ffff;
+  border-radius: var(--btn-border-radius);
+  padding: var(--space-xs) var(--space-s);
+}
+
+form.po-form div.button-wrapper button.cancel {
+  background: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--outline-clr);
+  color: var(--clr-text-primary);
+}

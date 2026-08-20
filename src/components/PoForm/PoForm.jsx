@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { matchFilename } from '../../utils/regexPattern';
 import { useNavigate } from 'react-router';
+import styles from './PoForm.module.css';
+import Trash from '../../assets/svg/Trash';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -171,7 +173,8 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
   });
 
   return (
-    <>
+    <FormWrapper poData={poData === null}>
+      {poData !== null && <button onClick={closeCardForm}>x</button>}
       {formError.length > 0 && (
         <ul>
           {formError.map((error, index) => (
@@ -179,7 +182,19 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
           ))}
         </ul>
       )}
-      <form onSubmit={handleSubmit} data-testid="purchase-order-form">
+      {poData === null && <h3>Buat PO Baru</h3>}
+      <form
+        className={styles['po-form']}
+        onSubmit={handleSubmit}
+        data-testid="purchase-order-form"
+      >
+        <div className={styles.warn}>
+          <p>
+            Harap gunakan nama file dengan format &quot;NAMA
+            FILE_22-25_130x100_WARNA_2x.tif&quot; atau &quot;Nama
+            File_130x100_2x&quot;
+          </p>
+        </div>
         <div>
           <label htmlFor="customer-name">Nama Customer :</label>
           <input
@@ -190,7 +205,7 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
             value={customerName}
           />
         </div>
-        <div>
+        <div className={styles['select-wrapper']}>
           <label htmlFor="poType">Tipe po :</label>
           <select
             name="poType"
@@ -204,7 +219,7 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
             <option value="sublim">Sublim + Bahan</option>
           </select>
         </div>
-        <div>
+        <div className={styles['file-uploader']}>
           <label htmlFor="files">Upload Files :</label>
           <input
             type="file"
@@ -214,29 +229,41 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
             multiple
           />
         </div>
-        <div>
-          <p>Uploaded Files : </p>
-          <ul>
+        <div className={styles['uploaded-files']}>
+          <p>Valid Files : </p>
+          <ul className={styles.valid}>
             {validFiles.length > 0
               ? validFiles.map((file, index) => (
                   <li key={index}>
-                    {file}
-                    <button onClick={() => deleteUploadedFile(file)}>x</button>
+                    <p>
+                      {file}
+                      <button
+                        data-testid="delete-file"
+                        className={styles['delete-file']}
+                        onClick={() => deleteUploadedFile(file)}
+                      >
+                        <Trash />
+                      </button>
+                    </p>
                   </li>
                 ))
               : ''}
           </ul>
           <p>Invalid Files : </p>
-          <ul>
+          <ul className={styles.invalid}>
             {invalidFiles.length > 0
-              ? invalidFiles.map((file, index) => <li key={index}>{file}</li>)
+              ? invalidFiles.map((file, index) => (
+                  <li key={index}>
+                    <p>{file}</p>
+                  </li>
+                ))
               : ''}
           </ul>
         </div>
-        <div>
+        <div className={styles['button-wrapper']}>
           {errorMsg !== '' && <span>{errorMsg}</span>}
-          <button type="submit">Submit</button>
           <button
+            className={styles.cancel}
             type="button"
             onClick={
               poData === null
@@ -246,9 +273,18 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
           >
             Cancel
           </button>
+          <button type="submit">Submit</button>
         </div>
         {editPo && <span>Berhasil mengedit po</span>}
       </form>
-    </>
+    </FormWrapper>
+  );
+}
+
+function FormWrapper({ children, poData = false }) {
+  return poData ? (
+    <main>{children}</main>
+  ) : (
+    <div className={styles['po-form-wrapper']}>{children}</div>
   );
 }

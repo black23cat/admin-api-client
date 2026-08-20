@@ -54,7 +54,7 @@ describe('Upload file', () => {
     expect(uploadFiles.files[0]).toStrictEqual(multipleFiles[0]);
     expect(uploadFiles.files[1]).toStrictEqual(multipleFiles[1]);
 
-    const deleteFileButtons = screen.getAllByRole('button', { name: 'x' });
+    const deleteFileButtons = screen.getAllByTestId('delete-file');
 
     await user.click(deleteFileButtons[0]);
 
