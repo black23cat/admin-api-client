@@ -42,11 +42,6 @@ describe('Render Invoice Page correctly', () => {
         <InvoicePage />
       </MemoryRouter>,
     );
-    const newInvoiceButton = screen.getByRole('button', {
-      name: /\bbuat invoice\b/i,
-    });
-
-    expect(newInvoiceButton).toBeInTheDocument();
 
     await waitFor(() => {
       const invoiceCards = screen.getAllByText(/INV-\d{4}/i, { exact: false });

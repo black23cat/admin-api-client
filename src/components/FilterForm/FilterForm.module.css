@@ -41,7 +41,7 @@ div.button-wrapper button svg {
   display: block;
   font-weight: 500;
   margin-bottom: var(--space-xxs);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xxs);
 }
 
 .filter-form-wrapper form.filter-form div input {
@@ -52,7 +52,7 @@ div.button-wrapper button svg {
   border: 1px solid var(--border-clr-a0);
   background-color: var(--bg-secondary-a10, red);
   color: var(--clr-text-secondary-a10, red);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   transition: var(--bg-clr-transition);
 }
 
@@ -142,6 +142,7 @@ select {
   transition: var(--bg-clr-transition);
   color: var(--clr-text-secondary-a10);
   min-width: 210px;
+  font-size: var(--font-size-xxs);
 }
 
 select::picker-icon {

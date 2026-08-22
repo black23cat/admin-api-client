@@ -1,0 +1,40 @@
+.invoice-card-wrapper {
+  --grid-col1: minmax(55px, 1fr);
+  --grid-col2: minmax(75px, 2fr);
+  --grid-col3: minmax(75px, 2fr);
+  --grid-col4: minmax(55px, 1fr);
+  --grid-col5: minmax(75px, 1fr);
+  --grid-col6: minmax(65px, 1fr);
+  --grid-header-cols: var(--grid-col1) var(--grid-col2) var(--grid-col3)
+    var(--grid-col4) var(--grid-col5) var(--grid-col6);
+  --content-min-width: 480px;
+
+  overflow-x: auto;
+  width: 100%;
+  max-width: 1000px;
+  scrollbar-width: 3px;
+  scrollbar-color: #888888 #f1f1f1;
+  background-color: var(--bg-secondary-a0);
+  position: relative;
+  font-size: var(--font-size-xs);
+  border-radius: var(--border-radius);
+}
+
+div.card-header {
+  padding: var(--space-xs) var(--space-s);
+  width: 100%;
+  min-width: var(--content-min-width);
+  grid-column: 1/6;
+  display: grid;
+  grid-template-columns: var(--grid-header-cols);
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+div.card-header h4:last-child {
+  text-align: center;
+}
+
+.invoice-card-wrapper::-webkit-scrollbar {
+  background: red;
+}

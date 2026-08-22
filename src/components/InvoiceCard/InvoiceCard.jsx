@@ -5,6 +5,10 @@ import { useState } from 'react';
 import PaymentForm from '../PaymentForm/PaymentForm';
 import PaymentError from '../PaymentError/PaymentError';
 import PaymentSuccess from '../PaymentSuccess/PaymentSuccess';
+import styles from './InvoiceCard.module.css';
+import CancelReceipt from '../../assets/svg/CancelReceipt';
+import Printer from '../../assets/svg/Printer';
+import Pay from '../../assets/svg/Pay';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -95,7 +99,7 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
   };
 
   return (
-    <div className="invoice-card">
+    <div className={styles['invoice-card']}>
       <Dialog isOpen={openModal} closeModal={closeModal}>
         {paymentError ? (
           <PaymentError invoice={invoice} closeModal={closeModal} />
@@ -138,37 +142,65 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
           />
         )}
       </Dialog>
-      <h3>#INV-{invoice.invoiceNumber}</h3>
-      <span>
-        <h4>{invoice.customerName}</h4>
-        <p>{invoice.customerPhone}</p>
-      </span>
+      <InvoiceDetails invoice={invoice} />
+      <InvoiceButtons
+        invoice={invoice}
+        openPaymentForm={openPaymentForm}
+        cancelInvoice={handleCancelInvoice}
+      />
+    </div>
+  );
+}
+
+function InvoiceDetails({ invoice }) {
+  const invoiceStatus = invoice.status;
+  return (
+    <div className={styles.details}>
+      <p>#INV-{invoice.invoiceNumber}</p>
+      <p>{invoice.customerName}</p>
       <p>{format(new Date(invoice.createdAt), 'dd-MMM-yyyy')}</p>
       <p>{formatter.format(invoice.amount[0].total)}</p>
-      <p>{invoice.status}</p>
-      <div className="action-button-wrapper">
-        <button
-          type="button"
-          onClick={openPaymentForm}
-          disabled={invoice.status === 'Paid'}
-        >
-          <img src="example.com" alt="Pay Invoice" />
-        </button>
-        <button type="button">
-          <img src="example.com" alt="Print Invoice" />
-        </button>
-        <button
-          type="button"
-          onClick={() => handleCancelInvoice('openModal')}
-          disabled={
-            invoice.status === 'Paid' ||
-            invoice.paymentDetails.length > 0 ||
-            invoice.status === 'Cancelled'
-          }
-        >
-          <img src="example.com" alt="Batalkan Invoice" />
-        </button>
-      </div>
+      <p
+        className={
+          invoiceStatus === 'Pending'
+            ? styles.pending
+            : invoiceStatus === 'Paid'
+              ? styles.paid
+              : styles.cancelled
+        }
+      >
+        {invoiceStatus}
+      </p>
+    </div>
+  );
+}
+
+function InvoiceButtons({ invoice, openPaymentForm, cancelInvoice }) {
+  return (
+    <div className={styles['invoice-buttons']}>
+      <button
+        data-testid="bayar-invoice"
+        type="button"
+        onClick={openPaymentForm}
+        disabled={invoice.status === 'Paid'}
+      >
+        <Pay />
+      </button>
+      <button data-testid="print-invoice" type="button">
+        <Printer />
+      </button>
+      <button
+        data-testid="batalkan-invoice"
+        type="button"
+        onClick={() => cancelInvoice('openModal')}
+        disabled={
+          invoice.status === 'Paid' ||
+          invoice.paymentDetails.length > 0 ||
+          invoice.status === 'Cancelled'
+        }
+      >
+        <CancelReceipt />
+      </button>
     </div>
   );
 }

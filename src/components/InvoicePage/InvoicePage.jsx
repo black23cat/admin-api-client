@@ -3,6 +3,7 @@ import InvoiceCard from '../InvoiceCard/InvoiceCard';
 import FilterForm from '../FilterForm/FilterForm';
 import { useSearchParams } from 'react-router';
 import PageNavigation from '../PageNavigation/PageNavigation';
+import styles from './InvoicePage.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const initialFilterParams = 'page=1&filter=0';
@@ -87,15 +88,22 @@ export default function InvoicePage() {
   });
 
   return (
-    <>
-      <button>(+) Buat Invoice</button>
+    <main>
+      <h3>Data Invoice</h3>
       <FilterForm
         handleFilterButtonClick={handleFilterButtonClick}
         type="invoice"
       />
       {fetchInvoiceError && <span>Gagal mengambil invoice</span>}
-      <div className="invoice-card-wrapper">
-        {invoiceList.length > 0 ? (
+      <div className={styles['invoice-card-wrapper']}>
+        <div className={styles['card-header']}>
+          <h4>No Invoice</h4>
+          <h4>Nama</h4>
+          <h4>Tanggal</h4>
+          <h4>Total</h4>
+          <h4>Status</h4>
+        </div>
+        {invoiceList.length > 0 &&
           invoiceList.map((invoice) => {
             return (
               <InvoiceCard
@@ -104,16 +112,13 @@ export default function InvoicePage() {
                 updateInvoice={updateInvoice}
               />
             );
-          })
-        ) : (
-          <span>Belum ada data invoice</span>
-        )}
+          })}
       </div>
       <PageNavigation
         totalItemCount={invoiceCount}
         currentPage={currentPage}
         handlePageNavigation={handlePageNavigation}
       />
-    </>
+    </main>
   );
 }

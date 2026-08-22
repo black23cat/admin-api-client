@@ -1,0 +1,61 @@
+div.invoice-card {
+  border-top: 1px solid var(--border-clr-a0, red);
+  display: grid;
+  grid-template-columns: var(--grid-header-cols);
+  width: 100%;
+  min-width: var(--content-min-width);
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  align-items: center;
+}
+
+div.invoice-card div.details {
+  grid-column: 1/6;
+  display: grid;
+  grid-template-columns:
+    var(--grid-col1) var(--grid-col2) var(--grid-col3) var(--grid-col4)
+    var(--grid-col5);
+  gap: var(--space-xs);
+}
+
+div.invoice-card div.details p {
+  height: auto;
+  align-self: center;
+}
+
+div.invoice-card div.details p:last-child {
+  text-align: center;
+  border-radius: 6px;
+}
+
+div.invoice-card div.details p.pending {
+  background-color: var(--warn-a30);
+  color: var(--warn-a0);
+}
+
+div.invoice-card div.details p.paid {
+  background-color: var(--success-a20);
+  color: var(--success-a0);
+}
+
+div.invoice-card div.details p.cancelled {
+  background-color: var(--danger-a20);
+  color: var(--danger-a0);
+}
+
+div.invoice-card div.invoice-buttons {
+  grid-column: 6/7;
+  display: flex;
+  gap: var(--space-xs);
+  padding-left: var(--space-xxs);
+}
+div.invoice-card div.invoice-buttons button {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+div.invoice-card div.invoice-buttons svg {
+  width: 16px;
+  height: 16px;
+}
