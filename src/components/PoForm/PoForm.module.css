@@ -39,13 +39,15 @@ form.po-form label {
   display: block;
   width: 50%;
   margin: var(--space-xs) 0;
+  font-size: var(--font-size-xs);
 }
 form.po-form input {
+  font-size: var(--font-size-xs);
   width: 100%;
 }
 
 form.po-form input:not([type='file']) {
-  border: 1px solid var(--outline-clr);
+  border: 1px solid var(--border-clr-a0);
   border-radius: var(--border-radius);
   padding: var(--space-xs) var(--space-s);
   background-color: var(--bg-secondary-a0);
@@ -54,7 +56,8 @@ form.po-form input:not([type='file']) {
 
 form.po-form select {
   background-color: var(--bg-secondary-a0);
-  border: 1px solid var(--outline-clr);
+  border: 1px solid var(--border-clr-a0);
+  font-size: var(--font-size-xs);
 }
 
 form.po-form div.select-wrapper,
@@ -106,6 +109,9 @@ form.po-form div.uploaded-files ul {
   margin-bottom: var(--space-s);
 }
 
+form.po-form div.uploaded-files {
+  font-size: var(--font-size-xs);
+}
 form.po-form div.uploaded-files ul li {
   list-style: none;
   overflow-wrap: anywhere;
@@ -119,7 +125,7 @@ form.po-form div.uploaded-files ul li p {
   align-items: center;
   list-style-type: disc;
   padding: var(--space-xxs) var(--space-s);
-  border: 1px solid var(--outline-clr);
+  border: 1px solid var(--border-clr-a0);
   border-radius: var(--border-radius);
   background-color: var(--bg-secondary-a0);
 }
@@ -137,7 +143,7 @@ form.po-form div.warn {
   padding: var(--space-xs);
   border-radius: var(--border-radius);
   background-color: var(--warn-a30);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xxs);
   color: #3d3d3d;
   margin-top: var(--space-s);
 }
@@ -156,6 +162,7 @@ form.po-form div.button-wrapper button {
   color: #ffff;
   border-radius: var(--btn-border-radius);
   padding: var(--space-xs) var(--space-s);
+  font-size: var(--font-size-xs);
 }
 
 form.po-form div.button-wrapper button.cancel {
@@ -164,4 +171,12 @@ form.po-form div.button-wrapper button.cancel {
   border-style: solid;
   border-color: var(--outline-clr);
   color: var(--clr-text-primary);
+}
+
+form.po-form div.error span {
+  border-radius: 12px;
+  padding: var(--space-xs) var(--space-s);
+  font-size: var(--font-size-sm);
+  background-color: var(--danger-a20);
+  color: var(--danger-a0);
 }

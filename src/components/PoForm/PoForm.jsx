@@ -260,8 +260,10 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
               : ''}
           </ul>
         </div>
-        <div className={styles['button-wrapper']}>
+        <div className={styles.error}>
           {errorMsg !== '' && <span>{errorMsg}</span>}
+        </div>
+        <div className={styles['button-wrapper']}>
           <button
             className={styles.cancel}
             type="button"
