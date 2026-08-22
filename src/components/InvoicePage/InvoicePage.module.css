@@ -1,8 +1,8 @@
 .invoice-card-wrapper {
   --grid-col1: minmax(55px, 1fr);
   --grid-col2: minmax(75px, 2fr);
-  --grid-col3: minmax(75px, 2fr);
-  --grid-col4: minmax(55px, 1fr);
+  --grid-col3: minmax(55px, 2fr);
+  --grid-col4: minmax(75px, 1fr);
   --grid-col5: minmax(75px, 1fr);
   --grid-col6: minmax(65px, 1fr);
   --grid-header-cols: var(--grid-col1) var(--grid-col2) var(--grid-col3)
