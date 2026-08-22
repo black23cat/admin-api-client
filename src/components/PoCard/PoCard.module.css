@@ -5,7 +5,11 @@ div.card {
   gap: var(--space-xs);
   border-top: 1px solid var(--border-clr-a0);
   font-size: var(--font-size-xs);
-  transition: var(--bg-clr-transition);
+}
+
+div.card:hover {
+  transition: none;
+  background-color: var(--card-hover-bg, red);
 }
 
 div.card-details {

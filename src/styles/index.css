@@ -61,6 +61,7 @@
   --main-content-min-width: 300px;
   --border-radius: 12px;
   --btn-disabled: #a3b7ff;
+  --card-hover-bg: #f3f3f3;
 }
 
 [data-theme='dark'] {
@@ -91,4 +92,5 @@
   --theme-toggle-bg: #121b4f;
   --backdrop-clr: #181818c2;
   --date-picker-filter: invert(1);
+  --card-hover-bg: #0c1422;
 }

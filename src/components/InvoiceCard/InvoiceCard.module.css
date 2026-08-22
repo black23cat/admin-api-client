@@ -9,6 +9,10 @@ div.invoice-card {
   align-items: center;
 }
 
+div.invoice-card:hover {
+  background-color: var(--card-hover-bg, red);
+}
+
 div.invoice-card div.details {
   grid-column: 1/6;
   display: grid;
@@ -58,4 +62,7 @@ div.invoice-card div.invoice-buttons button {
 div.invoice-card div.invoice-buttons svg {
   width: 16px;
   height: 16px;
+}
+div.invoice-card div.invoice-buttons button:nth-child(2) svg path {
+  fill: var(--clr-text-primary);
 }
