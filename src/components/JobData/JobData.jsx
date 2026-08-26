@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 import PageNavigation from '../PageNavigation/PageNavigation';
 import { id } from 'date-fns/locale';
 import getFileDetails from '../../utils/getFileDetails';
+import styles from './JobData.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function JobData() {
   const [jobData, setJobData] = useState([]);
+  const [jobDataCount, setJobDataCount] = useState(null);
   const [fetchErrorMsg, setFetchErrorMsg] = useState('');
   const [filterParams, setFilterParams] = useSearchParams(
     `page=1&dateStart=&dateEnd=`,
@@ -61,9 +63,10 @@ export default function JobData() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
-          const result = await response.json();
+          const { jobData, jobDataCount } = await response.json();
+
           let currentDate;
-          const groupedDate = result.map((item, index) => {
+          const groupedDate = jobData.map((item, index) => {
             if (
               index > 0 &&
               format(item.createdAt, 'dd-MM-yyyy') ===
@@ -74,8 +77,9 @@ export default function JobData() {
             currentDate = item.createdAt;
             return item;
           });
-
-          return setJobData(groupedDate);
+          setJobDataCount(jobDataCount);
+          setJobData(groupedDate);
+          return;
         }
       } catch (err) {
         if (err.name === 'AbortError' || abortController.signal.aborted) {
@@ -125,130 +129,119 @@ export default function JobData() {
   });
 
   return (
-    <>
+    <main>
       <FilterForm
         handleFilterButtonClick={handleFilterButtonClick}
         type="job-data"
       />
       {fetchErrorMsg !== '' && <span>{fetchErrorMsg}</span>}
-      {jobData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th scope="col" rowSpan={2} style={{ border: '1px solid red' }}>
-                Hari / Tanggal
-              </th>
-              <th scope="col" rowSpan={2}>
-                Nama
-              </th>
-              <th scope="col" rowSpan={2}>
-                Data Pekerjaan
-              </th>
-              <th scope="col" rowSpan={2}>
-                Ukuran
-              </th>
-              <th scope="col" rowSpan={2}>
-                Jumlah
-              </th>
-              <th scope="col" colSpan={4}>
-                Volume
-              </th>
-            </tr>
-            <tr>
-              <th>P</th>
-              <th>PB</th>
-              <th>PP</th>
-              <th>PPB</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobData.map((data) => {
-              return <JobDataRow jobData={data} key={data.id} />;
-            })}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="col" colSpan={5}>
-                Total
-              </th>
-              <td>{printLengthCount.eco}</td>
-              <td>{printLengthCount['eco-bahan']}</td>
-              <td>{printLengthCount['sublim-press']}</td>
-              <td>{printLengthCount['sublim-bahan']}</td>
-            </tr>
-          </tfoot>
-        </table>
+      {jobData.length > 0 ? (
+        <div className={styles['job-data-wrapper']}>
+          <div className={styles['job-data-header']}>
+            <h4>Hari / Tanggal</h4>
+            <h4>Nama</h4>
+            <h4>Data Pekerjaan</h4>
+            <h4>Ukuran</h4>
+            <h4>Jumlah</h4>
+            <div className={styles['volume-wrapper']}>
+              <h4>Volume</h4>
+              <div>
+                <h4>P</h4>
+                <h4>PB</h4>
+                <h4>PP</h4>
+                <h4>PPB</h4>
+              </div>
+            </div>
+          </div>
+          {jobData.map((data) => {
+            return <JobDataRow jobData={data} key={data.id} />;
+          })}
+          <div className={styles['table-footer']}>
+            <h4>Total</h4>
+            <p>
+              Eco Solvent (Print) <span>: {printLengthCount.eco}</span>
+            </p>
+            <p>
+              Eco Solvent (Print + Bahan){' '}
+              <span>: {printLengthCount['eco-bahan']}</span>
+            </p>
+            <p>
+              Sublim (Press) <span>: {printLengthCount['sublim-press']}</span>
+            </p>
+            <p>
+              Sublim (Press + Bahan){' '}
+              <span>: {printLengthCount['sublim-bahan']}</span>
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p>Tidak ada Data Pekerjaan....</p>
       )}
       <PageNavigation
+        totalItemCount={jobDataCount}
         currentPage={currentPage}
         handlePageNavigation={handlePageNavigation}
       />
-    </>
+    </main>
   );
 }
 
 function JobDataRow({ jobData }) {
   return (
-    <>
-      <tr>
-        <td rowSpan={jobData.fileList.length + 1}>
-          {jobData.createdAt === null
-            ? ''
-            : format(jobData.createdAt, 'EEEE / dd', { locale: id })}
-        </td>
-        <td rowSpan={jobData.fileList.length + 1}>{jobData.customerName}</td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-        <td style={{ display: 'none' }}></td>
-      </tr>
-      {jobData.fileList.map((file) => {
-        const { filename, printWidth, printHeight, printCount } =
-          getFileDetails(file.filename);
-        return (
-          <tr key={file.id}>
-            <td style={{ display: 'none' }}></td>
-            <td style={{ display: 'none' }}></td>
-            <td>{filename}</td>
-            <td>{`${printWidth}x${printHeight}`}</td>
-            <td>{printCount}x</td>
-            {jobData.poType === 'eco' ? (
-              <>
-                <td>{printHeight * printCount}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </>
-            ) : jobData.poType === 'ecoBahan' ? (
-              <>
-                <td></td>
-                <td>{printHeight * printCount}</td>
-                <td></td>
-                <td></td>
-              </>
-            ) : jobData.poType === 'sublimPress' ? (
-              <>
-                <td></td>
-                <td></td>
-                <td>{printHeight * printCount}</td>
-                <td></td>
-              </>
-            ) : jobData.poType === 'sublim' ? (
-              <>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{printHeight * printCount}</td>
-              </>
-            ) : (
-              <></>
-            )}
-          </tr>
-        );
-      })}
-    </>
+    <div className={styles['job-data-row']}>
+      <p>
+        {jobData.createdAt === null
+          ? ''
+          : format(jobData.createdAt, 'EEEE / dd', { locale: id })}
+      </p>
+      <p>{jobData.customerName}</p>
+
+      <div className={styles['print-details']}>
+        {jobData.fileList.map((file) => {
+          const { filename, printWidth, printHeight, printCount } =
+            getFileDetails(file.filename);
+          return (
+            <div className={styles['file-details']} key={file.id}>
+              <p>{filename}</p>
+              <p>{`${printWidth}x${printHeight}`}</p>
+              <p>{printCount}</p>
+              <div className={styles['print-length']}>
+                {jobData.poType === 'eco' ? (
+                  <>
+                    <p>{printHeight * printCount}</p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                  </>
+                ) : jobData.poType === 'ecoBahan' ? (
+                  <>
+                    <p></p>
+                    <p>{printHeight * printCount}</p>
+                    <p></p>
+                    <p></p>
+                  </>
+                ) : jobData.poType === 'sublimPress' ? (
+                  <>
+                    <p></p>
+                    <p></p>
+                    <p>{printHeight * printCount}</p>
+                    <p></p>
+                  </>
+                ) : jobData.poType === 'sublim' ? (
+                  <>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>{printHeight * printCount}</p>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

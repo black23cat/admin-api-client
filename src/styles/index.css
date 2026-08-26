@@ -62,6 +62,7 @@
   --border-radius: 12px;
   --btn-disabled: #a3b7ff;
   --card-hover-bg: #f3f3f3;
+  --table-vol-bg-clr: #b7d6ff;
 }
 
 [data-theme='dark'] {
@@ -93,4 +94,5 @@
   --backdrop-clr: #181818c2;
   --date-picker-filter: invert(1);
   --card-hover-bg: #0c1422;
+  --table-vol-bg-clr: #264063;
 }
