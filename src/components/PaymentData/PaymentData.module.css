@@ -1,0 +1,34 @@
+.info {
+  border: 1px solid var(--border-clr-a0);
+  font-size: var(--font-size-sm);
+  padding: var(--space-s);
+  background-color: var(--bg-secondary-a0);
+  border-radius: var(--border-radius);
+}
+
+.payment-data-wrapper {
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--border-clr-a0, red);
+  border-radius: var(--border-radius);
+  max-width: 1000px;
+  background-color: var(--bg-secondary-a0);
+}
+
+.payment-data-header,
+.payment-data-card {
+  display: grid;
+  grid-template-columns:
+    minmax(55px, 1fr) minmax(65px, 1fr) minmax(75px, 1fr)
+    minmax(75px, 1fr);
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+}
+
+.payment-data-card:nth-child(even) {
+  background-color: var(--bg-primary-a0);
+}
+
+.payment-data-card:last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}

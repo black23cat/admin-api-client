@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router';
 import FilterForm from '../FilterForm/FilterForm';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { id } from 'date-fns/locale';
+import styles from './PaymentData.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -77,13 +78,13 @@ export default function PaymentData() {
   });
 
   return (
-    <>
+    <main>
       <FilterForm
         handleFilterButtonClick={handleFilterButtonClick}
         type="payment-data"
       />
       {fetchErrorMsg !== '' && <span>{fetchErrorMsg}</span>}
-      <div>
+      <div className={styles.info}>
         <p>
           Menampilkan pembayaran{' '}
           {dateStart !== '' && dateEnd !== ''
@@ -95,17 +96,26 @@ export default function PaymentData() {
                 : `dari ${format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'EEEE, dd-MMM-yyyy', { locale: id })} sampai ${format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'EEEE, dd-MMM-yyyy', { locale: id })}`}
         </p>
       </div>
-      {paymentData.length > 0 &&
-        paymentData.map((data) => {
-          return (
-            <div key={data.id}>
-              <p>Nama:{data.invoice.customerName}</p>
-              <p>No Invoice:{data.invoice.invoiceNumber}</p>
-              <p>Metode Pembayaran:{data.method}</p>
-              <p>Jumlah Pembayaran:{data.amountPaid}</p>
-            </div>
-          );
-        })}
-    </>
+      <div className={styles['payment-data-wrapper']}>
+        <div className={styles['payment-data-header']}>
+          <h4>No Invoice</h4>
+          <h4>Nama</h4>
+          <h4>Nominal Pembayaran</h4>
+          <h4>Metode Pembayaran</h4>
+        </div>
+
+        {paymentData.length > 0 &&
+          paymentData.map((data) => {
+            return (
+              <div key={data.id} className={styles['payment-data-card']}>
+                <p>{data.invoice.invoiceNumber}</p>
+                <p>{data.invoice.customerName}</p>
+                <p>{data.amountPaid}</p>
+                <p>{data.method}</p>
+              </div>
+            );
+          })}
+      </div>
+    </main>
   );
 }
