@@ -64,6 +64,7 @@ div.print-length p {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: var(--space-xxs);
 }
 
 div.job-data-row {

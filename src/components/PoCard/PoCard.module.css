@@ -5,6 +5,7 @@ div.card {
   gap: var(--space-xs);
   border-top: 1px solid var(--border-clr-a0);
   font-size: var(--font-size-xs);
+  min-height: 35px;
 }
 
 div.card:hover {

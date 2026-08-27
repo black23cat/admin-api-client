@@ -28,6 +28,7 @@ div.po-list-wrapper div.card-header {
   gap: var(--space-xs);
   padding: var(--space-xxs) var(--space-s);
   color: var(--clr-text-secondary-a0, red);
+  min-height: 45px;
 }
 
 div.po-list-wrapper div.card-header h3:nth-child(1) {

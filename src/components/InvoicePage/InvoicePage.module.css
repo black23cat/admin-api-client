@@ -29,6 +29,7 @@ div.card-header {
   grid-template-columns: var(--grid-header-cols);
   gap: var(--space-xs);
   align-items: center;
+  min-height: 45px;
 }
 
 div.card-header h4:last-child {

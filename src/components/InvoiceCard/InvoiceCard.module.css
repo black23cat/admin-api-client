@@ -7,6 +7,7 @@ div.invoice-card {
   gap: var(--space-xs);
   padding: var(--space-xs) var(--space-s);
   align-items: center;
+  min-height: 35px;
 }
 
 div.invoice-card:hover {
