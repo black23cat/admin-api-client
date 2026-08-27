@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -8,33 +8,47 @@ import { jwtDecode } from 'jwt-decode';
 const currentTime = new Date();
 export const UserContext = createContext({});
 export const ThemeContext = createContext('light');
+export const UserScreenData = createContext({});
 
 export default function App() {
   const [user, setUser] = useState(userInit);
   const [theme, setTheme] = useState(themeInit);
+  const [userScreen, setUserScreen] = useState(getUserScreenData);
+
+  useEffect(() => {
+    const resize = () => {
+      setUserScreen(getUserScreenData());
+    };
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  });
 
   if (user === null) {
     return (
-      <UserContext value={[setUser]}>
-        <ThemeContext value={[theme, setTheme]}>
-          <AppWrapper theme={theme}>
-            <LoginForm />
-          </AppWrapper>
-        </ThemeContext>
-      </UserContext>
+      <UserScreenData value={[userScreen]}>
+        <UserContext value={[setUser]}>
+          <ThemeContext value={[theme, setTheme]}>
+            <AppWrapper theme={theme}>
+              <LoginForm />
+            </AppWrapper>
+          </ThemeContext>
+        </UserContext>
+      </UserScreenData>
     );
   }
 
   return (
-    <UserContext value={[user]}>
-      <ThemeContext value={[theme, setTheme]}>
-        <AppWrapper theme={theme}>
-          <Header />
-          <Sidebar />
-          <Outlet />
-        </AppWrapper>
-      </ThemeContext>
-    </UserContext>
+    <UserScreenData value={[userScreen]}>
+      <UserContext value={[user]}>
+        <ThemeContext value={[theme, setTheme]}>
+          <AppWrapper theme={theme}>
+            <Header />
+            <Sidebar />
+            <Outlet />
+          </AppWrapper>
+        </ThemeContext>
+      </UserContext>
+    </UserScreenData>
   );
 }
 
@@ -76,6 +90,11 @@ function themeInit() {
     localStorage.setItem('theme', 'light');
     return 'light';
   }
+}
+
+function getUserScreenData() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return { width, height };
 }
 
 function AppWrapper({ theme, children }) {
