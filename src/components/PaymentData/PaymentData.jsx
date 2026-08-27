@@ -4,6 +4,7 @@ import FilterForm from '../FilterForm/FilterForm';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { id } from 'date-fns/locale';
 import styles from './PaymentData.module.css';
+import formatter from '../../utils/formatter';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -77,6 +78,19 @@ export default function PaymentData() {
     return () => clearTimeout(timeout);
   });
 
+  const paymentDetails = {
+    cash: 0,
+    transfer: 0,
+  };
+
+  if (paymentData.length > 0) {
+    paymentData.forEach((payment) => {
+      payment.method === 'Cash'
+        ? (paymentDetails.cash += payment.amountPaid)
+        : (paymentDetails.transfer += payment.amountPaid);
+    });
+  }
+
   return (
     <main>
       <FilterForm
@@ -103,8 +117,7 @@ export default function PaymentData() {
           <h4>Nominal Pembayaran</h4>
           <h4>Metode Pembayaran</h4>
         </div>
-
-        {paymentData.length > 0 &&
+        {paymentData.length > 0 ? (
           paymentData.map((data) => {
             return (
               <div key={data.id} className={styles['payment-data-card']}>
@@ -114,7 +127,26 @@ export default function PaymentData() {
                 <p>{data.method}</p>
               </div>
             );
-          })}
+          })
+        ) : (
+          <p>Belum ada data pembayaran</p>
+        )}
+        <div className={styles['payment-data-footer']}>
+          <h4>Total kas masuk</h4>
+          <p>
+            Transfer <span>: {formatter.format(paymentDetails.transfer)}</span>
+          </p>
+          <p>
+            Cash <span>: {formatter.format(paymentDetails.cash)}</span>
+          </p>
+          <p>
+            Total{' '}
+            <span>
+              :{' '}
+              {formatter.format(paymentDetails.cash + paymentDetails.transfer)}
+            </span>
+          </p>
+        </div>
       </div>
     </main>
   );

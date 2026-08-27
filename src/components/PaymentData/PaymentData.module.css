@@ -14,6 +14,11 @@
   background-color: var(--bg-secondary-a0);
 }
 
+.payment-data-wrapper > p {
+  padding: var(--space-xs) var(--space-s);
+  background-color: var(--bg-primary-a0);
+}
+
 .payment-data-header,
 .payment-data-card {
   display: grid;
@@ -24,11 +29,37 @@
   padding: var(--space-xs) var(--space-s);
 }
 
-.payment-data-card:nth-child(even) {
+.payment-data-wrapper div:nth-child(even) {
   background-color: var(--bg-primary-a0);
 }
 
 .payment-data-card:last-child {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+}
+
+.payment-data-footer {
+  padding: var(--space-xs) var(--space-s);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.payment-data-footer h4 {
+  margin-bottom: var(--space-xs);
+}
+
+.payment-data-footer p {
+  display: grid;
+  grid-template-columns: 70px auto;
+  gap: var(--space-xs);
+}
+
+.payment-data-footer p:last-child {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin: var(--space-xs) 0;
+}
+
+.payment-data-footer p span {
+  align-content: end;
 }
