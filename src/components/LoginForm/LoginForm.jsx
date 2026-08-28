@@ -7,6 +7,7 @@ import styles from './LoginForm.module.css';
 import warnIcon from '../../assets/images/warning.svg';
 import checklistIcon from '../../assets/images/checklist.svg';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import { UserScreenData } from '../../App';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,6 +18,7 @@ export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [setUser] = useContext(UserContext);
+  const [userScreen] = useContext(UserScreenData);
 
   const handleFormInput = (e) => {
     setFieldsError(false);
@@ -68,19 +70,34 @@ export default function LoginForm() {
   });
 
   return (
-    <main className="login">
+    <div className={styles.login}>
       <section className={styles['first-panel']}>
         {' '}
-        <div className={styles['theme-toggle-wrapper']}>
-          <ThemeToggle />
-        </div>
+        {userScreen.width < 700 && (
+          <div className={styles['theme-toggle-wrapper']}>
+            <ThemeToggle />
+          </div>
+        )}
         <div className={styles.logo}>
           <LogoPgSmall />
         </div>
         <h3>Selamat Datang di website admin Polygraphic</h3>
       </section>
+
       <section className={styles['second-panel']}>
+        {userScreen.width >= 700 && (
+          <div className={styles['theme-toggle-wrapper']}>
+            <ThemeToggle />
+          </div>
+        )}
+        <div className={styles['login-image-wrapper']}>
+          <div className={styles['login-image-placeholder']}>
+            <p>BIG IMAGE PLACEHOLDER</p>
+          </div>
+        </div>
+        <div className={styles.splitter}></div>
         <form className={styles['login-form']} onSubmit={handleFormSubmit}>
+          <h3>Login Sebagai Admin</h3>
           <div className={styles['login-success']}>
             {isLogin && (
               <p>
@@ -146,6 +163,6 @@ export default function LoginForm() {
           </p>
         </form>
       </section>
-    </main>
+    </div>
   );
 }

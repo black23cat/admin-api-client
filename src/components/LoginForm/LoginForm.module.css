@@ -9,10 +9,11 @@
   text-align: right;
   margin-bottom: var(--space-m);
   transition: var(--bg-clr-transition);
+  position: relative;
 }
 
 .first-panel h3 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-l);
   padding: var(--space-m) var(--space-m) var(--space-s) var(--space-m);
 }
 
@@ -29,6 +30,10 @@
   transform: scale(120%);
 }
 
+.logo.small svg {
+  transform: scale(80%);
+}
+
 .theme-toggle-wrapper {
   align-self: end;
   margin-top: var(--space-m);
@@ -37,6 +42,11 @@
 
 .second-panel {
   margin: var(--space-m);
+  font-size: var(--font-size-xs);
+}
+
+form.login-form h3 {
+  display: none;
 }
 
 form.login-form .input-wrapper div {
@@ -48,7 +58,6 @@ form.login-form .input-wrapper div label {
   margin-left: var(--space-l);
   transform: translateY(25px);
   color: var(--label-text-clr);
-  font-size: var(--font-size-sm);
 }
 
 form.login-form .input-wrapper div input {
@@ -57,7 +66,7 @@ form.login-form .input-wrapper div input {
   background-color: var(--bg-secondary-a0);
   width: 100%;
   padding: var(--space-m) var(--space-s) var(--space-s) var(--space-l);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
   border-radius: 10px;
   border: none;
   transition: var(--bg-clr-transition);
@@ -134,10 +143,9 @@ form.login-form .input-wrapper div.form-invalid label {
 }
 
 .login-btn {
-  /* margin-top: var(--space-xl); */
   padding: var(--space-xs);
   background-color: var(--elements-a0);
-  color: var(--clr-text-primary);
+  color: #ffff;
   width: 100%;
   border: none;
   transition: var(--bg-clr-transition);
@@ -168,4 +176,84 @@ form.login-form .input-wrapper div.form-invalid label {
 
 .contact-admin a:active {
   color: var(--elements-a30);
+}
+
+.login-image-wrapper {
+  display: none;
+}
+
+@media screen and (min-width: 700px) {
+  div.login {
+    background-color: var(--bg-primary-a0);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 75px auto;
+    min-height: 100vh;
+  }
+
+  .first-panel {
+    flex-direction: row-reverse;
+    justify-content: center;
+    background-image: none;
+    grid-column: 1/3;
+    background: none;
+    margin: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .first-panel h3 {
+    display: none;
+  }
+
+  .first-panel .logo svg {
+    transform: scale(80%);
+    margin: 0;
+  }
+
+  section.second-panel {
+    position: relative;
+    box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.2);
+    max-width: 1000px;
+    min-width: 77%;
+    grid-column: 1/3;
+    justify-self: center;
+    border: 1px solid var(--border-clr-a0);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary-a0);
+  }
+  .theme-toggle-wrapper {
+    position: absolute;
+    margin: 0;
+    top: calc((75px - 25px) / 2);
+    left: var(--space-l);
+  }
+
+  div.splitter {
+    border-left: 1px solid var(--border-clr-a0);
+    min-height: 70%;
+  }
+
+  .login-image-wrapper {
+    margin-right: var(--space-l);
+    display: block;
+  }
+
+  section.second-panel form {
+    padding: 0 var(--space-l);
+    padding-top: var(--space-s);
+  }
+
+  form.login-form h3 {
+    display: block;
+  }
+
+  .login-image-placeholder {
+    border: 1px solid red;
+    width: 250px;
+    height: 200px;
+  }
 }

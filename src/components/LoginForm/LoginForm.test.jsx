@@ -4,8 +4,10 @@ import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
 import { MemoryRouter } from 'react-router';
 import { UserContext } from '../../App';
+import { UserScreenData } from '../../App';
 
 let mockContextValue;
+let userScreen;
 const mockUser = {
   id: 1,
   firstName: 'John',
@@ -15,18 +17,28 @@ const mockUser = {
   password: 'johndoe123',
   role: 'Admin',
 };
+
 beforeEach(() => {
   const setUser = vi.fn();
   mockContextValue = [setUser];
+
+  userScreen = [
+    {
+      width: 500,
+      height: 600,
+    },
+  ];
 });
 
 describe('Render Login Form', () => {
   it('Render forms correctly', () => {
     render(
       <MemoryRouter>
-        <UserContext value={mockContextValue}>
-          <LoginForm />
-        </UserContext>
+        <UserScreenData value={userScreen}>
+          <UserContext value={mockContextValue}>
+            <LoginForm />
+          </UserContext>
+        </UserScreenData>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
@@ -53,9 +65,11 @@ describe('Form submit data correctly', () => {
     });
     render(
       <MemoryRouter>
-        <UserContext value={mockContextValue}>
-          <LoginForm />
-        </UserContext>
+        <UserScreenData value={userScreen}>
+          <UserContext value={mockContextValue}>
+            <LoginForm />
+          </UserContext>
+        </UserScreenData>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
@@ -86,9 +100,11 @@ describe('Form submit data correctly', () => {
     });
     render(
       <MemoryRouter>
-        <UserContext value={mockContextValue}>
-          <LoginForm />
-        </UserContext>
+        <UserScreenData value={userScreen}>
+          <UserContext value={mockContextValue}>
+            <LoginForm />
+          </UserContext>
+        </UserScreenData>
       </MemoryRouter>,
     );
     const usernameField = screen.getByLabelText('Email or Username :');
