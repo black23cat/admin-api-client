@@ -21,50 +21,13 @@ header div.company-logo-wrapper svg {
   height: 65px;
 }
 
-header div.dropdown-button-wrapper {
-  grid-area: 1/3/2/4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: var(--space-s);
-  justify-self: end;
-  padding: 0;
-}
-
-header div.dropdown-button-wrapper button {
-  border: none;
-  border-radius: 10px;
+header div.open-sidebar button {
   background: none;
-  cursor: pointer;
+  border: none;
+  margin-left: var(--space-xs);
+  width: 35px;
 }
 
-header div.dropdown-button-wrapper button.active {
-  background-color: var(--elements-a0);
-  transition: var(--bg-clr-transition);
-}
-
-header div.dropdown-button-wrapper svg {
-  fill: var(--clr-text-primary, red);
-}
-
-header div.dropdown-button-wrapper button.active svg {
-  fill: white;
-}
-
-header nav.dropdown-wrapper {
-  width: 100vw;
-  height: 35px;
-  position: absolute;
-  bottom: -34px;
-  padding: var(--space-xxs) var(--space-s);
-  background-color: var(--bg-secondary-a0);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition:
-    transform ease-in-out 0.3s,
-    var(--bg-clr-transition);
-  box-shadow: 0px 2px 2px 0px rgba(193, 193, 193, 0.75);
-}
-nav.dropdown-wrapper.open {
-  transform: scaleY(1);
+header div.open-sidebar button svg path {
+  fill: var(--clr-text-primary);
 }

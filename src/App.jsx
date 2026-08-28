@@ -11,9 +11,18 @@ export const ThemeContext = createContext('light');
 export const UserScreenData = createContext({});
 
 export default function App() {
+  const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(userInit);
   const [theme, setTheme] = useState(themeInit);
   const [userScreen, setUserScreen] = useState(getUserScreenData);
+
+  const openSidebar = () => {
+    setIsOpen(true);
+  };
+
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     const resize = () => {
@@ -42,8 +51,8 @@ export default function App() {
       <UserContext value={[user]}>
         <ThemeContext value={[theme, setTheme]}>
           <AppWrapper theme={theme}>
-            <Header />
-            <Sidebar />
+            <Header openSidebar={openSidebar} />
+            <Sidebar showSidebar={isOpen} closeSidebar={closeSidebar} />
             <Outlet />
           </AppWrapper>
         </ThemeContext>
@@ -58,6 +67,7 @@ function userInit() {
   if (token === null) {
     return null;
   }
+
   const decodedToken = jwtDecode(token);
   const tokenExpTime = new Date(decodedToken.exp * 1000); //jwt exp time must be times 1000 to get milisecond value
   if (currentTime > tokenExpTime) {

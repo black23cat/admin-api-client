@@ -18,21 +18,23 @@ aside.show {
 
 button.sidebar-toggle {
   cursor: pointer;
-  border: 1px solid var(--border-clr-a0);
-  border-left: none;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
+  border: none;
+  /* border-left: none; */
+  /* border-top-right-radius: 7px; */
+  /* border-bottom-right-radius: 7px; */
   display: flex;
   justify-content: center;
   align-items: center;
   width: 25px;
   height: 30px;
   position: absolute;
-  top: 25px;
-  right: -25px;
-  z-index: 9999999;
-  background-color: var(--bg-secondary-a0, blue);
+  top: 15px;
+  right: 15px;
+  /* z-index: 9999999; */
+  /* background-color: var(--bg-secondary-a0, blue);*/
+  background: none;
   transition: var(--bg-clr-transition);
+  color: var(--clr-text-primary);
 }
 
 button.sidebar-toggle.open svg {
@@ -49,6 +51,7 @@ button.sidebar-toggle path {
 }
 
 .sidebar-header {
+  position: relative;
   margin-bottom: var(--space-xs);
   padding: var(--space-s);
   border-bottom: 1px solid var(--border-clr-a0);

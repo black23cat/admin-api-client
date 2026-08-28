@@ -12,7 +12,7 @@ describe('Render Header correctly', () => {
     );
     const companyLogo = screen.getByTestId('company-logo');
     expect(companyLogo).toBeInTheDocument();
-    const dropdown = screen.getByTestId('dropdown');
-    expect(dropdown).toBeInTheDocument();
+    const openSidebarBtn = screen.getByTestId('open-sidebar');
+    expect(openSidebarBtn).toBeInTheDocument();
   });
 });

@@ -42,10 +42,10 @@ describe('Render Sidebar', () => {
 describe('Sidebar button redirect to correct route', () => {
   it('Redirect to correct route', async () => {
     const user = userEvent.setup({ pointerEventsCheck: 0 });
-
+    const closeSidebar = vi.fn();
     render(
       <MemoryRouter>
-        <Sidebar />
+        <Sidebar showSidebar={true} closeSidebar={closeSidebar} />
       </MemoryRouter>,
     );
 

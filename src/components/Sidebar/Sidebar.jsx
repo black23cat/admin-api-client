@@ -10,16 +10,13 @@ import JobData from '../../assets/svg/JobData';
 import Payment from '../../assets/svg/Payment';
 import SidebarToggle from '../../assets/svg/SidebarToggle';
 
-export default function Sidebar() {
-  const [showSidebar, setShowSidebar] = useState(false);
+export default function Sidebar({ showSidebar, closeSidebar }) {
   const [activeSidebarButton, setActiveSidebarButton] = useState('');
   const navigate = useNavigate();
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
+
   const handleSidebarButtonClick = (page) => {
     setActiveSidebarButton(page);
-    setShowSidebar(false);
+    closeSidebar();
     switch (page) {
       case 'po':
         navigate('/purchase-order');
@@ -45,7 +42,7 @@ export default function Sidebar() {
       if (e.key !== 'Escape') {
         return;
       }
-      setShowSidebar(false);
+      closeSidebar();
     };
 
     window.addEventListener('keydown', handleCLoseSidebar);
@@ -55,14 +52,14 @@ export default function Sidebar() {
   return (
     <>
       <aside className={`${showSidebar ? styles.show : ''}`}>
-        <button
-          data-testid="toggle-sidebar"
-          className={`${styles['sidebar-toggle']} ${showSidebar ? styles.open : ''}`}
-          onClick={toggleSidebar}
-        >
-          <SidebarToggle />
-        </button>
         <div className={styles['sidebar-header']}>
+          <button
+            data-testid="toggle-sidebar"
+            className={styles['sidebar-toggle']}
+            onClick={closeSidebar}
+          >
+            x
+          </button>
           <img src={printerIcon} width={'28px'} height={'28px'} alt="" />
           <div>
             <h4>PrintAdmin</h4>
@@ -105,10 +102,7 @@ export default function Sidebar() {
         </div>
         <ThemeToggle sidebar={true} />
       </aside>{' '}
-      <Backdrop
-        isOpen={showSidebar}
-        closeSidebar={() => setShowSidebar(false)}
-      />
+      <Backdrop isOpen={showSidebar} closeSidebar={() => closeSidebar()} />
     </>
   );
 }
