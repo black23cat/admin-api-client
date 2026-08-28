@@ -8,6 +8,7 @@ import warnIcon from '../../assets/images/warning.svg';
 import checklistIcon from '../../assets/images/checklist.svg';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { UserScreenData } from '../../App';
+import adminIcon from '../../assets/images/admin-icon.svg';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -92,7 +93,7 @@ export default function LoginForm() {
         )}
         <div className={styles['login-image-wrapper']}>
           <div className={styles['login-image-placeholder']}>
-            <p>BIG IMAGE PLACEHOLDER</p>
+            <img src={adminIcon} alt="" />
           </div>
         </div>
         <div className={styles.splitter}></div>

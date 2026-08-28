@@ -189,6 +189,7 @@ form.login-form .input-wrapper div.form-invalid label {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 75px auto;
     min-height: 100vh;
+    transition: var(--bg-clr-transition);
   }
 
   .first-panel {
@@ -224,6 +225,7 @@ form.login-form .input-wrapper div.form-invalid label {
     align-items: center;
     justify-content: center;
     background-color: var(--bg-secondary-a0);
+    transition: var(--bg-clr-transition);
   }
   .theme-toggle-wrapper {
     position: absolute;
@@ -252,8 +254,6 @@ form.login-form .input-wrapper div.form-invalid label {
   }
 
   .login-image-placeholder {
-    border: 1px solid red;
-    width: 250px;
-    height: 200px;
+    min-width: 90%;
   }
 }
