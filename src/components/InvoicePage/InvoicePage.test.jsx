@@ -4,12 +4,19 @@ import { MemoryRouter } from 'react-router';
 import { invoiceData as mockInvoice } from '../../utils/mockData';
 import InvoicePage from './InvoicePage';
 import InvoiceCard from '../InvoiceCard/InvoiceCard';
+import FilterForm from '../FilterForm/FilterForm';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const mockData = {
   invoiceList: mockInvoice,
   count: mockInvoice.length,
 };
+
+vi.mock('../FilterForm/FilterForm', () => ({
+  default: () => {
+    return <div>Filter Form</div>;
+  },
+}));
 
 vi.mock('../InvoiceCard/InvoiceCard', () => ({
   default: ({ invoice }) => {

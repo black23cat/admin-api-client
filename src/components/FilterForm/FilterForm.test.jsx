@@ -3,16 +3,29 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { invoiceData as mockInvoice } from '../../utils/mockData';
 import FilterForm from './FilterForm';
+import { UserScreenData } from '../../App';
 
 let onSubmit;
+let userScreen;
 beforeEach(() => {
   onSubmit = vi.fn();
+
+  userScreen = [
+    {
+      width: 500,
+      height: 600,
+    },
+  ];
 });
 
 describe('Filter Form render correctly', () => {
   it('Render Form', async () => {
     const user = userEvent.setup();
-    render(<FilterForm handleFilterButtonClick={onSubmit} type="invoice" />);
+    render(
+      <UserScreenData value={userScreen}>
+        <FilterForm handleFilterButtonClick={onSubmit} type="invoice" />
+      </UserScreenData>,
+    );
 
     const toggleFilterFormButton = screen.getByRole('button', {
       name: 'Filter Data',
@@ -48,7 +61,11 @@ describe('Filter form working correctly', () => {
   it('Send form data to parent element', async () => {
     const user = userEvent.setup();
 
-    render(<FilterForm handleFilterButtonClick={onSubmit} type="invoice" />);
+    render(
+      <UserScreenData value={userScreen}>
+        <FilterForm handleFilterButtonClick={onSubmit} type="invoice" />
+      </UserScreenData>,
+    );
     const toggleFilterFormButton = screen.getByRole('button', {
       name: 'Filter Data',
     });

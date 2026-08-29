@@ -1,15 +1,17 @@
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './FilterForm.module.css';
 import Filter from '../../assets/svg/Filter';
 import Reset from '../../assets/svg/Reset';
+import { UserScreenData } from '../../App';
 
 export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
+  const [userScreen] = useContext(UserScreenData);
   const todayDate = new Date();
   const [isOpen, setIsOpen] = useState(false);
   const [searchBox, setSearchBox] = useState('');
   const [selectedValue, setSelectedValue] = useState(
-    type === 'invoice' ? 'invoiceNumber' : null
+    type === 'invoice' ? 'invoiceNumber' : null,
   );
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
@@ -74,13 +76,20 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
 
   return (
     <div className={styles['filter-form-wrapper']}>
-      <div className={styles['button-wrapper']}>
-        <button onClick={toggleFilterForm}>
+      {userScreen.width < 700 ? (
+        <div className={styles['button-wrapper']}>
+          <button onClick={toggleFilterForm}>
+            <Filter />
+            Filter Data
+          </button>
+        </div>
+      ) : (
+        <p className={styles['filter-data']}>
           <Filter />
           Filter Data
-        </button>
-      </div>
-      {isOpen && (
+        </p>
+      )}
+      {(userScreen.width >= 700 || isOpen) && (
         <form
           className={styles['filter-form']}
           onSubmit={handleSubmit}
@@ -128,7 +137,7 @@ export default function FilterForm({ handleFilterButtonClick, type = 'po' }) {
             </div>
           </div>
           {type === 'invoice' && (
-            <div>
+            <div className={styles['sort-by']}>
               <label htmlFor="sort-by">Urutkan :</label>
               <select
                 name="sort-by"
