@@ -12,6 +12,8 @@
   border-radius: var(--border-radius);
   max-width: 1000px;
   background-color: var(--bg-secondary-a0);
+  overflow-x: auto;
+  width: 100%;
 }
 
 .payment-data-wrapper > p {
@@ -23,10 +25,12 @@
 .payment-data-card {
   display: grid;
   grid-template-columns:
-    minmax(55px, 1fr) minmax(65px, 1fr) minmax(75px, 1fr)
+    minmax(55px, 1fr) minmax(65px, 1fr) minmax(75px, 1fr) minmax(55px, 1fr)
     minmax(75px, 1fr);
   gap: var(--space-xs);
   padding: var(--space-xs) var(--space-s);
+  width: 100%;
+  min-width: 380px;
 }
 
 .payment-data-wrapper div:nth-child(even) {
@@ -42,6 +46,8 @@
   padding: var(--space-xs) var(--space-s);
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+  width: 100%;
+  min-width: 380px;
 }
 
 .payment-data-footer h4 {

@@ -5,7 +5,6 @@ import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { id } from 'date-fns/locale';
 import styles from './PaymentData.module.css';
 import formatter from '../../utils/formatter';
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PaymentData() {
@@ -115,6 +114,7 @@ export default function PaymentData() {
           <h4>No Invoice</h4>
           <h4>Nama</h4>
           <h4>Nominal Pembayaran</h4>
+          <h4>Tanggal</h4>
           <h4>Metode Pembayaran</h4>
         </div>
         {paymentData.length > 0 ? (
@@ -123,7 +123,8 @@ export default function PaymentData() {
               <div key={data.id} className={styles['payment-data-card']}>
                 <p>{data.invoice.invoiceNumber}</p>
                 <p>{data.invoice.customerName}</p>
-                <p>{data.amountPaid}</p>
+                <p>{formatter.format(data.amountPaid)}</p>
+                <p>{format(data.paymentDate, 'dd-MMM-yy', { locale: id })}</p>
                 <p>{data.method}</p>
               </div>
             );
