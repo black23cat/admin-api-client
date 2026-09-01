@@ -11,7 +11,7 @@
 
   overflow-x: auto;
   width: 100%;
-  max-width: 1000px;
+  max-width: 100%;
   scrollbar-width: 3px;
   scrollbar-color: #888888 #f1f1f1;
   background-color: var(--bg-secondary-a0);
@@ -38,4 +38,9 @@ div.card-header h4:last-child {
 
 .invoice-card-wrapper::-webkit-scrollbar {
   background: red;
+}
+
+@media screen and (min-width: 1200px) {
+  .invoice-card-wrapper {
+  }
 }

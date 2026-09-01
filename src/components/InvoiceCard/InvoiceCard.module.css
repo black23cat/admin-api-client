@@ -54,16 +54,26 @@ div.invoice-card div.invoice-buttons {
   gap: var(--space-xs);
   padding-left: var(--space-xxs);
 }
+
 div.invoice-card div.invoice-buttons button {
   padding: 0;
   background: none;
   border: none;
 }
 
+div.invoice-card div.invoice-buttons button:disabled {
+  cursor: not-allowed;
+}
+
+div.invoice-card div.invoice-buttons button:disabled svg path {
+  filter: grayscale(0.7);
+}
+
 div.invoice-card div.invoice-buttons svg {
   width: 16px;
   height: 16px;
 }
+
 div.invoice-card div.invoice-buttons button:nth-child(2) svg path {
   fill: var(--clr-text-primary);
 }

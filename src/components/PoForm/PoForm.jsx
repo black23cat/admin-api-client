@@ -230,35 +230,39 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
           />
         </div>
         <div className={styles['uploaded-files']}>
-          <p>Valid Files : </p>
-          <ul className={styles.valid}>
-            {validFiles.length > 0
-              ? validFiles.map((file, index) => (
-                  <li key={index}>
-                    <p>
-                      {file}
-                      <button
-                        data-testid="delete-file"
-                        className={styles['delete-file']}
-                        onClick={() => deleteUploadedFile(file)}
-                      >
-                        <Trash />
-                      </button>
-                    </p>
-                  </li>
-                ))
-              : ''}
-          </ul>
-          <p>Invalid Files : </p>
-          <ul className={styles.invalid}>
-            {invalidFiles.length > 0
-              ? invalidFiles.map((file, index) => (
-                  <li key={index}>
-                    <p>{file}</p>
-                  </li>
-                ))
-              : ''}
-          </ul>
+          <div className={styles['valid-files']}>
+            <p>Valid Files : </p>
+            <ul className={styles.valid}>
+              {validFiles.length > 0
+                ? validFiles.map((file, index) => (
+                    <li key={index}>
+                      <p>
+                        {file}
+                        <button
+                          data-testid="delete-file"
+                          className={styles['delete-file']}
+                          onClick={() => deleteUploadedFile(file)}
+                        >
+                          <Trash />
+                        </button>
+                      </p>
+                    </li>
+                  ))
+                : ''}
+            </ul>
+          </div>
+          <div className={styles['invalid-files']}>
+            <p>Invalid Files : </p>
+            <ul className={styles.invalid}>
+              {invalidFiles.length > 0
+                ? invalidFiles.map((file, index) => (
+                    <li key={index}>
+                      <p>{file}</p>
+                    </li>
+                  ))
+                : ''}
+            </ul>
+          </div>
         </div>
         <div className={styles.error}>
           {errorMsg !== '' && <span>{errorMsg}</span>}

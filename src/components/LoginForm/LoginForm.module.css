@@ -226,6 +226,7 @@ form.login-form .input-wrapper div.form-invalid label {
     justify-content: center;
     background-color: var(--bg-secondary-a0);
     transition: var(--bg-clr-transition);
+    max-width: 1000px;
   }
   .theme-toggle-wrapper {
     position: absolute;

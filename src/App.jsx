@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 const currentTime = new Date();
 export const UserContext = createContext({});
 export const ThemeContext = createContext('light');
-export const UserScreenData = createContext({});
+export const UserScreenData = createContext([{ width: 0, height: 0 }]);
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);

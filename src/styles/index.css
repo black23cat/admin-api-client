@@ -63,6 +63,7 @@
   --btn-disabled: #a3b7ff;
   --card-hover-bg: #f3f3f3;
   --table-vol-bg-clr: #b7d6ff;
+  --sidebar-width: 200px;
 }
 
 [data-theme='dark'] {

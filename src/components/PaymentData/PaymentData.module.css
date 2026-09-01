@@ -10,7 +10,6 @@
   font-size: var(--font-size-xs);
   border: 1px solid var(--border-clr-a0, red);
   border-radius: var(--border-radius);
-  max-width: 1000px;
   background-color: var(--bg-secondary-a0);
   overflow-x: auto;
   width: 100%;

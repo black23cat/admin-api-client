@@ -5,10 +5,10 @@
   --grid-col4: minmax(70px, 1fr);
   --grid-col5: minmax(55px, 1fr);
   --grid-col6: minmax(130px, 1fr);
-  --grid-vol-col1: 30px;
-  --grid-vol-col2: 30px;
-  --grid-vol-col3: 30px;
-  --grid-vol-col4: 35px;
+  --grid-vol-col1: minmax(30px, 1fr);
+  --grid-vol-col2: minmax(30px, 1fr);
+  --grid-vol-col3: minmax(30px, 1fr);
+  --grid-vol-col4: minmax(30px, 1fr);
   --grid-header-cols: var(--grid-col1) var(--grid-col2) var(--grid-col3)
     var(--grid-col4) var(--grid-col5) var(--grid-col6);
   --content-min-width: 650px;
@@ -18,7 +18,7 @@
 
   overflow-x: auto;
   width: 100%;
-  max-width: 1000px;
+  max-width: 100%;
   scrollbar-width: 3px;
   scrollbar-color: #888888 #f1f1f1;
   font-size: var(--font-size-xs);
@@ -51,6 +51,7 @@ div.print-length {
     var(--grid-vol-col4);
   gap: var(--space-xxs);
   text-align: center;
+  width: 100%;
 }
 
 .job-data-header div.volume-wrapper > div h4,
