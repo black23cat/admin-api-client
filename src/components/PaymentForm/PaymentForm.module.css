@@ -1,0 +1,58 @@
+form.payment-form {
+  padding: var(--space-xs);
+  min-width: 300px;
+}
+
+form.payment-form h4 {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-xs);
+}
+
+form.payment-form div {
+  margin: var(--space-xxs) 0;
+}
+form.payment-form label,
+form.payment-form input {
+  margin: var(--space-xxs) 0;
+  width: 100%;
+  display: block;
+  font-size: var(--font-size-xs);
+}
+
+form.payment-form input {
+  font-size: var(--font-size-sm);
+  background-color: var(--bg-primary-a0);
+  border: 1px solid var(--border-clr-a0);
+  padding: var(--space-xxs) var(--space-s);
+  color: var(--clr-text-primary);
+  border-radius: 10px;
+}
+
+form.payment-form div.payment-methods {
+  display: flex;
+  gap: var(--space-s);
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--space-s) 0;
+}
+form.payment-form div.button-wrapper {
+  display: flex;
+  justify-content: end;
+}
+form.payment-form button {
+  border: none;
+  background-color: var(--elements-a0);
+  color: #ffff;
+  padding: var(--space-xxs) var(--space-s);
+  border-radius: 8px;
+  margin: var(--space-xs) 0;
+  padding: var(--space-xs) var(--space-s);
+}
+
+form.payment-form button:first-child {
+  margin-right: var(--space-s);
+  background: none;
+  border: 1px solid var(--border-clr-a0);
+}
+
+/* TODO: LAYOUT FORM FOR DESKTOP VIEW */

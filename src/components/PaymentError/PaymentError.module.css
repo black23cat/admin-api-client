@@ -1,0 +1,19 @@
+div.payment-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 80vw;
+  max-width: 550px;
+  padding: var(--space-xs);
+}
+
+div.payment-error button {
+  border: none;
+  background-color: var(--elements-a0);
+  color: #ffff;
+  padding: var(--space-xxs) var(--space-s);
+  border-radius: 8px;
+  margin: var(--space-xs) 0;
+}

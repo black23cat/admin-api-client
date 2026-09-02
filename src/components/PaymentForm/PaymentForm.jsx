@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import formatter from '../../utils/formatter';
+import styles from './PaymentForm.module.css';
 
 export default function PaymentForm({
   invoiceData,
@@ -7,22 +8,14 @@ export default function PaymentForm({
   cancelBtnHandler,
 }) {
   const [paymentMethods, setPaymentMethods] = useState('Cash');
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
 
   return (
-    <form onSubmit={(e) => handleSubmit(e, { paymentMethods, amount })}>
-      <div>
-        <label htmlFor="paymentMethods">Metode Pembayaran :</label>
-        <select
-          name="paymentMethods"
-          id="paymentMethods"
-          value={paymentMethods}
-          onChange={(e) => setPaymentMethods(e.target.value)}
-        >
-          <option value="Cash">Cash</option>
-          <option value="Transfer">Transfer</option>
-        </select>
-      </div>
+    <form
+      className={styles['payment-form']}
+      onSubmit={(e) => handleSubmit(e, { paymentMethods, amount })}
+    >
+      <h4>Bayar Invoice</h4>
       <div>
         <label htmlFor="amount">Jumlah ({formatter.format(amount)}) :</label>
         <input
@@ -35,11 +28,24 @@ export default function PaymentForm({
           onChange={(e) => setAmount(e.target.value)}
         />
       </div>
-      <div>
-        <button type="submit">Konfirmasi Pembayaran</button>
+      <div className={styles['payment-methods']}>
+        <label htmlFor="paymentMethods">Metode Pembayaran :</label>
+        <select
+          name="paymentMethods"
+          id="paymentMethods"
+          value={paymentMethods}
+          onChange={(e) => setPaymentMethods(e.target.value)}
+        >
+          <option value="Cash">Cash</option>
+          <option value="Transfer">Transfer</option>
+        </select>
+      </div>
+
+      <div className={styles['button-wrapper']}>
         <button type="button" onClick={cancelBtnHandler}>
           Batal
         </button>
+        <button type="submit">Konfirmasi Pembayaran</button>
       </div>
     </form>
   );

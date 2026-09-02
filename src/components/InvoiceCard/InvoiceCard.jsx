@@ -9,6 +9,9 @@ import styles from './InvoiceCard.module.css';
 import CancelReceipt from '../../assets/svg/CancelReceipt';
 import Printer from '../../assets/svg/Printer';
 import Pay from '../../assets/svg/Pay';
+import InvoiceCancelConfirm from '../InvoiceCancelConfirm/InvoiceCancelConfirm';
+import InvoiceCancelSuccess from '../InvoiceCancelSuccess/InvoiceCancelSuccess';
+import InvoiceCancelError from '../InvoiceCancelError/InvoiceCancelError';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -35,6 +38,9 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if (invoice.status === 'Paid') {
+      return setPaymentError(true);
+    }
+    if (formData.amount === 0 || !formData.amount) {
       return setPaymentError(true);
     }
     try {
@@ -106,34 +112,20 @@ export default function InvoiceCard({ invoice, updateInvoice }) {
         ) : paymentSuccess ? (
           <PaymentSuccess invoice={invoice} closeModal={closeModal} />
         ) : cancelSuccess ? (
-          <>
-            <h3>Berhasil membatalkan invoice {invoice.invoiceNumber}</h3>
-            <button type="button" onClick={closeModal}>
-              Tutup
-            </button>
-          </>
+          <InvoiceCancelSuccess
+            invoiceNumber={invoice.invoiceNumber}
+            closeModal={closeModal}
+          />
         ) : cancelError ? (
-          <>
-            <h3>Gagal membatalkan invoice {invoice.invoiceNumber}</h3>
-            <button type="button" onClick={closeModal}>
-              Tutup
-            </button>
-          </>
+          <InvoiceCancelError
+            invoiceNumber={invoice.invoiceNumber}
+            closeModal={closeModal}
+          />
         ) : cancelConfirmation ? (
-          <>
-            <h3>Ingin membatalkan invoice</h3>
-            <div>
-              <button
-                type="button"
-                onClick={() => handleCancelInvoice('confirm')}
-              >
-                Ya
-              </button>
-              <button type="button" onClick={closeModal}>
-                Batal
-              </button>
-            </div>
-          </>
+          <InvoiceCancelConfirm
+            handleCancelInvoice={handleCancelInvoice}
+            closeModal={closeModal}
+          />
         ) : (
           <PaymentForm
             invoiceData={invoice}
@@ -182,7 +174,7 @@ function InvoiceButtons({ invoice, openPaymentForm, cancelInvoice }) {
         data-testid="bayar-invoice"
         type="button"
         onClick={openPaymentForm}
-        disabled={invoice.status === 'Paid'}
+        disabled={invoice.status === 'Paid' || invoice.status === 'Cancelled'}
       >
         <Pay />
       </button>

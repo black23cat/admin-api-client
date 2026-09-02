@@ -17,6 +17,34 @@
   padding: var(--space-m) var(--space-s);
 }
 
+/* SCROLLBAR STYLE */
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: darken(var(--scrollbar-thumb), 2);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: darken(var(--scrollbar-thumb), 5%);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-thumb);
+}
+
+::-webkit-resizer {
+  background: var(--scrollbar-thumb);
+}
+
 @media screen and (min-width: 700px) {
   .app main {
     max-width: 1000px;

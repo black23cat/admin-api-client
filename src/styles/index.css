@@ -64,6 +64,10 @@
   --card-hover-bg: #f3f3f3;
   --table-vol-bg-clr: #b7d6ff;
   --sidebar-width: 200px;
+
+  --scrollbar-size: 5px;
+  --scrollbar-track: #8383838b;
+  --scrollbar-thumb: #2a2a2abd;
 }
 
 [data-theme='dark'] {

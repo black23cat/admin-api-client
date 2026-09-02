@@ -6,6 +6,7 @@ import InvoiceConfirmForm from '../InvoiceConfirmForm/InvoiceConfirmForm';
 import FilterForm from '../FilterForm/FilterForm';
 import PageNavigation from '../PageNavigation/PageNavigation';
 import styles from './PoPage.module.css';
+import InvoiceCreated from '../InvoiceCreated/InvoiceCreated';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const initialFilterParams = 'page=1&filter=0';
@@ -211,12 +212,7 @@ export default function PoPage() {
       {' '}
       <Dialog isOpen={showModal} closeModal={closeModal}>
         {invoiceCreated ? (
-          <>
-            <h3>Berhasil membuat invoice</h3>
-            <button type="button" onClick={invoiceCancelButton}>
-              Tutup
-            </button>
-          </>
+          <InvoiceCreated closeModal={invoiceCancelButton} />
         ) : (
           <>
             <h3>Konfirmasi pembuatan invoice</h3>

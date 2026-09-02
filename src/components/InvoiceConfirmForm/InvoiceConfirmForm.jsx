@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import styles from './InvoiceConfirmForm.module.css';
+import formatter from '../../utils/formatter';
+import Trash from '../../assets/svg/Trash';
 
 export default function InvoiceConfirmForm({
   data,
@@ -103,32 +106,32 @@ export default function InvoiceConfirmForm({
     handleSubmit(e, formData);
   };
   return (
-    <>
-      <form onSubmit={handleFormSubmit}>
-        {data.needMissmatchConfirmation && (
-          <>
-            <span
-              style={{
-                border: '1px solid red',
-                padding: '2px',
-                backgroundColor: 'red',
-              }}
-            >
-              Nama customer berbeda.
-            </span>
-          </>
-        )}
-        <div>
-          <label htmlFor="customerName">Nama Customer :</label>
-          <input
-            type="text"
-            name="customerName"
-            id="customerName"
-            value={customerName}
-            onChange={(e) => handleCustomerNameChange(e)}
-          />
-        </div>
-        <h3>Eco Solvent</h3>
+    <form className={styles['confirm-form']} onSubmit={handleFormSubmit}>
+      {data.needMissmatchConfirmation && (
+        <>
+          <span
+            style={{
+              border: '1px solid red',
+              padding: '2px',
+              backgroundColor: 'red',
+            }}
+          >
+            Nama customer berbeda.
+          </span>
+        </>
+      )}
+      <div>
+        <label htmlFor="customerName">Nama Customer :</label>
+        <input
+          type="text"
+          name="customerName"
+          id="customerName"
+          value={customerName}
+          onChange={(e) => handleCustomerNameChange(e)}
+        />
+      </div>
+      <fieldset>
+        <legend>Eco Solvent</legend>
         <h4>Print :</h4>
         <div>
           <label htmlFor="ecoLength">Total(m) :</label>
@@ -179,32 +182,9 @@ export default function InvoiceConfirmForm({
             onChange={(e) => onChange(e, 'ecoBahanPrice')}
           />
         </div>
-        <h3>Sublim</h3>
-        <h4>Print + Press + Bahan :</h4>
-        <div>
-          <label htmlFor="sublimLength">Total(m) :</label>
-          <input
-            id="sublimLength"
-            name="sublimLength"
-            type="number"
-            value={
-              confirmFormInput.sublim.printLength === null
-                ? 0
-                : confirmFormInput.sublim.printLength
-            }
-            onChange={(e) => onChange(e, 'sublimLength')}
-          />
-        </div>
-        <div>
-          <label htmlFor="sublimPrice">Harga (/m) :</label>
-          <input
-            id="sublimPrice"
-            name="sublimPrice"
-            type="number"
-            value={confirmFormInput.sublim.price}
-            onChange={(e) => onChange(e, 'sublimPrice')}
-          />
-        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Sublim</legend>
         <h4>Print + Press :</h4>
         <div>
           <label htmlFor="sublimPressLength">Total(m) :</label>
@@ -230,7 +210,34 @@ export default function InvoiceConfirmForm({
             onChange={(e) => onChange(e, 'sublimPressPrice')}
           />
         </div>
-        <h4>Non Print Item :</h4>
+        <h4>Print + Press + Bahan :</h4>
+        <div>
+          <label htmlFor="sublimLength">Total(m) :</label>
+          <input
+            id="sublimLength"
+            name="sublimLength"
+            type="number"
+            value={
+              confirmFormInput.sublim.printLength === null
+                ? 0
+                : confirmFormInput.sublim.printLength
+            }
+            onChange={(e) => onChange(e, 'sublimLength')}
+          />
+        </div>
+        <div>
+          <label htmlFor="sublimPrice">Harga (/m) :</label>
+          <input
+            id="sublimPrice"
+            name="sublimPrice"
+            type="number"
+            value={confirmFormInput.sublim.price}
+            onChange={(e) => onChange(e, 'sublimPrice')}
+          />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Non Print Item</legend>
         <div>
           <label htmlFor="itemName">Nama Item :</label>
           <input
@@ -261,28 +268,34 @@ export default function InvoiceConfirmForm({
             value={nonPrintValue.itemPrice}
           />
         </div>
-        <div>
-          {addNonPrintItemError && <span>Harap isi field terlebih dahulu</span>}
-          <button type="button" onClick={handleAddNonPrintItem}>
-            Tambahkan Item
-          </button>
-        </div>
-        <div>
+        <div className={styles['non-print-items-wrapper']}>
           {nonPrintItems.length > 0 && (
             <>
               {nonPrintItems.map((item, index) => {
                 return (
-                  <div key={index}>
-                    <p>{item.itemName}</p>
-                    <p>{item.itemCount}</p>
-                    <p>{item.itemPrice}</p>
+                  <div key={index} className={styles['non-print-items']}>
+                    <p>
+                      {`${item.itemName}`}{' '}
+                      <span>{`(${item.itemCount}) x ${formatter.format(item.itemPrice)}`}</span>
+                    </p>
+                    <button type="button">
+                      <Trash />
+                    </button>
                   </div>
                 );
               })}
             </>
           )}
+        </div>{' '}
+        <div>
+          {addNonPrintItemError && <span>Harap isi field terlebih dahulu</span>}
+          <button type="button" onClick={handleAddNonPrintItem}>
+            (+)Item
+          </button>
         </div>
-        <h4>Casback</h4>
+      </fieldset>
+      <fieldset>
+        <legend>Cashback</legend>
         <div>
           <label htmlFor="cashbackNotes">Keterangan :</label>
           <input
@@ -304,14 +317,14 @@ export default function InvoiceConfirmForm({
             value={nonPrintValue.cashbackAmount}
           />
         </div>
-        <p>Lanjutkan ?</p>
-        <div>
-          <button type="submit">Ya</button>
-          <button type="button" onClick={handleCancel}>
-            Batal
-          </button>
-        </div>
-      </form>
-    </>
+      </fieldset>
+      <p>Lanjutkan ?</p>
+      <div className={styles['button-wrapper']}>
+        <button type="button" onClick={handleCancel}>
+          Batal
+        </button>
+        <button type="submit">Ya</button>
+      </div>
+    </form>
   );
 }

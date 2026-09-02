@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+// eslint-disable-next-line no-unused-vars
+import styles from './Dialog.module.css';
 
 export default function Dialog({ isOpen, closeModal, children }) {
   const modalRef = useRef(null);
