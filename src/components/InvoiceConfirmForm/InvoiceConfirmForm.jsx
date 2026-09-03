@@ -107,19 +107,8 @@ export default function InvoiceConfirmForm({
   };
   return (
     <form className={styles['confirm-form']} onSubmit={handleFormSubmit}>
-      {data.needMissmatchConfirmation && (
-        <>
-          <span
-            style={{
-              border: '1px solid red',
-              padding: '2px',
-              backgroundColor: 'red',
-            }}
-          >
-            Nama customer berbeda.
-          </span>
-        </>
-      )}
+      <h3>Konfirmasi pembuatan invoice</h3>
+
       <div>
         <label htmlFor="customerName">Nama Customer :</label>
         <input
@@ -130,7 +119,7 @@ export default function InvoiceConfirmForm({
           onChange={(e) => handleCustomerNameChange(e)}
         />
       </div>
-      <fieldset>
+      <fieldset className={styles.eco}>
         <legend>Eco Solvent</legend>
         <h4>Print :</h4>
         <div>
@@ -318,12 +307,17 @@ export default function InvoiceConfirmForm({
           />
         </div>
       </fieldset>
-      <p>Lanjutkan ?</p>
-      <div className={styles['button-wrapper']}>
-        <button type="button" onClick={handleCancel}>
-          Batal
-        </button>
-        <button type="submit">Ya</button>
+      {data.needMissmatchConfirmation && (
+        <p className={styles.warn}>Nama customer berbeda.</p>
+      )}
+      <div>
+        <p>Lanjutkan ?</p>
+        <div className={styles['button-wrapper']}>
+          <button type="button" onClick={handleCancel}>
+            Batal
+          </button>
+          <button type="submit">Ya</button>
+        </div>
       </div>
     </form>
   );

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styles from './PoCard.module.css';
 import Trasn from '../../assets/svg/Trash';
 import Printer from '../../assets/svg/Printer';
+import DeletePo from '../DeletePo/DeletePo';
 
 export default function PoCard({
   purchaseOrder,
@@ -75,11 +76,7 @@ export default function PoCard({
       }
     >
       <Dialog isOpen={openModal} closeModal={closeModal}>
-        <h3>Hapus Purchase Order</h3>
-        <div>
-          <button onClick={() => handleModalBtnClick('confirm')}>Hapus</button>
-          <button onClick={() => handleModalBtnClick('cancel')}>Batal</button>
-        </div>
+        <DeletePo handleModalBtnClick={handleModalBtnClick} />
       </Dialog>
       <input
         type="checkbox"

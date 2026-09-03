@@ -1,0 +1,25 @@
+div.delete-po {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 80vw;
+  max-width: 500px;
+}
+
+div.delete-po button {
+  border: none;
+  background-color: var(--elements-a0);
+  color: #ffff;
+  padding: var(--space-xxs) var(--space-s);
+  border-radius: 8px;
+  margin: var(--space-xs) 0;
+}
+
+div.delete-po button:first-child {
+  background: none;
+  color: var(--clr-text-secondary);
+  border: 1px solid var(--border-clr-a0);
+  margin-right: var(--space-xs);
+}

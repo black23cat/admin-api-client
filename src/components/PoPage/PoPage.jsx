@@ -215,7 +215,6 @@ export default function PoPage() {
           <InvoiceCreated closeModal={invoiceCancelButton} />
         ) : (
           <>
-            <h3>Konfirmasi pembuatan invoice</h3>
             {newInvoiceResult !== null && (
               <InvoiceConfirmForm
                 data={newInvoiceResult}
