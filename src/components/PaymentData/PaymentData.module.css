@@ -68,3 +68,11 @@
 .payment-data-footer p span {
   align-content: end;
 }
+
+p.loading,
+p.error,
+p.no-data {
+  padding: var(--space-xs) var(--space-s);
+  color: var(--clr-text-secondary-a0);
+  font-size: var(--font-size-sm);
+}

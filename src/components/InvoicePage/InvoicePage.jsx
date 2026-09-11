@@ -9,6 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const initialFilterParams = 'page=1&filter=0';
 
 export default function InvoicePage() {
+  const [loading, setLoading] = useState(true);
   const [invoiceList, setInvoiceList] = useState([]);
   const [invoiceCount, setInvoiceCount] = useState(null);
   const [fetchInvoiceError, setFetchInvoiceError] = useState(false);
@@ -65,27 +66,18 @@ export default function InvoicePage() {
           setInvoiceCount(result.count);
           setInvoiceList(result.invoiceList);
         }
+        setLoading(false);
       } catch (err) {
         if (err.name === 'AbortError' || abortController.signal.aborted) {
           return;
         }
         setFetchInvoiceError(true);
+        setLoading(false);
       }
     };
     fetchData(filterParams);
     return () => abortController.abort();
   }, [filterParams]);
-
-  useEffect(() => {
-    if (!fetchInvoiceError) {
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setFetchInvoiceError(false);
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  });
 
   return (
     <main>
@@ -94,7 +86,6 @@ export default function InvoicePage() {
         handleFilterButtonClick={handleFilterButtonClick}
         type="invoice"
       />
-      {fetchInvoiceError && <span>Gagal mengambil invoice</span>}
       <div className={styles['invoice-card-wrapper']}>
         <div className={styles['card-header']}>
           <h4>No Invoice</h4>
@@ -103,7 +94,7 @@ export default function InvoicePage() {
           <h4>Total</h4>
           <h4>Status</h4>
         </div>
-        {invoiceList.length > 0 &&
+        {invoiceList.length > 0 ? (
           invoiceList.map((invoice) => {
             return (
               <InvoiceCard
@@ -112,7 +103,16 @@ export default function InvoicePage() {
                 updateInvoice={updateInvoice}
               />
             );
-          })}
+          })
+        ) : loading && invoiceList.length === 0 ? (
+          <p className={styles['loading']}>Mengambil data invoice...</p>
+        ) : fetchInvoiceError ? (
+          <p className={styles['error']}>
+            Gagal mengambil data invoice dari server
+          </p>
+        ) : (
+          <p className={styles['no-data']}>Tidak ada data invoice</p>
+        )}
       </div>
       <PageNavigation
         totalItemCount={invoiceCount}

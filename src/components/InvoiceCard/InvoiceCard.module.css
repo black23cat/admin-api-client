@@ -53,6 +53,7 @@ div.invoice-card div.invoice-buttons {
   display: flex;
   gap: var(--space-xs);
   padding-left: var(--space-xxs);
+  justify-self: center;
 }
 
 div.invoice-card div.invoice-buttons button {

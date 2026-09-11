@@ -167,6 +167,17 @@ form.po-form div.button-wrapper button {
   font-size: var(--font-size-xs);
 }
 
+form.po-form div.button-wrapper button:disabled {
+  background-color: var(--elements-a30);
+  cursor: not-allowed;
+}
+
+form.po-form div.button-wrapper button.loading {
+  background-color: var(--elements-a30);
+  cursor: wait;
+  position: relative;
+}
+
 form.po-form div.button-wrapper button.cancel {
   background: none;
   border-width: 1px;

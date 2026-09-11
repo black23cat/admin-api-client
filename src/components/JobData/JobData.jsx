@@ -10,6 +10,7 @@ import styles from './JobData.module.css';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function JobData() {
+  const [loading, setLoading] = useState(true);
   const [jobData, setJobData] = useState([]);
   const [jobDataCount, setJobDataCount] = useState(null);
   const [fetchErrorMsg, setFetchErrorMsg] = useState('');
@@ -79,6 +80,7 @@ export default function JobData() {
           });
           setJobDataCount(jobDataCount);
           setJobData(groupedDate);
+          setLoading(false);
           return;
         }
       } catch (err) {
@@ -86,6 +88,7 @@ export default function JobData() {
           return;
         }
         setFetchErrorMsg('Gagal mengambil data dari server');
+        setLoading(false);
       }
     };
     fetchData();
@@ -118,65 +121,58 @@ export default function JobData() {
           return acc;
         }, printLength);
 
-  useEffect(() => {
-    if (fetchErrorMsg === '') {
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setFetchErrorMsg('');
-    }, 300);
-    return () => clearTimeout(timeout);
-  });
-
   return (
     <main>
       <FilterForm
         handleFilterButtonClick={handleFilterButtonClick}
         type="job-data"
       />
-      {fetchErrorMsg !== '' && <span>{fetchErrorMsg}</span>}
-      {jobData.length > 0 ? (
-        <div className={styles['job-data-wrapper']}>
-          <div className={styles['job-data-header']}>
-            <h4>Hari / Tanggal</h4>
-            <h4>Nama</h4>
-            <h4>Data Pekerjaan</h4>
-            <h4>Ukuran</h4>
-            <h4>Jumlah</h4>
-            <div className={styles['volume-wrapper']}>
-              <h4>Volume</h4>
-              <div>
-                <h4>P</h4>
-                <h4>PB</h4>
-                <h4>PP</h4>
-                <h4>PPB</h4>
-              </div>
+      <div className={styles['job-data-wrapper']}>
+        <div className={styles['job-data-header']}>
+          <h4>Hari / Tanggal</h4>
+          <h4>Nama</h4>
+          <h4>Data Pekerjaan</h4>
+          <h4>Ukuran</h4>
+          <h4>Jumlah</h4>
+          <div className={styles['volume-wrapper']}>
+            <h4>Volume</h4>
+            <div>
+              <h4>P</h4>
+              <h4>PB</h4>
+              <h4>PP</h4>
+              <h4>PPB</h4>
             </div>
           </div>
-          {jobData.map((data) => {
-            return <JobDataRow jobData={data} key={data.id} />;
-          })}
-          <div className={styles['table-footer']}>
-            <h4>Total</h4>
-            <p>
-              Eco Solvent (Print) <span>: {printLengthCount.eco}</span>
-            </p>
-            <p>
-              Eco Solvent (Print + Bahan){' '}
-              <span>: {printLengthCount['eco-bahan']}</span>
-            </p>
-            <p>
-              Sublim (Press) <span>: {printLengthCount['sublim-press']}</span>
-            </p>
-            <p>
-              Sublim (Press + Bahan){' '}
-              <span>: {printLengthCount['sublim-bahan']}</span>
-            </p>
-          </div>
         </div>
-      ) : (
-        <p>Tidak ada Data Pekerjaan....</p>
-      )}
+        {jobData.length > 0 ? (
+          jobData.map((data) => {
+            return <JobDataRow jobData={data} key={data.id} />;
+          })
+        ) : loading ? (
+          <p className={styles.loading}>Mengambil data dari server...</p>
+        ) : fetchErrorMsg ? (
+          <p className={styles['error']}>{fetchErrorMsg}</p>
+        ) : (
+          <p className={styles['no-data']}>Tidak ada data pekerjaan</p>
+        )}
+        <div className={styles['table-footer']}>
+          <h4>Total</h4>
+          <p>
+            Eco Solvent (Print) <span>: {printLengthCount.eco}</span>
+          </p>
+          <p>
+            Eco Solvent (Print + Bahan){' '}
+            <span>: {printLengthCount['eco-bahan']}</span>
+          </p>
+          <p>
+            Sublim (Press) <span>: {printLengthCount['sublim-press']}</span>
+          </p>
+          <p>
+            Sublim (Press + Bahan){' '}
+            <span>: {printLengthCount['sublim-bahan']}</span>
+          </p>
+        </div>
+      </div>
       <PageNavigation
         totalItemCount={jobDataCount}
         currentPage={currentPage}

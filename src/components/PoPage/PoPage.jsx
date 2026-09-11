@@ -16,12 +16,13 @@ export default function PoPage() {
   const [poList, setPoList] = useState([]);
   const [poCount, setPoCount] = useState(null);
   const [editCardId, setEditCardId] = useState(null);
-  const [fetchPoError, setFetchPoError] = useState('');
+  const [fetchPoError, setFetchPoError] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [newInvoiceResult, setNewInvoiceResult] = useState(null);
   const [invoiceCreated, setInvoiceCreated] = useState(false);
   const [invoiceErrorMsg, setInvoiceErrorMsg] = useState('');
   const [filterParams, setFilterParams] = useSearchParams(initialFilterParams);
+  const [fetchLoading, setFetchLoading] = useState(true);
 
   // Define total items to displayed on page
   // Calculte current user displayed page
@@ -185,12 +186,13 @@ export default function PoPage() {
 
         setPoCount(result.count);
         setPoList(result.purchaseOrder);
+        setFetchLoading(false);
       } catch (err) {
         if (err.name === 'AbortError') {
           return;
-        } else {
-          setFetchPoError(fetchErrorMessage);
         }
+        setFetchPoError(true);
+        setFetchLoading(false);
       }
     };
     fetchPoData(filterParams);
@@ -240,6 +242,7 @@ export default function PoPage() {
             <h3>Nama Customer</h3>
             <h3>Tanggal</h3>
           </div>
+
           {poList.length > 0 ? (
             <>
               {poList.map((po) => {
@@ -257,10 +260,14 @@ export default function PoPage() {
                 );
               })}
             </>
-          ) : poList.length === 0 && fetchPoError === '' ? (
-            <span>Loading</span>
+          ) : fetchLoading && poList.length === 0 ? (
+            <p className={styles.loading}>Mengambil data dari server...</p>
+          ) : poList.length === 0 && fetchPoError ? (
+            <p className={styles['fetch-error']}>
+              Gagal mengambil data po dari server
+            </p>
           ) : (
-            <span>{fetchPoError}</span>
+            <p className={styles['no-data']}>Tidak ada data po</p>
           )}
         </div>
         <button

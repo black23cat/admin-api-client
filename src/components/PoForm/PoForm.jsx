@@ -3,6 +3,7 @@ import { matchFilename } from '../../utils/regexPattern';
 import { useNavigate } from 'react-router';
 import styles from './PoForm.module.css';
 import Trash from '../../assets/svg/Trash';
+import Spinner from '../Spinner/Spinner';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,6 +19,7 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
   const [formError, setFormError] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [editPo, setEditPo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -59,6 +61,7 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (validFiles.length === 0) {
       return setErrorMsg('Tidak ada file yang diupload');
@@ -96,13 +99,15 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
         }
         if (response.status === 400) {
           const result = await response.json();
-          return setFormError(result);
+          setIsLoading(false);
+          setFormError(result);
+          return;
         }
         throw new Error(invoiceErrorMsg);
       } catch {
+        setIsLoading(false);
         setErrorMsg(invoiceErrorMsg);
       }
-      return;
     }
     let edited;
     for (let i = 0; i < validFiles.length; i++) {
@@ -147,15 +152,19 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
         if (response.status === 200) {
           const result = await response.json();
           updatePo(result);
-          return setEditPo(true);
+          setEditPo(true);
+          setIsLoading(false);
+          return;
         }
         if (response.status === 400) {
           const result = await response.json();
           setFormError(result);
+          setIsLoading(false);
         }
         throw new Error(editPoErrorMsg);
       } catch {
         setErrorMsg(editPoErrorMsg);
+        setIsLoading(false);
       }
     }
   };
@@ -171,6 +180,17 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
     }, 500);
     return () => clearTimeout(timeout);
   });
+
+  useEffect(() => {
+    if (errorMsg === '') {
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setErrorMsg('');
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [errorMsg]);
 
   return (
     <FormWrapper poData={poData === null}>
@@ -279,7 +299,14 @@ export default function PoForm({ poData = null, closeCardForm, updatePo }) {
           >
             Cancel
           </button>
-          <button type="submit">Submit</button>
+          <button
+            className={isLoading ? styles.loading : ''}
+            type="submit"
+            disabled={poData !== null && poData.invoiceId !== null}
+          >
+            {isLoading && <Spinner />}
+            Submit
+          </button>
         </div>
         {editPo && <span>Berhasil mengedit po</span>}
       </form>

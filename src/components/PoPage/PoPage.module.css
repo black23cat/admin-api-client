@@ -19,6 +19,14 @@ div.po-list-wrapper {
   margin: var(--space-s) 0;
 }
 
+div.po-list-wrapper > p.loading,
+div.po-list-wrapper > p.fetch-error,
+div.po-list-wrapper > p.no-data {
+  padding: var(--space-s);
+  color: var(--clr-text-secondary-a0);
+  font-size: var(--font-size-sm);
+}
+
 div.po-list-wrapper div.card-header {
   font-size: var(--font-size-xxs);
   display: grid;

@@ -8,6 +8,7 @@ import formatter from '../../utils/formatter';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PaymentData() {
+  const [loading, setLoading] = useState(true);
   const [paymentData, setPaymentData] = useState([]);
   const [fetchErrorMsg, setFetchErrorMsg] = useState('');
   const [filterParams, setFilterParams] = useSearchParams({
@@ -54,6 +55,7 @@ export default function PaymentData() {
         if (response.ok) {
           const result = await response.json();
 
+          setLoading(false);
           return setPaymentData(result);
         }
       } catch (err) {
@@ -61,21 +63,12 @@ export default function PaymentData() {
           return;
         }
         setFetchErrorMsg('Gagal mengambil data dari server');
+        setLoading(false);
       }
     };
     fetchData();
     return () => abortController.abort();
   }, [filterParams]);
-
-  useEffect(() => {
-    if (fetchErrorMsg === '') {
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setFetchErrorMsg('');
-    }, 300);
-    return () => clearTimeout(timeout);
-  });
 
   const paymentDetails = {
     cash: 0,
@@ -129,8 +122,12 @@ export default function PaymentData() {
               </div>
             );
           })
+        ) : loading ? (
+          <p className={styles.loading}>Mengambil data dari server...</p>
+        ) : fetchErrorMsg ? (
+          <p className={styles.error}>{fetchErrorMsg}</p>
         ) : (
-          <p>Belum ada data pembayaran</p>
+          <p className={styles['no-data']}>Belum ada data pembayaran</p>
         )}
         <div className={styles['payment-data-footer']}>
           <h4>Total kas masuk</h4>

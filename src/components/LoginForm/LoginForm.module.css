@@ -151,6 +151,13 @@ form.login-form .input-wrapper div.form-invalid label {
   transition: var(--bg-clr-transition);
   border-radius: 10px;
 }
+
+.login-btn.loading {
+  background-color: var(--elements-a30);
+  cursor: wait;
+  position: relative;
+}
+
 .login-btn:hover {
   background-color: var(--elements-a10);
   transition: background-color 0.1s;

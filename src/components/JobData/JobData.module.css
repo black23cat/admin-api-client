@@ -107,3 +107,11 @@ div.table-footer p {
   display: grid;
   grid-template-columns: 270px 200px;
 }
+
+.job-data-wrapper p.loading,
+.job-data-wrapper p.error,
+.job-data-wrapper p.no-data {
+  padding: var(--space-xs) var(--space-s);
+  color: var(--clr-text-secondary-a0);
+  font-size: var(--font-size-sm);
+}

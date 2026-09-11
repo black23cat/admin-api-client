@@ -40,7 +40,10 @@ div.card-header h4:last-child {
   background: red;
 }
 
-@media screen and (min-width: 1200px) {
-  .invoice-card-wrapper {
-  }
+.invoice-card-wrapper p.loading,
+.invoice-card-wrapper p.error,
+.invoice-card-wrapper p.no-data {
+  padding: var(--space-xs) var(--space-s);
+  color: var(--clr-text-secondary-a0);
+  font-size: var(--font-size-sm);
 }

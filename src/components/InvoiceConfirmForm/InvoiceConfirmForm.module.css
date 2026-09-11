@@ -89,6 +89,12 @@ form.confirm-form .button-wrapper button {
   margin-left: var(--space-xs);
 }
 
+form.confirm-form .button-wrapper button.loading {
+  background-color: var(--elements-a30);
+  cursor: wait;
+  position: relative;
+}
+
 form.confirm-form .button-wrapper button:first-child {
   background: none;
   border: 1px solid var(--border-clr-a0);

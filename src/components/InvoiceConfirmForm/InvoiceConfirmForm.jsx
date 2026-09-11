@@ -2,12 +2,14 @@ import { useState } from 'react';
 import styles from './InvoiceConfirmForm.module.css';
 import formatter from '../../utils/formatter';
 import Trash from '../../assets/svg/Trash';
+import Spinner from '../Spinner/Spinner';
 
 export default function InvoiceConfirmForm({
   data,
   handleSubmit,
   handleCancel,
 }) {
+  const [loading, setLoading] = useState(false);
   const [confirmFormInput, setConfirmFormInput] = useState(data.printDetails);
   const [customerName, setCustomerName] = useState(data.customerName);
   const [nonPrintValue, setNonPrintValue] = useState({
@@ -90,6 +92,7 @@ export default function InvoiceConfirmForm({
   };
 
   const handleFormSubmit = (e) => {
+    setLoading(true);
     const formData = {
       ...confirmFormInput,
       customerName,
@@ -104,6 +107,7 @@ export default function InvoiceConfirmForm({
     };
 
     handleSubmit(e, formData);
+    setLoading(false);
   };
   return (
     <form className={styles['confirm-form']} onSubmit={handleFormSubmit}>
@@ -316,7 +320,14 @@ export default function InvoiceConfirmForm({
           <button type="button" onClick={handleCancel}>
             Batal
           </button>
-          <button type="submit">Ya</button>
+          <button
+            type="submit"
+            className={loading ? styles.loading : ''}
+            disabled={loading}
+          >
+            {loading && <Spinner />}
+            Ya
+          </button>
         </div>
       </div>
     </form>

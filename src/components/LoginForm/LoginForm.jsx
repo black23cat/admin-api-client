@@ -9,6 +9,7 @@ import checklistIcon from '../../assets/images/checklist.svg';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { UserScreenData } from '../../App';
 import adminIcon from '../../assets/images/admin-icon.svg';
+import Spinner from '../Spinner/Spinner';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -151,11 +152,15 @@ export default function LoginForm() {
           </div>
           <div>
             <button
-              className={styles['login-btn']}
+              className={
+                loading
+                  ? `${styles['login-btn']} ${styles.loading}`
+                  : styles['login-btn']
+              }
               type="submit"
               disabled={loading}
             >
-              {loading && <div className="spinner"></div>}
+              {loading && <Spinner />}
               LOGIN
             </button>
           </div>{' '}
