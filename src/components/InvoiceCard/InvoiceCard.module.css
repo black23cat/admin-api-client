@@ -56,10 +56,12 @@ div.invoice-card div.invoice-buttons {
   justify-self: center;
 }
 
-div.invoice-card div.invoice-buttons button {
+div.invoice-card div.invoice-buttons button,
+div.invoice-card div.invoice-buttons a {
   padding: 0;
   background: none;
   border: none;
+  position: relative;
 }
 
 div.invoice-card div.invoice-buttons button:disabled {

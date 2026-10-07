@@ -52,11 +52,13 @@ div.card-button {
   align-items: center;
 }
 
-div.card-button button {
+div.card-button button,
+div.card-button a {
   width: 24px;
   height: 24px;
   padding: 0;
   background: none;
+  position: relative;
   border: none;
 }
 

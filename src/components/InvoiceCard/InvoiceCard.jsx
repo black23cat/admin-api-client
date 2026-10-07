@@ -12,6 +12,9 @@ import Pay from '../../assets/svg/Pay';
 import InvoiceCancelConfirm from '../InvoiceCancelConfirm/InvoiceCancelConfirm';
 import InvoiceCancelSuccess from '../InvoiceCancelSuccess/InvoiceCancelSuccess';
 import InvoiceCancelError from '../InvoiceCancelError/InvoiceCancelError';
+import Spinner from '../Spinner/Spinner';
+import InvoicePrint from '../InvoicePrint/InvoicePrint';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -168,6 +171,7 @@ function InvoiceDetails({ invoice }) {
 }
 
 function InvoiceButtons({ invoice, openPaymentForm, cancelInvoice }) {
+  const documentTitle = `INV-0${invoice.invoiceNumber}_${invoice.customerName}`;
   return (
     <div className={styles['invoice-buttons']}>
       <button
@@ -178,9 +182,18 @@ function InvoiceButtons({ invoice, openPaymentForm, cancelInvoice }) {
       >
         <Pay />
       </button>
-      <button data-testid="print-invoice" type="button">
+      {invoice.status === 'Cancelled' ? (
         <Printer />
-      </button>
+      ) : (
+        <PDFDownloadLink
+          document={
+            <InvoicePrint invoiceData={invoice} title={documentTitle} />
+          }
+          fileName={documentTitle}
+        >
+          {({ loading }) => (loading ? <Spinner size="14px" /> : <Printer />)}
+        </PDFDownloadLink>
+      )}
       <button
         data-testid="batalkan-invoice"
         type="button"

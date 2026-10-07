@@ -4,4 +4,9 @@ const formatter = new Intl.NumberFormat('id-ID', {
   minimumFractionDigits: 0,
 });
 
+export const decimalFormatter = new Intl.NumberFormat('id-ID', {
+  style: 'decimal',
+  minimumFractionDigits: 0,
+});
+
 export default formatter;

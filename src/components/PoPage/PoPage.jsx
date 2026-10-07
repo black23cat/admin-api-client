@@ -78,6 +78,8 @@ export default function PoPage() {
   const invoiceCancelButton = () => {
     closeModal();
     setNewInvoiceResult(null);
+    setInvoiceCreated(false);
+    setInvoiceErrorMsg('');
     return;
   };
 

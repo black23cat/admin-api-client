@@ -1,11 +1,15 @@
+import { useState } from 'react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { format } from 'date-fns';
+import generatePoId from '../../utils/generatePoId';
 import PoForm from '../PoForm/PoForm';
 import Dialog from '../Dialog/Dialog';
-import { useState } from 'react';
-import styles from './PoCard.module.css';
 import Trasn from '../../assets/svg/Trash';
 import Printer from '../../assets/svg/Printer';
 import DeletePo from '../DeletePo/DeletePo';
+import PoPrint from '../PoPrint/PoPrint';
+import Spinner from '../Spinner/Spinner';
+import styles from './PoCard.module.css';
 
 export default function PoCard({
   purchaseOrder,
@@ -92,9 +96,9 @@ export default function PoCard({
         purchaseOrder={purchaseOrder}
       />
       <CardButton
-        poId={purchaseOrder.id}
         deletePo={deletePo}
         disabled={purchaseOrder.invoiceId !== null}
+        poData={purchaseOrder}
       />
       {isOpen && (
         <>
@@ -125,12 +129,17 @@ function CardDetails({ handleCardClick, purchaseOrder }) {
   );
 }
 
-function CardButton({ deletePo, disabled }) {
+function CardButton({ deletePo, disabled, poData }) {
+  const documentTitle = `${generatePoId(poData)}-${poData.customerName}`;
   return (
     <div className={styles['card-button']}>
-      <button data-testid="print-po">
-        <Printer />
-      </button>
+      <PDFDownloadLink
+        document={<PoPrint poData={poData} title={documentTitle} />}
+        fileName={documentTitle}
+      >
+        {({ loading }) => (loading ? <Spinner size="14px" /> : <Printer />)}
+      </PDFDownloadLink>
+
       <button
         data-testid="delete-po"
         className={styles.delete}
@@ -141,14 +150,4 @@ function CardButton({ deletePo, disabled }) {
       </button>
     </div>
   );
-}
-
-function generatePoId(po) {
-  const createdAt = new Date(po.createdAt);
-  const poId = po.id;
-  // const idLength = poId.toString().length;
-  // const idPrefix = '000000'.slice(0, 6 - idLength);
-  return `PO-${createdAt.getMonth() + 1 < 10 ? '0' : ''}${
-    createdAt.getMonth() + 1
-  }${createdAt.getFullYear().toString().slice(2)}-00${poId}`;
 }
