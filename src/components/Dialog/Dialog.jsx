@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-// eslint-disable-next-line no-unused-vars
 import styles from './Dialog.module.css';
 
 export default function Dialog({ isOpen, closeModal, children }) {
@@ -12,7 +11,11 @@ export default function Dialog({ isOpen, closeModal, children }) {
     }
   }, [isOpen]);
   return (
-    <dialog ref={modalRef} onCancel={closeModal}>
+    <dialog
+      className={styles['main-dialog']}
+      ref={modalRef}
+      onCancel={closeModal}
+    >
       {children}
     </dialog>
   );

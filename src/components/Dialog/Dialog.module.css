@@ -1,4 +1,4 @@
-dialog {
+dialog.main-dialog {
   position: fixed;
   inset: 0;
   margin: auto;
@@ -14,9 +14,9 @@ dialog {
   -moz-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.389);
 }
 
-dialog h3 {
+dialog.main-dialog h3 {
   font-size: var(--font-size-base);
 }
-dialog::backdrop {
+dialog.main-dialog::backdrop {
   background-color: #000000a6;
 }
